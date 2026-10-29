@@ -15,7 +15,7 @@ export async function requireAuth(req: NextRequest): Promise<{ authenticated: bo
     if (authHeader && authHeader.startsWith('Bearer ')) {
       token = authHeader.split(' ')[1];
     } else {
-      const cookie = req.cookies.get('admin_token');
+      const cookie = req.cookies?.get('admin_token');
       if (cookie) {
         token = cookie.value;
       }

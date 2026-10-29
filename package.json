@@ -1,36 +1,21 @@
 {
-  "name": "iimbbsr-next",
-  "version": "0.1.0",
+  "name": "iimbbsr-project",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 0.0.0.0",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "seed": "tsx backend/seed.ts",
-    "test:backend": "tsx backend/test-backend.ts"
+    "dev": "npm run dev:frontend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend",
+    "seed:backend": "npm run seed --prefix backend",
+    "test:backend": "npm run test --prefix backend"
   },
   "dependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "bcryptjs": "^3.0.3",
-    "imagekit": "^6.0.0",
-    "jsonwebtoken": "^9.0.3",
-    "lucide-react": "^1.61.0",
-    "mongoose": "^9.11.4",
-    "next": "16.4.3",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/turbopack": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.4.3",
-    "tailwindcss": "^4",
-    "tsx": "^4.23.15",
-    "typescript": "^5"
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0"
   }
 }

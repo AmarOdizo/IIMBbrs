@@ -20,7 +20,7 @@ import {
   newsList,
   galleryItems,
   studentChaptersData,
-} from '../src/data/siteData';
+} from '../frontend/src/data/siteData';
 
 export async function seedDatabase() {
   try {

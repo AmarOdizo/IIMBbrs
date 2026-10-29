@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@/backend/*": ["./*"]
+    },
+    "outDir": "./dist"
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
