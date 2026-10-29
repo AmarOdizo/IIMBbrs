@@ -45,6 +45,84 @@ export default function RootLayout({
       <body className="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary selection:text-white" suppressHydrationWarning>
         {children}
         <ClientNav />
+        <script
+          id="hardcoded-mobile-nav"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                function toggleMobileDrawer(forceClose) {
+                  var drawer = document.getElementById('mobile-menu-drawer');
+                  var toggle = document.getElementById('mobile-menu-toggle');
+                  var iconOpen = document.getElementById('menu-icon-open');
+                  var iconClose = document.getElementById('menu-icon-close');
+                  if (!drawer) return;
+
+                  if (drawer.parentElement !== document.body) {
+                    document.body.appendChild(drawer);
+                  }
+
+                  var willOpen = forceClose === true ? false : !drawer.classList.contains('drawer-open');
+
+                  if (willOpen) {
+                    drawer.classList.add('drawer-open');
+                    drawer.setAttribute('aria-hidden', 'false');
+                    if (toggle) toggle.setAttribute('aria-expanded', 'true');
+                    if (iconOpen) iconOpen.classList.add('hidden');
+                    if (iconClose) iconClose.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                  } else {
+                    drawer.classList.remove('drawer-open');
+                    drawer.setAttribute('aria-hidden', 'true');
+                    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+                    if (iconOpen) iconOpen.classList.remove('hidden');
+                    if (iconClose) iconClose.classList.add('hidden');
+                    document.body.style.overflow = '';
+                  }
+                }
+
+                window.toggleMobileDrawer = toggleMobileDrawer;
+
+                document.addEventListener('click', function (e) {
+                  var target = e.target;
+                  if (!target) return;
+
+                  if (target.closest && target.closest('#mobile-menu-toggle')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleMobileDrawer();
+                    return;
+                  }
+
+                  if (target.closest && target.closest('#mobile-menu-close')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleMobileDrawer(true);
+                    return;
+                  }
+
+                  if (target.id === 'mobile-menu-backdrop') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleMobileDrawer(true);
+                    return;
+                  }
+
+                  if (target.closest && target.closest('#mobile-menu-drawer a')) {
+                    toggleMobileDrawer(true);
+                  }
+                }, true);
+
+                document.addEventListener('keydown', function(e) {
+                  if (e.key === 'Escape') toggleMobileDrawer(true);
+                });
+
+                window.addEventListener('resize', function() {
+                  if (window.innerWidth >= 1024) toggleMobileDrawer(true);
+                });
+              })();
+            `,
+          }}
+        />
       </body>
     </html>
   );
