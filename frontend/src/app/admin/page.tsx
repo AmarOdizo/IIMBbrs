@@ -30,6 +30,9 @@ import {
   Eye,
   Check,
   FileText,
+  Settings,
+  Sparkles,
+  Handshake,
 } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 
@@ -80,7 +83,7 @@ interface CommitteeItem {
   _id: string;
   name: string;
   role: string;
-  category: 'Apex' | 'Office Bearer' | 'Executive Member' | 'Advisory' | string;
+  category: string;
   title: string;
   institution: string;
   email: string;
@@ -100,8 +103,6 @@ interface ApplicationItem {
   organization: string;
   designation: string;
   cadreSought: string;
-  applicationType?: string;
-  existingIimId?: string;
   verificationStatus: string;
   remarks?: string;
   createdAt: string;
@@ -121,6 +122,51 @@ interface EventItem {
   isFeatured?: boolean;
 }
 
+interface ProgrammeItem {
+  _id: string;
+  title: string;
+  category: string;
+  annualSchedule: string;
+  description: string;
+  highlights: string[];
+  bannerImage?: string;
+  brochurePdfUrl?: string;
+  orderIndex: number;
+  isActive: boolean;
+}
+
+interface SiteSettingItem {
+  _id?: string;
+  chapterName: string;
+  tagline: string;
+  secretariatAddress: string;
+  primaryEmail: string;
+  membershipEmail: string;
+  symposiumEmail: string;
+  primaryPhone: string;
+  secondaryPhone?: string;
+  officeHours: string;
+  activeMembersCount: string;
+  partnerInstitutionsCount: string;
+  studentChaptersCount: string;
+  symposiaCount: string;
+  chairmanName: string;
+  chairmanTitle: string;
+  chairmanQuote: string;
+  chairmanPhotoUrl?: string;
+}
+
+interface SponsorItem {
+  _id: string;
+  name: string;
+  tier: string;
+  logoUrl: string;
+  websiteUrl?: string;
+  description?: string;
+  orderIndex: number;
+  isActive: boolean;
+}
+
 interface RegistrationItem {
   _id: string;
   symposiumTitle: string;
@@ -132,29 +178,21 @@ interface RegistrationItem {
   feeAmount: number;
   mode: string;
   paymentStatus: string;
-  paymentId?: string;
   badgeQrCode?: string;
-  isAttendingBanquet?: boolean;
   createdAt: string;
 }
 
 interface PaperItem {
   _id: string;
-  symposiumTitle: string;
   paperTitle: string;
   track: string;
   authors: string[];
   correspondingAuthor: {
     name: string;
     email: string;
-    phone?: string;
     institution?: string;
   };
-  abstractText: string;
-  keywords?: string[];
   reviewStatus: string;
-  reviewerNotes?: string;
-  createdAt: string;
 }
 
 interface NewsItem {
@@ -164,7 +202,6 @@ interface NewsItem {
   category: string;
   summary: string;
   content?: string;
-  author?: string;
   attachmentPdfUrl?: string;
   publishedAt?: string;
   isPublished?: boolean;
@@ -176,9 +213,6 @@ interface GalleryItem {
   category: string;
   imageUrl: string;
   description?: string;
-  eventDate?: string;
-  orderIndex?: number;
-  isActive?: boolean;
 }
 
 interface StudentChapterItem {
@@ -189,8 +223,6 @@ interface StudentChapterItem {
   location: string;
   memberCount: number;
   highlights?: string;
-  badgeStatus?: string;
-  isActive?: boolean;
 }
 
 interface ContactInquiryItem {
@@ -203,9 +235,7 @@ interface ContactInquiryItem {
   organization: string;
   subjectRef: string;
   messageBody: string;
-  attachmentUrl?: string;
   status: string;
-  replyNotes?: string;
   createdAt: string;
 }
 
@@ -226,35 +256,58 @@ export default function AdminPage() {
     | 'members'
     | 'committee'
     | 'applications'
+    | 'programmes'
     | 'events'
     | 'symposium'
+    | 'sponsors'
     | 'news'
     | 'gallery'
     | 'student-chapters'
-    | 'inquiries';
+    | 'inquiries'
+    | 'settings';
 
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [loadingData, setLoadingData] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
-  // Data States
+  // Data Lists
   const [stats, setStats] = useState<StatsData | null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
   const [membersList, setMembersList] = useState<MemberItem[]>([]);
   const [committeeList, setCommitteeList] = useState<CommitteeItem[]>([]);
   const [applicationsList, setApplicationsList] = useState<ApplicationItem[]>([]);
+  const [programmesList, setProgrammesList] = useState<ProgrammeItem[]>([]);
   const [eventsList, setEventsList] = useState<EventItem[]>([]);
   const [registrationsList, setRegistrationsList] = useState<RegistrationItem[]>([]);
   const [papersList, setPapersList] = useState<PaperItem[]>([]);
   const [sympSubTab, setSympSubTab] = useState<'delegates' | 'papers'>('delegates');
+  const [sponsorsList, setSponsorsList] = useState<SponsorItem[]>([]);
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [galleryList, setGalleryList] = useState<GalleryItem[]>([]);
   const [chaptersList, setChaptersList] = useState<StudentChapterItem[]>([]);
   const [inquiriesList, setInquiriesList] = useState<ContactInquiryItem[]>([]);
+  const [siteSettings, setSiteSettings] = useState<SiteSettingItem>({
+    chapterName: 'The Indian Institute of Metals • Bhubaneswar Chapter',
+    tagline: 'Advancing Metallurgy, Mineral Processing & Advanced Materials in Odisha',
+    secretariatAddress: 'CSIR – Institute of Minerals and Materials Technology (CSIR-IMMT), Acharya Vihar, Bhubaneswar - 751013, Odisha, India',
+    primaryEmail: 'secretary@iimbhubaneswar.in',
+    membershipEmail: 'membership@iimbhubaneswar.in',
+    symposiumEmail: 'symposium2026@iimbhubaneswar.in',
+    primaryPhone: '+91 674 237 9401',
+    secondaryPhone: '+91 674 237 4112',
+    officeHours: 'Mon - Fri: 9:30 AM - 5:30 PM IST',
+    activeMembersCount: '750+',
+    partnerInstitutionsCount: '30+',
+    studentChaptersCount: '4',
+    symposiaCount: '18',
+    chairmanName: 'Dr. Ashok Kumar Mohanty, FIE, FIIM',
+    chairmanTitle: 'Chairman, IIM Bhubaneswar Chapter • Chief Scientist (Retd.), CSIR-IMMT',
+    chairmanQuote: 'Odisha produces over half of India’s iron ore and bauxite. As we transition towards green hydrogen direct-reduction and circular slag utilisation, the IIM Bhubaneswar Chapter serves as the intellectual crucible transforming resource abundance into sustainable technological sovereignty.',
+    chairmanPhotoUrl: '',
+  });
 
-  // Search & Filter
+  // Search
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterCategory, setFilterCategory] = useState('ALL');
 
   // Modals
   const [showMemberModal, setShowMemberModal] = useState(false);
@@ -281,6 +334,30 @@ export default function AdminPage() {
     location: '',
     bio: '',
     image: '',
+    orderIndex: 1,
+  });
+
+  const [showProgrammeModal, setShowProgrammeModal] = useState(false);
+  const [editingProgrammeId, setEditingProgrammeId] = useState<string | null>(null);
+  const [programmeForm, setProgrammeForm] = useState({
+    title: '',
+    category: 'Annual Tradition',
+    annualSchedule: 'Annually',
+    description: '',
+    highlights: '',
+    bannerImage: '',
+    brochurePdfUrl: '',
+    orderIndex: 1,
+  });
+
+  const [showSponsorModal, setShowSponsorModal] = useState(false);
+  const [editingSponsorId, setEditingSponsorId] = useState<string | null>(null);
+  const [sponsorForm, setSponsorForm] = useState({
+    name: '',
+    tier: 'Platinum Sponsor',
+    logoUrl: '',
+    websiteUrl: '',
+    description: '',
     orderIndex: 1,
   });
 
@@ -316,7 +393,6 @@ export default function AdminPage() {
     category: 'Symposium',
     imageUrl: '',
     description: '',
-    eventDate: new Date().toISOString().split('T')[0],
   });
 
   const [showChapterModal, setShowChapterModal] = useState(false);
@@ -353,7 +429,6 @@ export default function AdminPage() {
     async function loadData() {
       setLoadingData(true);
       setSearchQuery('');
-      setFilterCategory('ALL');
       try {
         if (activeTab === 'overview') {
           const [statsRes, auditRes] = await Promise.all([
@@ -378,6 +453,10 @@ export default function AdminPage() {
           });
           const json = await res.json();
           if (json.success) setApplicationsList(json.data || []);
+        } else if (activeTab === 'programmes') {
+          const res = await fetch('/api/programmes');
+          const json = await res.json();
+          if (json.success) setProgrammesList(json.data || []);
         } else if (activeTab === 'events') {
           const res = await fetch('/api/events');
           const json = await res.json();
@@ -391,6 +470,10 @@ export default function AdminPage() {
           const paperJson = await paperRes.json();
           if (regJson.success) setRegistrationsList(regJson.data || []);
           if (paperJson.success) setPapersList(paperJson.data || []);
+        } else if (activeTab === 'sponsors') {
+          const res = await fetch('/api/sponsors');
+          const json = await res.json();
+          if (json.success) setSponsorsList(json.data || []);
         } else if (activeTab === 'news') {
           const res = await fetch('/api/news');
           const json = await res.json();
@@ -409,6 +492,10 @@ export default function AdminPage() {
           });
           const json = await res.json();
           if (json.success) setInquiriesList(json.data || []);
+        } else if (activeTab === 'settings') {
+          const res = await fetch('/api/settings');
+          const json = await res.json();
+          if (json.success && json.data) setSiteSettings(json.data);
         }
       } catch (err) {
         console.error('Failed to load tab data:', err);
@@ -439,9 +526,7 @@ export default function AdminPage() {
       });
 
       const json = await res.json();
-      if (!res.ok || !json.success) {
-        throw new Error(json.error || 'Invalid email or password.');
-      }
+      if (!res.ok || !json.success) throw new Error(json.error || 'Invalid email or password.');
 
       const receivedToken = json.data.token;
       const userObj = json.data.admin;
@@ -452,8 +537,7 @@ export default function AdminPage() {
       setAdminUser(userObj);
       showNotification('success', `Welcome back, ${userObj.name}!`);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Login failed.';
-      setLoginError(msg);
+      setLoginError(err instanceof Error ? err.message : 'Login failed.');
     } finally {
       setLoginLoading(false);
     }
@@ -612,7 +696,167 @@ export default function AdminPage() {
     }
   };
 
-  // --- CRUD: MEMBERSHIP APPLICATIONS ---
+  // --- CRUD: PROGRAMMES ---
+  const handleOpenProgrammeModal = (item?: ProgrammeItem) => {
+    if (item) {
+      setEditingProgrammeId(item._id);
+      setProgrammeForm({
+        title: item.title,
+        category: item.category,
+        annualSchedule: item.annualSchedule,
+        description: item.description,
+        highlights: Array.isArray(item.highlights) ? item.highlights.join(', ') : '',
+        bannerImage: item.bannerImage || '',
+        brochurePdfUrl: item.brochurePdfUrl || '',
+        orderIndex: item.orderIndex || 1,
+      });
+    } else {
+      setEditingProgrammeId(null);
+      setProgrammeForm({
+        title: '',
+        category: 'Annual Tradition',
+        annualSchedule: 'Annually',
+        description: '',
+        highlights: '',
+        bannerImage: '',
+        brochurePdfUrl: '',
+        orderIndex: programmesList.length + 1,
+      });
+    }
+    setShowProgrammeModal(true);
+  };
+
+  const handleSaveProgramme = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const url = editingProgrammeId ? `/api/programmes/${editingProgrammeId}` : '/api/programmes';
+      const method = editingProgrammeId ? 'PUT' : 'POST';
+
+      const payload = {
+        ...programmeForm,
+        highlights: programmeForm.highlights
+          .split(',')
+          .map((h) => h.trim())
+          .filter(Boolean),
+      };
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to save programme.');
+
+      showNotification('success', editingProgrammeId ? 'Programme updated!' : 'Programme added!');
+      setShowProgrammeModal(false);
+      const updated = await fetch('/api/programmes').then((r) => r.json());
+      if (updated.success) setProgrammesList(updated.data || []);
+    } catch (err) {
+      showNotification('error', err instanceof Error ? err.message : 'Error saving programme.');
+    }
+  };
+
+  const handleDeleteProgramme = async (id: string, title: string) => {
+    if (!confirm(`Are you sure you want to delete programme "${title}"?`)) return;
+    try {
+      const res = await fetch(`/api/programmes/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.error || 'Delete failed');
+      showNotification('success', 'Programme removed.');
+      setProgrammesList((prev) => prev.filter((p) => p._id !== id));
+    } catch (err) {
+      showNotification('error', err instanceof Error ? err.message : 'Delete failed');
+    }
+  };
+
+  // --- CRUD: SPONSORS ---
+  const handleOpenSponsorModal = (item?: SponsorItem) => {
+    if (item) {
+      setEditingSponsorId(item._id);
+      setSponsorForm({
+        name: item.name,
+        tier: item.tier,
+        logoUrl: item.logoUrl,
+        websiteUrl: item.websiteUrl || '',
+        description: item.description || '',
+        orderIndex: item.orderIndex || 1,
+      });
+    } else {
+      setEditingSponsorId(null);
+      setSponsorForm({
+        name: '',
+        tier: 'Platinum Sponsor',
+        logoUrl: '',
+        websiteUrl: '',
+        description: '',
+        orderIndex: sponsorsList.length + 1,
+      });
+    }
+    setShowSponsorModal(true);
+  };
+
+  const handleSaveSponsor = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const url = editingSponsorId ? `/api/sponsors/${editingSponsorId}` : '/api/sponsors';
+      const method = editingSponsorId ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(sponsorForm),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to save sponsor.');
+
+      showNotification('success', editingSponsorId ? 'Sponsor updated!' : 'Sponsor added!');
+      setShowSponsorModal(false);
+      const updated = await fetch('/api/sponsors').then((r) => r.json());
+      if (updated.success) setSponsorsList(updated.data || []);
+    } catch (err) {
+      showNotification('error', err instanceof Error ? err.message : 'Error saving sponsor.');
+    }
+  };
+
+  const handleDeleteSponsor = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete sponsor "${name}"?`)) return;
+    try {
+      const res = await fetch(`/api/sponsors/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.error || 'Delete failed');
+      showNotification('success', 'Sponsor removed.');
+      setSponsorsList((prev) => prev.filter((s) => s._id !== id));
+    } catch (err) {
+      showNotification('error', err instanceof Error ? err.message : 'Delete failed');
+    }
+  };
+
+  // --- CRUD: SETTINGS SAVE ---
+  const handleSaveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(siteSettings),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to update settings');
+      showNotification('success', 'Site settings updated successfully!');
+      if (json.data) setSiteSettings(json.data);
+    } catch (err) {
+      showNotification('error', err instanceof Error ? err.message : 'Failed to save settings.');
+    }
+  };
+
+  // --- CRUD: APPLICATIONS STATUS ---
   const handleUpdateAppStatus = async (id: string, newStatus: string) => {
     try {
       const res = await fetch(`/api/membership-applications/${id}`, {
@@ -628,71 +872,6 @@ export default function AdminPage() {
       );
     } catch (err) {
       showNotification('error', err instanceof Error ? err.message : 'Status update failed.');
-    }
-  };
-
-  // --- CRUD: GALLERY ---
-  const handleOpenGalleryModal = (item?: GalleryItem) => {
-    if (item) {
-      setEditingGalleryId(item._id);
-      setGalleryForm({
-        title: item.title,
-        category: item.category,
-        imageUrl: item.imageUrl,
-        description: item.description || '',
-        eventDate: item.eventDate ? new Date(item.eventDate).toISOString().split('T')[0] : '',
-      });
-    } else {
-      setEditingGalleryId(null);
-      setGalleryForm({
-        title: '',
-        category: 'Symposium',
-        imageUrl: '',
-        description: '',
-        eventDate: new Date().toISOString().split('T')[0],
-      });
-    }
-    setShowGalleryModal(true);
-  };
-
-  const handleSaveGallery = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!galleryForm.imageUrl) {
-      showNotification('error', 'Please upload or provide an image URL.');
-      return;
-    }
-    try {
-      const url = editingGalleryId ? `/api/gallery/${editingGalleryId}` : '/api/gallery';
-      const method = editingGalleryId ? 'PUT' : 'POST';
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(galleryForm),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to save photograph.');
-      showNotification('success', editingGalleryId ? 'Photo updated successfully!' : 'Photo added to Gallery!');
-      setShowGalleryModal(false);
-      const updated = await fetch('/api/gallery').then((r) => r.json());
-      if (updated.success) setGalleryList(updated.data || []);
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Failed to save.');
-    }
-  };
-
-  const handleDeleteGallery = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this photograph?')) return;
-    try {
-      const res = await fetch(`/api/gallery/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to delete photo.');
-      showNotification('success', 'Photograph deleted.');
-      setGalleryList((prev) => prev.filter((item) => item._id !== id));
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Delete failed.');
     }
   };
 
@@ -828,6 +1007,69 @@ export default function AdminPage() {
     }
   };
 
+  // --- CRUD: GALLERY ---
+  const handleOpenGalleryModal = (item?: GalleryItem) => {
+    if (item) {
+      setEditingGalleryId(item._id);
+      setGalleryForm({
+        title: item.title,
+        category: item.category,
+        imageUrl: item.imageUrl,
+        description: item.description || '',
+      });
+    } else {
+      setEditingGalleryId(null);
+      setGalleryForm({
+        title: '',
+        category: 'Symposium',
+        imageUrl: '',
+        description: '',
+      });
+    }
+    setShowGalleryModal(true);
+  };
+
+  const handleSaveGallery = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!galleryForm.imageUrl) {
+      showNotification('error', 'Please upload or provide an image URL.');
+      return;
+    }
+    try {
+      const url = editingGalleryId ? `/api/gallery/${editingGalleryId}` : '/api/gallery';
+      const method = editingGalleryId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(galleryForm),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to save photograph.');
+      showNotification('success', editingGalleryId ? 'Photo updated successfully!' : 'Photo added to Gallery!');
+      setShowGalleryModal(false);
+      const updated = await fetch('/api/gallery').then((r) => r.json());
+      if (updated.success) setGalleryList(updated.data || []);
+    } catch (err) {
+      showNotification('error', err instanceof Error ? err.message : 'Failed to save.');
+    }
+  };
+
+  const handleDeleteGallery = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this photograph?')) return;
+    try {
+      const res = await fetch(`/api/gallery/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to delete photo.');
+      showNotification('success', 'Photograph deleted.');
+      setGalleryList((prev) => prev.filter((item) => item._id !== id));
+    } catch (err) {
+      showNotification('error', err instanceof Error ? err.message : 'Delete failed.');
+    }
+  };
+
   // --- CRUD: STUDENT CHAPTERS ---
   const handleOpenChapterModal = (item?: StudentChapterItem) => {
     if (item) {
@@ -891,7 +1133,7 @@ export default function AdminPage() {
     }
   };
 
-  // --- CRUD: INQUIRIES STATUS TOGGLE ---
+  // --- CRUD: INQUIRIES ---
   const handleUpdateInquiryStatus = async (id: string, newStatus: string) => {
     try {
       const res = await fetch(`/api/contact/${id}`, {
@@ -931,7 +1173,7 @@ export default function AdminPage() {
             </span>
             <h1 className="text-2xl font-bold tracking-tight">Secretariat Admin Terminal</h1>
             <p className="text-xs text-slate-400">
-              Complete Management Console for Members, Committee, Symposia &amp; Circulars
+              Complete Management Console for 15 Collections: Members, Committee, Programmes, Settings &amp; Symposia
             </p>
           </div>
 
@@ -1026,7 +1268,7 @@ export default function AdminPage() {
               <div className="font-bold text-sm tracking-tight text-white flex items-center gap-2">
                 <span>IIM Bhubaneswar Chapter</span>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold tracking-wider uppercase">
-                  12 Tables Active
+                  15 Collections Live
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">Secretariat Management Console</p>
@@ -1070,19 +1312,22 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* 10 Console Navigation Tabs */}
+        {/* 13 Console Navigation Tabs */}
         <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
           {[
             { id: 'overview', label: 'Overview', icon: BarChart3 },
             { id: 'members', label: 'Members', icon: Users },
             { id: 'committee', label: 'Committee', icon: Award },
             { id: 'applications', label: 'Applications', icon: FileCheck },
+            { id: 'programmes', label: 'Programmes', icon: Sparkles },
             { id: 'events', label: 'Events', icon: Calendar },
             { id: 'symposium', label: 'Symposium 2026', icon: Ticket },
+            { id: 'sponsors', label: 'Sponsors', icon: Handshake },
             { id: 'news', label: 'News & Circulars', icon: Newspaper },
             { id: 'gallery', label: 'Gallery', icon: ImageIcon },
             { id: 'student-chapters', label: 'Student Chapters', icon: GraduationCap },
             { id: 'inquiries', label: 'Inquiries', icon: Mail },
+            { id: 'settings', label: 'Site Settings', icon: Settings },
           ].map((t) => {
             const Icon = t.icon;
             const active = activeTab === t.id;
@@ -1090,7 +1335,7 @@ export default function AdminPage() {
               <button
                 key={t.id}
                 onClick={() => setActiveTab(t.id as TabType)}
-                className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition shrink-0 flex items-center gap-2 ${
+                className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition shrink-0 flex items-center gap-2 ${
                   active
                     ? 'bg-primary text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
@@ -1114,7 +1359,6 @@ export default function AdminPage() {
             {/* ================= TAB 1: OVERVIEW ================= */}
             {activeTab === 'overview' && (
               <div className="space-y-6">
-                {/* Stats Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                   <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                     <span className="text-xs text-slate-500 font-medium">Total Members</span>
@@ -1148,12 +1392,11 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Recent Audit Logs */}
                 <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                   <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
                     <div>
                       <h3 className="font-bold text-slate-900 text-sm">Security Audit Trail</h3>
-                      <p className="text-xs text-slate-500">Live activity logs of changes across collections</p>
+                      <p className="text-xs text-slate-500">Live activity logs of changes across 15 collections</p>
                     </div>
                     <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg">
                       {auditLogs.length} Records
@@ -1199,17 +1442,15 @@ export default function AdminPage() {
             {activeTab === 'members' && (
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                  <div className="flex items-center gap-3 flex-1 max-w-md">
-                    <div className="relative w-full">
-                      <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="Search member by name, roll no, or organization..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
-                      />
-                    </div>
+                  <div className="relative w-full max-w-md">
+                    <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="Search member by name, roll no, or organization..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    />
                   </div>
                   <button
                     onClick={() => handleOpenMemberModal()}
@@ -1397,7 +1638,7 @@ export default function AdminPage() {
                           <th className="px-4 py-3 font-semibold">Contact</th>
                           <th className="px-4 py-3 font-semibold">Organization &amp; Post</th>
                           <th className="px-4 py-3 font-semibold">Cadre Sought</th>
-                          <th className="px-4 py-3 font-semibold">Verification Status</th>
+                          <th className="px-4 py-3 font-semibold">Status</th>
                           <th className="px-4 py-3 font-semibold text-right">Update Status</th>
                         </tr>
                       </thead>
@@ -1454,7 +1695,72 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= TAB 5: EVENTS ================= */}
+            {/* ================= TAB 5: PROGRAMMES ================= */}
+            {activeTab === 'programmes' && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-sm">Flagship Chapter Programmes</h3>
+                    <p className="text-xs text-slate-500">Foundation Day, NMD Awards, AGM, Memorial Lectures, Conclave</p>
+                  </div>
+                  <button
+                    onClick={() => handleOpenProgrammeModal()}
+                    className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-sm"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add Programme</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {programmesList.map((p) => (
+                    <div
+                      key={p._id}
+                      className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between gap-4"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary uppercase">
+                            {p.category}
+                          </span>
+                          <span className="text-xs font-semibold text-slate-500">{p.annualSchedule}</span>
+                        </div>
+                        <h4 className="font-bold text-base text-slate-900 leading-snug">{p.title}</h4>
+                        <p className="text-xs text-slate-600 line-clamp-3">{p.description}</p>
+                        {p.highlights && p.highlights.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 pt-2">
+                            {p.highlights.map((h, i) => (
+                              <span key={i} className="px-2 py-0.5 bg-slate-100 rounded text-[10px] text-slate-600">
+                                ✓ {h}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => handleOpenProgrammeModal(p)}
+                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-primary hover:bg-slate-100 transition flex items-center gap-1"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                          <span>Edit</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProgramme(p._id, p.title)}
+                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 transition flex items-center gap-1"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ================= TAB 6: EVENTS ================= */}
             {activeTab === 'events' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
@@ -1528,7 +1834,7 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= TAB 6: SYMPOSIUM ================= */}
+            {/* ================= TAB 7: SYMPOSIUM ================= */}
             {activeTab === 'symposium' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
@@ -1567,7 +1873,6 @@ export default function AdminPage() {
                             <th className="px-4 py-3 font-semibold">Institution</th>
                             <th className="px-4 py-3 font-semibold">Fee Tier</th>
                             <th className="px-4 py-3 font-semibold">Amount</th>
-                            <th className="px-4 py-3 font-semibold">Mode</th>
                             <th className="px-4 py-3 font-semibold">Payment Status</th>
                           </tr>
                         </thead>
@@ -1583,7 +1888,6 @@ export default function AdminPage() {
                                 </span>
                               </td>
                               <td className="px-4 py-3 font-bold text-slate-900">₹{r.feeAmount}</td>
-                              <td className="px-4 py-3">{r.mode}</td>
                               <td className="px-4 py-3">
                                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                   {r.paymentStatus}
@@ -1639,7 +1943,73 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= TAB 7: NEWS & CIRCULARS ================= */}
+            {/* ================= TAB 8: SPONSORS ================= */}
+            {activeTab === 'sponsors' && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-sm">Industry Sponsors &amp; Institutional Alliances</h3>
+                    <p className="text-xs text-slate-500">Corporate partners for symposia and annual endowment support</p>
+                  </div>
+                  <button
+                    onClick={() => handleOpenSponsorModal()}
+                    className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-sm"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add Sponsor</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {sponsorsList.map((s) => (
+                    <div
+                      key={s._id}
+                      className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col justify-between gap-3"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="px-2 py-0.5 bg-amber-50 text-amber-700 font-bold text-[10px] rounded-full">
+                            {s.tier}
+                          </span>
+                        </div>
+                        <h4 className="font-bold text-sm text-slate-900">{s.name}</h4>
+                        {s.description && <p className="text-xs text-slate-500 line-clamp-2">{s.description}</p>}
+                        {s.websiteUrl && (
+                          <a
+                            href={s.websiteUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-xs text-primary hover:underline flex items-center gap-1 font-medium"
+                          >
+                            <span>Visit Website</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => handleOpenSponsorModal(s)}
+                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-primary hover:bg-slate-100 transition flex items-center gap-1"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                          <span>Edit</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteSponsor(s._id, s.name)}
+                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 transition flex items-center gap-1"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ================= TAB 9: NEWS ================= */}
             {activeTab === 'news' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
@@ -1718,7 +2088,7 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= TAB 8: GALLERY ================= */}
+            {/* ================= TAB 10: GALLERY ================= */}
             {activeTab === 'gallery' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
@@ -1771,7 +2141,7 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= TAB 9: STUDENT CHAPTERS ================= */}
+            {/* ================= TAB 11: STUDENT CHAPTERS ================= */}
             {activeTab === 'student-chapters' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
@@ -1835,7 +2205,7 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= TAB 10: INQUIRIES ================= */}
+            {/* ================= TAB 12: INQUIRIES ================= */}
             {activeTab === 'inquiries' && (
               <div className="space-y-4">
                 <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
@@ -1899,6 +2269,189 @@ export default function AdminPage() {
                     </table>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* ================= TAB 13: SITE SETTINGS ================= */}
+            {activeTab === 'settings' && (
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 max-w-4xl">
+                <div className="border-b pb-4 mb-6">
+                  <h3 className="font-bold text-slate-900 text-base">Global Chapter Settings</h3>
+                  <p className="text-xs text-slate-500">
+                    Update secretariat postal address, phone numbers, official email IDs, and home page metrics
+                  </p>
+                </div>
+
+                <form onSubmit={handleSaveSettings} className="space-y-6 text-xs">
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm mb-3">1. Identity &amp; Secretariat Address</h4>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Chapter Name</label>
+                        <input
+                          type="text"
+                          required
+                          value={siteSettings.chapterName}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, chapterName: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Tagline</label>
+                        <input
+                          type="text"
+                          value={siteSettings.tagline}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, tagline: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Secretariat Postal Address</label>
+                        <textarea
+                          rows={2}
+                          required
+                          value={siteSettings.secretariatAddress}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, secretariatAddress: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-5">
+                    <h4 className="font-bold text-slate-900 text-sm mb-3">2. Official Communication Channels</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Primary Office Phone</label>
+                        <input
+                          type="text"
+                          required
+                          value={siteSettings.primaryPhone}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, primaryPhone: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Secondary / Mobile Phone</label>
+                        <input
+                          type="text"
+                          value={siteSettings.secondaryPhone || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, secondaryPhone: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">General Secretary Email</label>
+                        <input
+                          type="email"
+                          required
+                          value={siteSettings.primaryEmail}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, primaryEmail: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Membership Email</label>
+                        <input
+                          type="email"
+                          required
+                          value={siteSettings.membershipEmail}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, membershipEmail: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-5">
+                    <h4 className="font-bold text-slate-900 text-sm mb-3">3. Homepage Stats Counters</h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Active Members</label>
+                        <input
+                          type="text"
+                          value={siteSettings.activeMembersCount}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, activeMembersCount: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Partner Institutions</label>
+                        <input
+                          type="text"
+                          value={siteSettings.partnerInstitutionsCount}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, partnerInstitutionsCount: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Student Chapters</label>
+                        <input
+                          type="text"
+                          value={siteSettings.studentChaptersCount}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, studentChaptersCount: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">National Symposia</label>
+                        <input
+                          type="text"
+                          value={siteSettings.symposiaCount}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, symposiaCount: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-5">
+                    <h4 className="font-bold text-slate-900 text-sm mb-3">4. Chairman's Homepage Message</h4>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block font-semibold text-slate-700 mb-1">Chairman Name</label>
+                          <input
+                            type="text"
+                            required
+                            value={siteSettings.chairmanName}
+                            onChange={(e) => setSiteSettings({ ...siteSettings, chairmanName: e.target.value })}
+                            className="w-full px-3 py-2 border rounded-xl"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-semibold text-slate-700 mb-1">Chairman Title</label>
+                          <input
+                            type="text"
+                            required
+                            value={siteSettings.chairmanTitle}
+                            onChange={(e) => setSiteSettings({ ...siteSettings, chairmanTitle: e.target.value })}
+                            className="w-full px-3 py-2 border rounded-xl"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Chairman Quote / Message</label>
+                        <textarea
+                          rows={3}
+                          required
+                          value={siteSettings.chairmanQuote}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, chairmanQuote: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t flex justify-end">
+                    <button
+                      type="submit"
+                      className="px-6 py-2.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-container shadow-sm transition"
+                    >
+                      Save Site Settings
+                    </button>
+                  </div>
+                </form>
               </div>
             )}
           </>
@@ -2131,7 +2684,7 @@ export default function AdminPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Profile Photo (ImageUpload)</label>
+                <label className="block font-semibold text-slate-700 mb-1">Profile Photo</label>
                 <ImageUpload
                   value={committeeForm.image}
                   onChange={(url) => setCommitteeForm({ ...committeeForm, image: url })}
@@ -2163,6 +2716,231 @@ export default function AdminPage() {
                   className="px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-container"
                 >
                   Save Officer
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL: PROGRAMME ================= */}
+      {showProgrammeModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b pb-3">
+              <h3 className="font-bold text-slate-900 text-base">
+                {editingProgrammeId ? 'Edit Programme' : 'Add Flagship Programme'}
+              </h3>
+              <button onClick={() => setShowProgrammeModal(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleSaveProgramme} className="space-y-3 text-xs">
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Programme Title</label>
+                <input
+                  type="text"
+                  required
+                  value={programmeForm.title}
+                  onChange={(e) => setProgrammeForm({ ...programmeForm, title: e.target.value })}
+                  placeholder="e.g. Annual Foundation Day & Fellowship Conferment"
+                  className="w-full px-3 py-2 border rounded-xl"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Category</label>
+                  <select
+                    value={programmeForm.category}
+                    onChange={(e) => setProgrammeForm({ ...programmeForm, category: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-xl bg-white"
+                  >
+                    <option value="Annual Tradition">Annual Tradition</option>
+                    <option value="Honors & Recognition">Honors & Recognition</option>
+                    <option value="Constitutional Governance">Constitutional Governance</option>
+                    <option value="Endowed Memorial Oration">Endowed Memorial Oration</option>
+                    <option value="Youth & Academic Outreach">Youth & Academic Outreach</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Annual Schedule</label>
+                  <input
+                    type="text"
+                    required
+                    value={programmeForm.annualSchedule}
+                    onChange={(e) => setProgrammeForm({ ...programmeForm, annualSchedule: e.target.value })}
+                    placeholder="e.g. 24 February Annually"
+                    className="w-full px-3 py-2 border rounded-xl"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Description</label>
+                <textarea
+                  rows={3}
+                  required
+                  value={programmeForm.description}
+                  onChange={(e) => setProgrammeForm({ ...programmeForm, description: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-xl"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">
+                  Key Highlights / Pillars (Comma separated)
+                </label>
+                <input
+                  type="text"
+                  value={programmeForm.highlights}
+                  onChange={(e) => setProgrammeForm({ ...programmeForm, highlights: e.target.value })}
+                  placeholder="Life Citations, Milestone Track Release, Keynote Lecture"
+                  className="w-full px-3 py-2 border rounded-xl"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Banner Image URL</label>
+                <input
+                  type="text"
+                  value={programmeForm.bannerImage}
+                  onChange={(e) => setProgrammeForm({ ...programmeForm, bannerImage: e.target.value })}
+                  placeholder="https://... or /assets/images/..."
+                  className="w-full px-3 py-2 border rounded-xl"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Brochure / Guidelines PDF URL</label>
+                <input
+                  type="text"
+                  value={programmeForm.brochurePdfUrl}
+                  onChange={(e) => setProgrammeForm({ ...programmeForm, brochurePdfUrl: e.target.value })}
+                  placeholder="/uploads/circulars/guidelines.pdf"
+                  className="w-full px-3 py-2 border rounded-xl"
+                />
+              </div>
+
+              <div className="pt-3 border-t flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowProgrammeModal(false)}
+                  className="px-4 py-2 border rounded-xl font-semibold hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-container"
+                >
+                  Save Programme
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL: SPONSOR ================= */}
+      {showSponsorModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4">
+            <div className="flex items-center justify-between border-b pb-3">
+              <h3 className="font-bold text-slate-900 text-base">
+                {editingSponsorId ? 'Edit Sponsor Details' : 'Add Corporate Sponsor'}
+              </h3>
+              <button onClick={() => setShowSponsorModal(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleSaveSponsor} className="space-y-3 text-xs">
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Sponsor Company Name</label>
+                <input
+                  type="text"
+                  required
+                  value={sponsorForm.name}
+                  onChange={(e) => setSponsorForm({ ...sponsorForm, name: e.target.value })}
+                  placeholder="e.g. Tata Steel Kalinganagar"
+                  className="w-full px-3 py-2 border rounded-xl"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Sponsorship Tier</label>
+                  <select
+                    value={sponsorForm.tier}
+                    onChange={(e) => setSponsorForm({ ...sponsorForm, tier: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-xl bg-white"
+                  >
+                    <option value="Title Sponsor">Title Sponsor</option>
+                    <option value="Platinum Sponsor">Platinum Sponsor</option>
+                    <option value="Gold Sponsor">Gold Sponsor</option>
+                    <option value="Silver Sponsor">Silver Sponsor</option>
+                    <option value="Knowledge Partner">Knowledge Partner</option>
+                    <option value="Institutional Partner">Institutional Partner</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Order Index</label>
+                  <input
+                    type="number"
+                    value={sponsorForm.orderIndex}
+                    onChange={(e) => setSponsorForm({ ...sponsorForm, orderIndex: parseInt(e.target.value) || 1 })}
+                    className="w-full px-3 py-2 border rounded-xl"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Logo Image (ImageUpload or URL)</label>
+                <input
+                  type="text"
+                  required
+                  value={sponsorForm.logoUrl}
+                  onChange={(e) => setSponsorForm({ ...sponsorForm, logoUrl: e.target.value })}
+                  placeholder="/assets/images/logo1.svg or URL"
+                  className="w-full px-3 py-2 border rounded-xl"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Company Website URL</label>
+                <input
+                  type="url"
+                  value={sponsorForm.websiteUrl}
+                  onChange={(e) => setSponsorForm({ ...sponsorForm, websiteUrl: e.target.value })}
+                  placeholder="https://www.tatasteel.com"
+                  className="w-full px-3 py-2 border rounded-xl"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Description / Contribution</label>
+                <textarea
+                  rows={2}
+                  value={sponsorForm.description}
+                  onChange={(e) => setSponsorForm({ ...sponsorForm, description: e.target.value })}
+                  placeholder="Pioneering industrial partner in Eastern Indian steelmaking..."
+                  className="w-full px-3 py-2 border rounded-xl"
+                />
+              </div>
+
+              <div className="pt-3 border-t flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowSponsorModal(false)}
+                  className="px-4 py-2 border rounded-xl font-semibold hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-container"
+                >
+                  Save Sponsor
                 </button>
               </div>
             </form>
@@ -2416,30 +3194,19 @@ export default function AdminPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Category</label>
-                  <select
-                    value={galleryForm.category}
-                    onChange={(e) => setGalleryForm({ ...galleryForm, category: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl bg-white"
-                  >
-                    <option value="Symposium">Symposium</option>
-                    <option value="Foundation Day">Foundation Day</option>
-                    <option value="Lectures">Lectures</option>
-                    <option value="Field Visits">Field Visits</option>
-                    <option value="Ceremonies">Ceremonies</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Event Date</label>
-                  <input
-                    type="date"
-                    value={galleryForm.eventDate}
-                    onChange={(e) => setGalleryForm({ ...galleryForm, eventDate: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Category</label>
+                <select
+                  value={galleryForm.category}
+                  onChange={(e) => setGalleryForm({ ...galleryForm, category: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-xl bg-white"
+                >
+                  <option value="Symposium">Symposium</option>
+                  <option value="Foundation Day">Foundation Day</option>
+                  <option value="Lectures">Lectures</option>
+                  <option value="Field Visits">Field Visits</option>
+                  <option value="Ceremonies">Ceremonies</option>
+                </select>
               </div>
 
               <div>
