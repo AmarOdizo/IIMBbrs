@@ -20,8 +20,8 @@
   },
   "include": [
     "frontend/**/*",
-    "backend/**/*"
+    "backend/**/*",
+    "frontend/next-env.d.ts"
   ],
   "exclude": ["node_modules"]
 }
-
