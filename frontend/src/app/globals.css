@@ -3,8 +3,10 @@
     margin: 0;
     padding: 0;
   }
-  html {
+  html[data-scroll-behavior="smooth"] {
     scroll-behavior: smooth;
+  }
+  html {
     scroll-padding-top: 116px;
   }
   @media (max-width: 639px) {
