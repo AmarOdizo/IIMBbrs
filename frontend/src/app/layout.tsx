@@ -1,13 +1,84 @@
 import type { Metadata } from 'next';
 import ClientNav from '@/components/ClientNav';
+import JsonLd from '@/components/JsonLd';
+import { SITE_URL, siteMetadata, getOrganizationSchema, getWebSiteSchema } from '@/lib/seo';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'The Indian Institute of Metals (IIM) • Bhubaneswar Chapter',
-  description: 'Official portal of The Indian Institute of Metals (IIM) Bhubaneswar Chapter.',
-  icons: {
-    icon: '/assets/images/logo1.svg',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'The Indian Institute of Metals (IIM) • Bhubaneswar Chapter',
+    template: '%s | IIM Bhubaneswar Chapter',
   },
+  description: siteMetadata.description,
+  applicationName: siteMetadata.shortName,
+  authors: [{ name: 'The Indian Institute of Metals, Bhubaneswar Chapter', url: SITE_URL }],
+  creator: 'IIM Bhubaneswar Chapter',
+  publisher: 'The Indian Institute of Metals',
+  keywords: [
+    'Indian Institute of Metals',
+    'IIM Bhubaneswar',
+    'IIM Bhubaneswar Chapter',
+    'CSIR-IMMT Bhubaneswar',
+    'Odisha metallurgy',
+    'green steel India',
+    'hydrogen DRI metallurgy',
+    'Advanced High-Strength Steels',
+    'AHSS symposium',
+    'materials engineering Odisha',
+    'mineral processing Eastern India',
+    'student chapters metallurgy',
+  ],
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'The Indian Institute of Metals (IIM) • Bhubaneswar Chapter',
+    description: siteMetadata.description,
+    url: SITE_URL,
+    siteName: siteMetadata.name,
+    locale: siteMetadata.locale,
+    type: 'website',
+    images: [
+      {
+        url: siteMetadata.ogImage,
+        width: 1200,
+        height: 630,
+        alt: 'IIM Bhubaneswar Chapter — Metallurgical Science & Green Steel',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'The Indian Institute of Metals (IIM) • Bhubaneswar Chapter',
+    description: siteMetadata.description,
+    images: [siteMetadata.ogImage],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: '/assets/images/logo1.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/assets/images/logo1.svg' },
+    ],
+  },
+  manifest: '/manifest.webmanifest',
 };
 
 export default function RootLayout({
@@ -18,10 +89,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
-        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
         <link rel="icon" type="image/svg+xml" href="/assets/images/logo1.svg" />
+        <JsonLd data={[getOrganizationSchema(), getWebSiteSchema()]} />
         <link
           href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
           rel="stylesheet"
