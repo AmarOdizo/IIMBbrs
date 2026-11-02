@@ -1,6 +1,5 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProgrammesList from '@/components/ProgrammesList';
 import JsonLd from '@/components/JsonLd';
@@ -30,7 +29,6 @@ export default function ProgrammesPage() {
           { name: 'Flagship Programmes', path: '/programmes' },
         ])}
       />
-      <Navbar />
       <main className="w-full pt-24 sm:pt-28 lg:pt-28 bg-surface min-h-screen">
         <ProgrammesList />
       </main>

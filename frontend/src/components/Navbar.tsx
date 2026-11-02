@@ -8,6 +8,11 @@ import { motion } from 'framer-motion';
 export default function Navbar() {
   const pathname = usePathname();
 
+  // Hide Navbar completely on /admin routes
+  if (pathname.startsWith('/admin')) {
+    return null;
+  }
+
   const navLinks = [
     { name: 'Home', href: '/', path: 'home', icon: 'home' },
     { name: 'About', href: '/about', path: 'about', icon: 'info' },
@@ -24,7 +29,7 @@ export default function Navbar() {
   const currentPath = (pathname.replace(/^\//, '').split('/')[0] || 'home').toLowerCase();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.06)] border-b border-surface-variant/20">
+    <header id="global-navbar" className="fixed top-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.06)] border-b border-surface-variant/20">
       {/* Top Chapter Affiliate Bar */}
       <div className="bg-on-background text-surface-variant font-label-sm text-[10px] sm:text-label-sm tracking-wider uppercase border-b border-surface-variant/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between gap-2">

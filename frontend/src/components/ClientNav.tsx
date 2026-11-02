@@ -33,86 +33,8 @@ export default function ClientNav() {
     }
   };
 
-  // Synchronize Active Nav Link Highlights and Smooth Sliding Pill
-  const highlightActiveLinks = (currentPathname: string) => {
-    const cleanPath = (currentPathname.replace(/^\//, '').split('/')[0] || 'home').toLowerCase();
-
-    const links = document.querySelectorAll<HTMLAnchorElement>(
-      'header nav a, #mobile-menu-panel a[data-path], header a[data-path]'
-    );
-
-    let activeDesktopLink: HTMLAnchorElement | null = null;
-
-    links.forEach((link) => {
-      const dataPath = (link.getAttribute('data-path') || '').toLowerCase();
-      const rawHref = (link.getAttribute('href') || '').replace(/^\//, '').split('/')[0].toLowerCase();
-
-      const isMatch =
-        cleanPath === 'home' || cleanPath === ''
-          ? dataPath === 'home' || rawHref === '' || rawHref === 'home'
-          : dataPath === cleanPath || rawHref === cleanPath;
-
-      // Ensure link text sits above background pills
-      link.style.position = 'relative';
-      link.style.zIndex = '2';
-
-      if (isMatch) {
-        link.classList.add('font-semibold');
-        link.classList.remove('text-on-surface-variant');
-        link.setAttribute('aria-current', 'page');
-        link.style.color = '#ffffff';
-
-        if (link.closest('header nav')) {
-          activeDesktopLink = link;
-          link.classList.remove('bg-primary-container');
-        } else {
-          link.classList.add('bg-primary-container');
-        }
-      } else {
-        link.classList.remove('bg-primary-container', 'font-semibold');
-        link.classList.add('text-on-surface-variant');
-        link.removeAttribute('aria-current');
-        link.style.color = '';
-      }
-    });
-
-    // Animate Smooth Sliding Pill strictly BEHIND the Active Desktop Tab (z-index 1)
-    const desktopNav = document.querySelector<HTMLElement>('header nav.hidden.lg\\:flex, header nav');
-    if (desktopNav && activeDesktopLink) {
-      desktopNav.style.position = 'relative';
-
-      // Check if Framer Motion is already rendering its own active pill on this nav
-      const hasFramerPill = desktopNav.querySelector('[data-projection-id]');
-
-      let slider = document.getElementById('navbar-active-slider');
-      if (hasFramerPill) {
-        if (slider) slider.style.display = 'none';
-        return;
-      }
-
-      if (!slider) {
-        slider = document.createElement('span');
-        slider.id = 'navbar-active-slider';
-        slider.className = 'absolute bg-primary-container rounded-lg pointer-events-none shadow-sm';
-        slider.style.zIndex = '1';
-        slider.style.transition = 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)';
-        desktopNav.insertBefore(slider, desktopNav.firstChild);
-      }
-
-      const activeEl = activeDesktopLink as HTMLAnchorElement;
-      slider.style.display = 'block';
-      slider.style.left = `${activeEl.offsetLeft}px`;
-      slider.style.top = `${activeEl.offsetTop}px`;
-      slider.style.width = `${activeEl.offsetWidth}px`;
-      slider.style.height = `${activeEl.offsetHeight}px`;
-      slider.style.opacity = '1';
-      slider.style.zIndex = '1';
-    }
-  };
-
-  // Run whenever the route changes
+  // Close mobile drawer on route change
   useEffect(() => {
-    highlightActiveLinks(pathname);
     setDrawerState(false);
   }, [pathname]);
 

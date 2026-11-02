@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Navbar from '@/components/Navbar';
 import ClientNav from '@/components/ClientNav';
 import JsonLd from '@/components/JsonLd';
 import { SITE_URL, siteMetadata, getOrganizationSchema, getWebSiteSchema } from '@/lib/seo';
@@ -112,6 +113,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary selection:text-white" suppressHydrationWarning>
+        <Navbar />
         {children}
         <ClientNav />
       </body>

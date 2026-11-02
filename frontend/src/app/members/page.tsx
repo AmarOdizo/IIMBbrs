@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MembersDirectory from '@/components/MembersDirectory';
 import Link from 'next/link';
@@ -9,7 +8,6 @@ import Link from 'next/link';
 export default function MembersPage() {
   return (
     <>
-      <Navbar />
       <main className="w-full pt-24 sm:pt-28 lg:pt-28 bg-surface min-h-screen pb-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-8">
           {/* Breadcrumb & Header */}

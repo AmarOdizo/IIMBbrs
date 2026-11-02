@@ -307,6 +307,16 @@ header nav a:active {
   transform: translateY(0);
 }
 
+/* Persistent Global Navbar */
+#global-navbar {
+  display: block !important;
+}
+
+/* Hide duplicate headers embedded in static page htmlContent */
+header:not(#global-navbar) {
+  display: none !important;
+}
+
 /* Ensure navbar tab text is ALWAYS visible above sliding pills and active states */
 header nav a {
   position: relative !important;
