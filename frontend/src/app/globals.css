@@ -162,11 +162,10 @@
   height: 100vh !important;
   height: 100dvh !important;
   z-index: 999999 !important;
-  display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 header:has(#mobile-menu-drawer.drawer-open) {
@@ -178,14 +177,13 @@ header:has(#mobile-menu-drawer.drawer-open) {
 }
 
 #mobile-menu-drawer.drawer-open {
-  display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
 }
 
 #mobile-menu-backdrop {
-  position: fixed !important;
+  position: absolute !important;
   inset: 0 !important;
   top: 0 !important;
   left: 0 !important;
@@ -193,12 +191,12 @@ header:has(#mobile-menu-drawer.drawer-open) {
   bottom: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  background-color: rgba(15, 23, 42, 0.7) !important;
-  backdrop-filter: blur(4px) !important;
-  -webkit-backdrop-filter: blur(4px) !important;
-  opacity: 0;
+  background-color: rgba(15, 23, 42, 0.65) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  opacity: 0 !important;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
   z-index: 1 !important;
 }
 
@@ -208,7 +206,7 @@ header:has(#mobile-menu-drawer.drawer-open) {
 }
 
 #mobile-menu-panel {
-  position: fixed !important;
+  position: absolute !important;
   top: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
@@ -219,24 +217,19 @@ header:has(#mobile-menu-drawer.drawer-open) {
   height: 100dvh !important;
   background-color: #ffffff !important;
   color: #0f172a !important;
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: -10px 0 35px rgba(0, 0, 0, 0.25) !important;
   border-left: 1px solid #cbd5e1 !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
   z-index: 2 !important;
-  visibility: visible !important;
   transform: translateX(100%) !important;
-  translate: 100% 0 !important;
-  --tw-translate-x: 100% !important;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), translate 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  will-change: transform, translate;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform;
 }
 
 #mobile-menu-drawer.drawer-open #mobile-menu-panel {
-  transform: translateX(0) !important;
-  translate: 0 0 !important;
-  --tw-translate-x: 0% !important;
+  transform: translateX(0%) !important;
 }
 
 #mobile-menu-panel .drawer-header {
@@ -266,5 +259,53 @@ header:has(#mobile-menu-drawer.drawer-open) {
   color: #994106 !important;
   font-weight: 600 !important;
 }
+
+/* ==========================================================
+   SMOOTH TAB & PAGE SLIDE TRANSITIONS
+   ========================================================== */
+
+/* Smooth entrance animation for all tab pages */
+@keyframes tabPageSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tab-page-transition {
+  animation: tabPageSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+/* Smooth horizontal scroll & sliding for all tab bars & category strips */
+.overflow-x-auto,
+nav[class*="overflow-x"],
+[role="tablist"],
+.no-scrollbar,
+.scrollbar-none {
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Silky smooth transitions on all navbar & filter tab buttons */
+header nav a,
+#mobile-menu-panel a,
+button[role="tab"],
+.tab-button {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+header nav a:hover {
+  transform: translateY(-1px);
+}
+
+header nav a:active {
+  transform: translateY(0);
+}
+
 
 

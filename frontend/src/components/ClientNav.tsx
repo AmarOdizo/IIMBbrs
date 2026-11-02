@@ -173,7 +173,7 @@ export default function ClientNav() {
 
       // Perform instant, smooth Client-side SPA navigation via Next.js router
       router.push(destination);
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     }
 
     // Prefetch routes on hover for instant 0ms transition
