@@ -124,3 +124,4 @@ export function getSymposiumEventSchema() {
     image: [`${SITE_URL}/assets/images/hero_green_steel.jpg`],
   };
 }
+
