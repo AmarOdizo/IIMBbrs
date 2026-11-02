@@ -14,13 +14,13 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@/*": ["./frontend/src/*"],
-      "@/backend/*": ["./frontend/src/backend/*"]
+      "@/*": ["./IIMBbsr/src/*"],
+      "@/backend/*": ["./IIMBbsr/src/backend/*"]
     }
   },
   "include": [
-    "frontend/**/*",
-    "frontend/next-env.d.ts"
+    "IIMBbsr/**/*",
+    "IIMBbsr/next-env.d.ts"
   ],
   "exclude": ["node_modules"]
 }
