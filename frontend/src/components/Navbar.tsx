@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -45,7 +46,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation Menu (Visible on lg: >= 1024px) */}
-        <nav className="hidden lg:flex items-center gap-1 font-label-md text-label-md">
+        <nav className="relative hidden lg:flex items-center gap-1 font-label-md text-label-md">
           {navLinks.map((item) => {
             const isActive =
               (currentPath === 'home' || currentPath === '')
@@ -58,13 +59,20 @@ export default function Navbar() {
                 href={item.href}
                 data-path={item.path}
                 aria-current={isActive ? 'page' : undefined}
-                className={`px-2.5 py-1.5 transition-colors shrink-0 rounded-lg ${
+                className={`relative px-2.5 py-1.5 transition-colors shrink-0 rounded-lg ${
                   isActive
-                    ? 'bg-primary-container text-on-primary-container font-semibold'
-                    : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
+                    ? 'text-on-primary-container font-semibold'
+                    : 'text-on-surface-variant hover:text-on-surface'
                 }`}
               >
-                {item.name}
+                {isActive && (
+                  <motion.span
+                    layoutId="navbar-active-pill"
+                    className="absolute inset-0 bg-primary-container rounded-lg -z-0 shadow-sm"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{item.name}</span>
               </Link>
             );
           })}

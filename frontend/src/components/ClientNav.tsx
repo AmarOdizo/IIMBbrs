@@ -33,13 +33,15 @@ export default function ClientNav() {
     }
   };
 
-  // Synchronize Active Nav Link Highlights across Desktop & Mobile
+  // Synchronize Active Nav Link Highlights and Smooth Sliding Pill
   const highlightActiveLinks = (currentPathname: string) => {
     const cleanPath = (currentPathname.replace(/^\//, '').split('/')[0] || 'home').toLowerCase();
 
     const links = document.querySelectorAll<HTMLAnchorElement>(
       'header nav a, #mobile-menu-panel a[data-path], header a[data-path]'
     );
+
+    let activeDesktopLink: HTMLAnchorElement | null = null;
 
     links.forEach((link) => {
       const dataPath = (link.getAttribute('data-path') || '').toLowerCase();
@@ -54,12 +56,37 @@ export default function ClientNav() {
         link.classList.add('bg-primary-container', 'text-on-primary-container', 'font-semibold');
         link.classList.remove('text-on-surface-variant');
         link.setAttribute('aria-current', 'page');
+        if (link.closest('header nav')) {
+          activeDesktopLink = link;
+        }
       } else {
         link.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-semibold');
         link.classList.add('text-on-surface-variant');
         link.removeAttribute('aria-current');
       }
     });
+
+    // Animate Smooth Sliding Pill behind Active Desktop Tab
+    const desktopNav = document.querySelector<HTMLElement>('header nav.hidden.lg\\:flex, header nav');
+    if (desktopNav && activeDesktopLink) {
+      desktopNav.style.position = 'relative';
+
+      let slider = document.getElementById('navbar-active-slider');
+      if (!slider) {
+        slider = document.createElement('span');
+        slider.id = 'navbar-active-slider';
+        slider.className = 'absolute bg-primary-container rounded-lg -z-0 pointer-events-none shadow-sm';
+        slider.style.transition = 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)';
+        desktopNav.appendChild(slider);
+      }
+
+      const activeEl = activeDesktopLink as HTMLAnchorElement;
+      slider.style.left = `${activeEl.offsetLeft}px`;
+      slider.style.top = `${activeEl.offsetTop}px`;
+      slider.style.width = `${activeEl.offsetWidth}px`;
+      slider.style.height = `${activeEl.offsetHeight}px`;
+      slider.style.opacity = '1';
+    }
   };
 
   // Run whenever the route changes
