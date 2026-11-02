@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getImageKitAuth } from '@/backend/utils/imagekit';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const authParams = getImageKitAuth();
@@ -16,4 +18,3 @@ export async function GET() {
     );
   }
 }
-

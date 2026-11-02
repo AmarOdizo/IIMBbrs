@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { uploadToImageKit, deleteFromImageKit } from '@/backend/utils/imagekit';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
@@ -86,4 +88,3 @@ export async function DELETE(req: NextRequest) {
     );
   }
 }
-

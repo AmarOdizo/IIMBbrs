@@ -1,24 +1,45 @@
 import ImageKit from 'imagekit';
 
-const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY;
-const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
-const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT;
+let imagekitInstance: ImageKit | null = null;
 
-if (!publicKey || !privateKey || !urlEndpoint) {
-  console.warn('Warning: ImageKit environment variables are missing.');
+export function getImageKit(): ImageKit {
+  if (imagekitInstance) {
+    return imagekitInstance;
+  }
+
+  const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY;
+  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
+  const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT;
+
+  if (!publicKey || !privateKey || !urlEndpoint) {
+    throw new Error('ImageKit environment variables are missing (NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY, IMAGEKIT_PRIVATE_KEY, NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT).');
+  }
+
+  imagekitInstance = new ImageKit({
+    publicKey,
+    privateKey,
+    urlEndpoint,
+  });
+
+  return imagekitInstance;
 }
 
-export const imagekit = new ImageKit({
-  publicKey: publicKey || '',
-  privateKey: privateKey || '',
-  urlEndpoint: urlEndpoint || '',
+export const imagekit: ImageKit = new Proxy({} as ImageKit, {
+  get(_target, prop: string | symbol, receiver) {
+    const instance = getImageKit();
+    const value = Reflect.get(instance as unknown as Record<string | symbol, unknown>, prop, receiver);
+    if (typeof value === 'function') {
+      return value.bind(instance);
+    }
+    return value;
+  },
 });
 
 /**
  * Generate client-side authentication parameters for direct uploads
  */
 export function getImageKitAuth() {
-  return imagekit.getAuthenticationParameters();
+  return getImageKit().getAuthenticationParameters();
 }
 
 /**
@@ -35,7 +56,7 @@ export async function uploadToImageKit({
   folder?: string;
   tags?: string[];
 }) {
-  return await imagekit.upload({
+  return await getImageKit().upload({
     file,
     fileName,
     folder,
@@ -47,8 +68,7 @@ export async function uploadToImageKit({
  * Delete a file from ImageKit by fileId
  */
 export async function deleteFromImageKit(fileId: string) {
-  return await imagekit.deleteFile(fileId);
+  return await getImageKit().deleteFile(fileId);
 }
 
 export default imagekit;
-
