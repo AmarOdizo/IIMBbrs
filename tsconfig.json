@@ -15,12 +15,11 @@
     "incremental": true,
     "paths": {
       "@/*": ["./frontend/src/*"],
-      "@/backend/*": ["./backend/*"]
+      "@/backend/*": ["./frontend/src/backend/*"]
     }
   },
   "include": [
     "frontend/**/*",
-    "backend/**/*",
     "frontend/next-env.d.ts"
   ],
   "exclude": ["node_modules"]

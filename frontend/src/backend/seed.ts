@@ -23,7 +23,7 @@ import {
   newsList,
   galleryItems,
   studentChaptersData,
-} from '../frontend/src/data/siteData';
+} from '@/data/siteData';
 
 export async function seedDatabase() {
   try {

@@ -3,16 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "frontend",
-    "backend"
+    "frontend"
   ],
   "scripts": {
     "dev": "npm run dev --workspace=frontend",
-    "dev:frontend": "npm run dev --workspace=frontend",
-    "dev:backend": "npm run dev --workspace=backend",
-    "build:frontend": "npm run build --workspace=frontend",
-    "build:backend": "npm run build --workspace=backend",
-    "seed:backend": "npm run seed --workspace=backend",
-    "test:backend": "npm run test --workspace=backend"
+    "build": "npm run build --workspace=frontend",
+    "start": "npm run start --workspace=frontend",
+    "seed": "npm run seed --workspace=frontend",
+    "lint": "npm run lint --workspace=frontend"
   }
 }
