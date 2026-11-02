@@ -1,25 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { Mail, Building, Tag, MapPin, Award, Loader2, UserCheck } from 'lucide-react';
-
-export interface CommitteeOfficer {
-  _id: string;
-  name: string;
-  role: string;
-  category: 'Apex' | 'Office Bearer' | 'Executive Member' | 'Advisory' | string;
-  title: string;
-  institution: string;
-  email: string;
-  phone?: string;
-  location?: string;
-  bio?: string;
-  tags?: string[];
-  image?: string;
-  orderIndex?: number;
-  isActive?: boolean;
-}
+import { Mail, Building, MapPin, UserCheck } from 'lucide-react';
+import { committeeMembers, Officer } from '@/data/siteData';
 
 const CATEGORIES = [
   { label: 'All Council', value: 'All' },
@@ -30,32 +14,12 @@ const CATEGORIES = [
 ];
 
 export default function CommitteeList() {
-  const [officers, setOfficers] = useState<CommitteeOfficer[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  useEffect(() => {
-    async function fetchCommittee() {
-      setLoading(true);
-      try {
-        const url = selectedCategory === 'All' 
-          ? '/api/committee' 
-          : `/api/committee?category=${encodeURIComponent(selectedCategory)}`;
-
-        const res = await fetch(url);
-        const json = await res.json();
-        if (json.success && Array.isArray(json.data)) {
-          setOfficers(json.data);
-        }
-      } catch (err) {
-        console.error('Failed to load committee officers:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchCommittee();
-  }, [selectedCategory]);
+  const filteredOfficers: Officer[] =
+    selectedCategory === 'All'
+      ? committeeMembers
+      : committeeMembers.filter((m) => m.category === selectedCategory);
 
   return (
     <div className="w-full flex flex-col gap-8 max-w-7xl mx-auto px-6 lg:px-12 py-10">
@@ -78,17 +42,12 @@ export default function CommitteeList() {
         </div>
 
         <span className="text-xs font-mono text-secondary px-3 py-1.5 rounded-lg bg-surface-container shrink-0">
-          {officers.length} Council Leaders Synchronized
+          {filteredOfficers.length} Council Leaders Listed
         </span>
       </div>
 
       {/* Officers Grid */}
-      {loading ? (
-        <div className="py-20 flex flex-col items-center justify-center gap-3 text-slate-500">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-          <p className="text-sm">Fetching chapter executive council from MongoDB...</p>
-        </div>
-      ) : officers.length === 0 ? (
+      {filteredOfficers.length === 0 ? (
         <div className="py-16 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 p-8 flex flex-col items-center justify-center">
           <UserCheck className="w-10 h-10 text-primary/40 mb-3" />
           <h4 className="text-base font-bold text-slate-800">No Officers Listed</h4>
@@ -96,9 +55,9 @@ export default function CommitteeList() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {officers.map((officer) => (
+          {filteredOfficers.map((officer, index) => (
             <div
-              key={officer._id}
+              key={`${officer.name}-${index}`}
               className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200/80 flex flex-col justify-between group"
             >
               <div>
@@ -198,4 +157,3 @@ export default function CommitteeList() {
     </div>
   );
 }
-

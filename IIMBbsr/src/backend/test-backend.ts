@@ -2,7 +2,6 @@ import connectDB from './db';
 import {
   Admin,
   Member,
-  CommitteeMember,
   NewsCircular,
   GalleryItem,
   StudentChapter,
@@ -31,7 +30,6 @@ async function runTests() {
     const checks = [
       { name: 'Admin', model: Admin, min: 1 },
       { name: 'Member', model: Member, min: 1 },
-      { name: 'CommitteeMember', model: CommitteeMember, min: 1 },
       { name: 'NewsCircular', model: NewsCircular, min: 1 },
       { name: 'GalleryItem', model: GalleryItem, min: 1 },
       { name: 'StudentChapter', model: StudentChapter, min: 1 },

@@ -1,7 +1,6 @@
 export { Admin, type IAdmin } from './Admin';
 export { Member, type IMember } from './Member';
 export { MembershipApplication, type IMembershipApplication } from './MembershipApplication';
-export { CommitteeMember, type ICommitteeMember } from './CommitteeMember';
 export { SymposiumRegistration, type ISymposiumRegistration } from './SymposiumRegistration';
 export { PaperSubmission, type IPaperSubmission } from './PaperSubmission';
 export { Event, type IEvent, type IEventSpeaker } from './Event';

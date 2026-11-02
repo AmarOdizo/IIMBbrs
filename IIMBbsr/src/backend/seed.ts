@@ -2,7 +2,6 @@ import connectDB from './db';
 import {
   Admin,
   Member,
-  CommitteeMember,
   NewsCircular,
   GalleryItem,
   StudentChapter,
@@ -18,7 +17,6 @@ import {
 } from './models';
 import { hashPassword } from './utils/auth';
 import {
-  committeeMembers,
   membersList,
   newsList,
   galleryItems,
@@ -67,25 +65,16 @@ export async function seedDatabase() {
       console.log(`✅ Seeded ${membersToInsert.length} Members.`);
     }
 
-    // 3. Seed Committee Members
-    const committeeCount = await CommitteeMember.countDocuments();
-    if (committeeCount === 0) {
-      const committeeToInsert = committeeMembers.map((c, index) => ({
-        name: c.name,
-        role: c.role,
-        category: c.category,
-        title: c.title,
-        institution: c.institution,
-        email: c.email,
-        location: c.location,
-        bio: c.bio,
-        tags: c.tags,
-        image: c.image,
-        orderIndex: index + 1,
-        isActive: true,
-      }));
-      await CommitteeMember.insertMany(committeeToInsert);
-      console.log(`✅ Seeded ${committeeToInsert.length} Committee Members.`);
+    // 3. Drop legacy Committee Members table/collection if present
+    try {
+      const mongoose = await import('mongoose');
+      const collections = await mongoose.default.connection.db?.listCollections({ name: 'committeemembers' }).toArray();
+      if (collections && collections.length > 0) {
+        await mongoose.default.connection.db?.dropCollection('committeemembers');
+        console.log('🗑️ Dropped legacy committeemembers collection from MongoDB.');
+      }
+    } catch {
+      // Continue if not connected
     }
 
     // 4. Seed News & Circulars

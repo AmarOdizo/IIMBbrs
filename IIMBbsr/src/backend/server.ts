@@ -5,7 +5,6 @@ import connectDB from './db';
 
 // Models
 import { Member } from './models/Member';
-import { CommitteeMember } from './models/CommitteeMember';
 import { Event } from './models/Event';
 import { NewsCircular } from './models/NewsCircular';
 import { GalleryItem } from './models/GalleryItem';
@@ -77,17 +76,6 @@ app.get('/api/members', async (req: Request, res: Response) => {
       ];
     }
     const members = await Member.find(filter).sort({ memberCode: 1 });
-    res.json({ success: true, count: members.length, data: members });
-  } catch (err: any) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
-// ==================== COMMITTEE ROUTES ====================
-app.get('/api/committee', async (req: Request, res: Response) => {
-  try {
-    await connectDB();
-    const members = await CommitteeMember.find({ isActive: true }).sort({ displayOrder: 1 });
     res.json({ success: true, count: members.length, data: members });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });

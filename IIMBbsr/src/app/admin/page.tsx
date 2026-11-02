@@ -79,20 +79,6 @@ interface MemberItem {
   status: 'Active' | 'Inactive';
 }
 
-interface CommitteeItem {
-  _id: string;
-  name: string;
-  role: string;
-  category: string;
-  title: string;
-  institution: string;
-  email: string;
-  location?: string;
-  bio?: string;
-  image?: string;
-  orderIndex?: number;
-  isActive?: boolean;
-}
 
 interface ApplicationItem {
   _id: string;
@@ -254,7 +240,6 @@ export default function AdminPage() {
   type TabType =
     | 'overview'
     | 'members'
-    | 'committee'
     | 'applications'
     | 'programmes'
     | 'events'
@@ -274,7 +259,6 @@ export default function AdminPage() {
   const [stats, setStats] = useState<StatsData | null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
   const [membersList, setMembersList] = useState<MemberItem[]>([]);
-  const [committeeList, setCommitteeList] = useState<CommitteeItem[]>([]);
   const [applicationsList, setApplicationsList] = useState<ApplicationItem[]>([]);
   const [programmesList, setProgrammesList] = useState<ProgrammeItem[]>([]);
   const [eventsList, setEventsList] = useState<EventItem[]>([]);
@@ -320,21 +304,6 @@ export default function AdminPage() {
     city: 'Bhubaneswar',
     state: 'Odisha',
     status: 'Active' as 'Active' | 'Inactive',
-  });
-
-  const [showCommitteeModal, setShowCommitteeModal] = useState(false);
-  const [editingCommitteeId, setEditingCommitteeId] = useState<string | null>(null);
-  const [committeeForm, setCommitteeForm] = useState({
-    name: '',
-    role: '',
-    category: 'Apex',
-    title: '',
-    institution: '',
-    email: '',
-    location: '',
-    bio: '',
-    image: '',
-    orderIndex: 1,
   });
 
   const [showProgrammeModal, setShowProgrammeModal] = useState(false);
@@ -443,10 +412,7 @@ export default function AdminPage() {
           const res = await fetch('/api/members?limit=200');
           const json = await res.json();
           if (json.success) setMembersList(json.data || []);
-        } else if (activeTab === 'committee') {
-          const res = await fetch('/api/committee');
-          const json = await res.json();
-          if (json.success) setCommitteeList(json.data || []);
+
         } else if (activeTab === 'applications') {
           const res = await fetch('/api/membership-applications', {
             headers: { Authorization: `Bearer ${token}` },
@@ -618,79 +584,6 @@ export default function AdminPage() {
       if (!res.ok || !json.success) throw new Error(json.error || 'Delete failed');
       showNotification('success', 'Member record removed.');
       setMembersList((prev) => prev.filter((m) => m._id !== id));
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Delete failed');
-    }
-  };
-
-  // --- CRUD: COMMITTEE ---
-  const handleOpenCommitteeModal = (item?: CommitteeItem) => {
-    if (item) {
-      setEditingCommitteeId(item._id);
-      setCommitteeForm({
-        name: item.name,
-        role: item.role,
-        category: item.category,
-        title: item.title,
-        institution: item.institution,
-        email: item.email,
-        location: item.location || '',
-        bio: item.bio || '',
-        image: item.image || '',
-        orderIndex: item.orderIndex || 1,
-      });
-    } else {
-      setEditingCommitteeId(null);
-      setCommitteeForm({
-        name: '',
-        role: 'Executive Member',
-        category: 'Executive Member',
-        title: '',
-        institution: 'CSIR-IMMT / IIT Bhubaneswar',
-        email: '',
-        location: 'Bhubaneswar',
-        bio: '',
-        image: '',
-        orderIndex: committeeList.length + 1,
-      });
-    }
-    setShowCommitteeModal(true);
-  };
-
-  const handleSaveCommittee = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const url = editingCommitteeId ? `/api/committee/${editingCommitteeId}` : '/api/committee';
-      const method = editingCommitteeId ? 'PUT' : 'POST';
-
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(committeeForm),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to save committee member.');
-
-      showNotification('success', editingCommitteeId ? 'Committee officer updated.' : 'New Officer added!');
-      setShowCommitteeModal(false);
-      const updated = await fetch('/api/committee').then((r) => r.json());
-      if (updated.success) setCommitteeList(updated.data || []);
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Error saving officer.');
-    }
-  };
-
-  const handleDeleteCommittee = async (id: string, name: string) => {
-    if (!confirm(`Delete officer "${name}" from Executive Committee?`)) return;
-    try {
-      const res = await fetch(`/api/committee/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Delete failed');
-      showNotification('success', 'Officer removed from committee.');
-      setCommitteeList((prev) => prev.filter((c) => c._id !== id));
     } catch (err) {
       showNotification('error', err instanceof Error ? err.message : 'Delete failed');
     }
@@ -1173,7 +1066,7 @@ export default function AdminPage() {
             </span>
             <h1 className="text-2xl font-bold tracking-tight">Secretariat Admin Terminal</h1>
             <p className="text-xs text-slate-400">
-              Complete Management Console for 15 Collections: Members, Committee, Programmes, Settings &amp; Symposia
+              Complete Management Console: Members, Programmes, Settings &amp; Symposia
             </p>
           </div>
 
@@ -1317,7 +1210,6 @@ export default function AdminPage() {
           {[
             { id: 'overview', label: 'Overview', icon: BarChart3 },
             { id: 'members', label: 'Members', icon: Users },
-            { id: 'committee', label: 'Committee', icon: Award },
             { id: 'applications', label: 'Applications', icon: FileCheck },
             { id: 'programmes', label: 'Programmes', icon: Sparkles },
             { id: 'events', label: 'Events', icon: Calendar },
@@ -1525,87 +1417,6 @@ export default function AdminPage() {
                               </td>
                             </tr>
                           ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ================= TAB 3: COMMITTEE ================= */}
-            {activeTab === 'committee' && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Executive Committee Officers</h3>
-                    <p className="text-xs text-slate-500">Apex council, office bearers and honorary advisors</p>
-                  </div>
-                  <button
-                    onClick={() => handleOpenCommitteeModal()}
-                    className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-sm"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Add Officer</span>
-                  </button>
-                </div>
-
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs text-slate-600">
-                      <thead className="bg-slate-50 text-slate-500 border-b border-slate-200 uppercase tracking-wider text-[10px]">
-                        <tr>
-                          <th className="px-4 py-3 font-semibold">Photo</th>
-                          <th className="px-4 py-3 font-semibold">Officer Name</th>
-                          <th className="px-4 py-3 font-semibold">Chapter Role</th>
-                          <th className="px-4 py-3 font-semibold">Category</th>
-                          <th className="px-4 py-3 font-semibold">Organization / College</th>
-                          <th className="px-4 py-3 font-semibold">Email</th>
-                          <th className="px-4 py-3 font-semibold text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {committeeList.map((c) => (
-                          <tr key={c._id} className="hover:bg-slate-50 transition">
-                            <td className="px-4 py-3">
-                              <div className="w-9 h-9 rounded-full overflow-hidden bg-slate-100 border border-slate-200">
-                                {c.image ? (
-                                  <img src={c.image} alt={c.name} className="w-full h-full object-cover" />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center font-bold text-slate-400">
-                                    {c.name.charAt(0)}
-                                  </div>
-                                )}
-                              </div>
-                            </td>
-                            <td className="px-4 py-3 font-bold text-slate-900">{c.name}</td>
-                            <td className="px-4 py-3 font-semibold text-primary">{c.role}</td>
-                            <td className="px-4 py-3">
-                              <span className="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full text-[10px] font-semibold">
-                                {c.category}
-                              </span>
-                            </td>
-                            <td className="px-4 py-3 text-slate-700">{c.institution}</td>
-                            <td className="px-4 py-3 text-slate-500">{c.email}</td>
-                            <td className="px-4 py-3 text-right">
-                              <div className="inline-flex items-center gap-2">
-                                <button
-                                  onClick={() => handleOpenCommitteeModal(c)}
-                                  className="p-1.5 text-slate-500 hover:text-primary hover:bg-slate-100 rounded-lg transition"
-                                  title="Edit Officer"
-                                >
-                                  <Edit2 className="w-3.5 h-3.5" />
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteCommittee(c._id, c.name)}
-                                  className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
-                                  title="Delete Officer"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -2568,154 +2379,6 @@ export default function AdminPage() {
                   className="px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-container"
                 >
                   {editingMemberId ? 'Update Member' : 'Enroll Member'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ================= MODAL: COMMITTEE ================= */}
-      {showCommitteeModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="font-bold text-slate-900 text-base">
-                {editingCommitteeId ? 'Edit Committee Officer' : 'Add Executive Officer'}
-              </h3>
-              <button onClick={() => setShowCommitteeModal(false)} className="text-slate-400 hover:text-slate-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={handleSaveCommittee} className="space-y-3 text-xs">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Full Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={committeeForm.name}
-                    onChange={(e) => setCommitteeForm({ ...committeeForm, name: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Chapter Role</label>
-                  <input
-                    type="text"
-                    required
-                    value={committeeForm.role}
-                    onChange={(e) => setCommitteeForm({ ...committeeForm, role: e.target.value })}
-                    placeholder="e.g. Chairman / Hony. Secretary"
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Category</label>
-                  <select
-                    value={committeeForm.category}
-                    onChange={(e) => setCommitteeForm({ ...committeeForm, category: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl bg-white"
-                  >
-                    <option value="Apex">Apex</option>
-                    <option value="Office Bearer">Office Bearer</option>
-                    <option value="Executive Member">Executive Member</option>
-                    <option value="Advisory">Advisory</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Order Index</label>
-                  <input
-                    type="number"
-                    value={committeeForm.orderIndex}
-                    onChange={(e) => setCommitteeForm({ ...committeeForm, orderIndex: parseInt(e.target.value) || 1 })}
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Job Title</label>
-                <input
-                  type="text"
-                  required
-                  value={committeeForm.title}
-                  onChange={(e) => setCommitteeForm({ ...committeeForm, title: e.target.value })}
-                  placeholder="e.g. Chief Scientist & Head of Pyrometallurgy"
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Institution / Organization</label>
-                <input
-                  type="text"
-                  required
-                  value={committeeForm.institution}
-                  onChange={(e) => setCommitteeForm({ ...committeeForm, institution: e.target.value })}
-                  placeholder="e.g. CSIR-IMMT, Bhubaneswar"
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Official Email</label>
-                  <input
-                    type="email"
-                    required
-                    value={committeeForm.email}
-                    onChange={(e) => setCommitteeForm({ ...committeeForm, email: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Chamber / Location</label>
-                  <input
-                    type="text"
-                    value={committeeForm.location}
-                    onChange={(e) => setCommitteeForm({ ...committeeForm, location: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Profile Photo</label>
-                <ImageUpload
-                  value={committeeForm.image}
-                  onChange={(url) => setCommitteeForm({ ...committeeForm, image: url })}
-                  label="Upload Officer Photo"
-                  folder="/committee"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Short Biography</label>
-                <textarea
-                  rows={2}
-                  value={committeeForm.bio}
-                  onChange={(e) => setCommitteeForm({ ...committeeForm, bio: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div className="pt-3 border-t flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowCommitteeModal(false)}
-                  className="px-4 py-2 border rounded-xl font-semibold hover:bg-slate-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-container"
-                >
-                  Save Officer
                 </button>
               </div>
             </form>

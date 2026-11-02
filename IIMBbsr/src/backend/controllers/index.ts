@@ -2,7 +2,6 @@ export * as authController from './authController';
 export * as adminController from './adminController';
 export * as memberController from './memberController';
 export * as membershipApplicationController from './membershipApplicationController';
-export * as committeeController from './committeeController';
 export * as symposiumController from './symposiumController';
 export * as eventController from './eventController';
 export * as newsController from './newsController';
