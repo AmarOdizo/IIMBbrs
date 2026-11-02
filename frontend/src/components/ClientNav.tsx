@@ -1,108 +1,202 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function ClientNav() {
   const pathname = usePathname();
+  const router = useRouter();
 
-  useEffect(() => {
-    console.log('CLIENTNAV EFFECT EXECUTED, pathname =', pathname);
+  // Mobile Drawer State Controller
+  const setDrawerState = (open: boolean) => {
+    const drawer = document.getElementById('mobile-menu-drawer');
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
 
-    // 1. Move drawer to document.body initially so backdrop-blur on <header> never clips it
-    function prepareDrawer() {
-      const drawer = document.getElementById('mobile-menu-drawer');
-      if (drawer && drawer.parentElement !== document.body) {
-        document.body.appendChild(drawer);
-      }
-      return drawer;
+    if (!drawer) return;
+
+    if (open) {
+      drawer.classList.add('drawer-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      toggle?.setAttribute('aria-expanded', 'true');
+      if (iconOpen) iconOpen.classList.add('hidden');
+      if (iconClose) iconClose.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    } else {
+      drawer.classList.remove('drawer-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      toggle?.setAttribute('aria-expanded', 'false');
+      if (iconOpen) iconOpen.classList.remove('hidden');
+      if (iconClose) iconClose.classList.add('hidden');
+      document.body.style.overflow = '';
     }
+  };
 
-    const drawer = prepareDrawer();
+  // Synchronize Active Nav Link Highlights across Desktop & Mobile
+  const highlightActiveLinks = (currentPathname: string) => {
+    const cleanPath = (currentPathname.replace(/^\//, '').split('/')[0] || 'home').toLowerCase();
 
-    function setDrawerState(open: boolean) {
-      const activeDrawer = document.getElementById('mobile-menu-drawer') || drawer;
-      if (!activeDrawer) return;
+    const links = document.querySelectorAll<HTMLAnchorElement>(
+      'header nav a, #mobile-menu-panel a[data-path], header a[data-path]'
+    );
 
-      // Ensure drawer is on document.body
-      if (activeDrawer.parentElement !== document.body) {
-        document.body.appendChild(activeDrawer);
-      }
+    links.forEach((link) => {
+      const dataPath = (link.getAttribute('data-path') || '').toLowerCase();
+      const rawHref = (link.getAttribute('href') || '').replace(/^\//, '').split('/')[0].toLowerCase();
 
-      const toggle = document.getElementById('mobile-menu-toggle');
-      const iconOpen = document.getElementById('menu-icon-open');
-      const iconClose = document.getElementById('menu-icon-close');
+      const isMatch =
+        cleanPath === 'home' || cleanPath === ''
+          ? dataPath === 'home' || rawHref === '' || rawHref === 'home'
+          : dataPath === cleanPath || rawHref === cleanPath;
 
-      if (open) {
-        activeDrawer.classList.add('drawer-open');
-        activeDrawer.setAttribute('aria-hidden', 'false');
-        toggle?.setAttribute('aria-expanded', 'true');
-
-        if (iconOpen) iconOpen.classList.add('hidden');
-        if (iconClose) iconClose.classList.remove('hidden');
-
-        document.body.style.overflow = 'hidden';
+      if (isMatch) {
+        link.classList.add('bg-primary-container', 'text-on-primary-container', 'font-semibold');
+        link.classList.remove('text-on-surface-variant');
+        link.setAttribute('aria-current', 'page');
       } else {
-        activeDrawer.classList.remove('drawer-open');
-        activeDrawer.setAttribute('aria-hidden', 'true');
-        toggle?.setAttribute('aria-expanded', 'false');
-
-        if (iconOpen) iconOpen.classList.remove('hidden');
-        if (iconClose) iconClose.classList.add('hidden');
-
-        document.body.style.overflow = '';
+        link.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-semibold');
+        link.classList.add('text-on-surface-variant');
+        link.removeAttribute('aria-current');
       }
-    }
+    });
+  };
 
-    let lastClickTime = 0;
+  // Run whenever the route changes
+  useEffect(() => {
+    highlightActiveLinks(pathname);
+    setDrawerState(false);
+  }, [pathname]);
 
-    function handleClick(e: MouseEvent) {
+  // Global Click and Event Interceptor
+  useEffect(() => {
+    let lastToggleTime = 0;
+
+    function handleDocumentClick(e: MouseEvent) {
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
       const now = Date.now();
-      // Debounce fast double-clicks
-      if (now - lastClickTime < 250) {
-        return;
-      }
 
-      // Check if Toggle Button clicked
+      // 1. Mobile Hamburger Toggle Button
       const toggle = target.closest('#mobile-menu-toggle');
       if (toggle) {
         e.preventDefault();
         e.stopPropagation();
-        lastClickTime = now;
+        if (now - lastToggleTime < 200) return;
+        lastToggleTime = now;
 
-        const currentDrawer = document.getElementById('mobile-menu-drawer') || drawer;
-        const isOpen = currentDrawer?.classList.contains('drawer-open');
+        const drawer = document.getElementById('mobile-menu-drawer');
+        const isOpen = drawer?.classList.contains('drawer-open');
         setDrawerState(!isOpen);
         return;
       }
 
-      // Check if Close Button clicked
+      // 2. Mobile Drawer Close Button
       const closeBtn = target.closest('#mobile-menu-close');
       if (closeBtn) {
         e.preventDefault();
         e.stopPropagation();
-        lastClickTime = now;
         setDrawerState(false);
         return;
       }
 
-      // Check if Backdrop clicked
+      // 3. Mobile Backdrop Click
       if (target.id === 'mobile-menu-backdrop') {
         e.preventDefault();
         e.stopPropagation();
-        lastClickTime = now;
         setDrawerState(false);
         return;
       }
 
-      // Check if any link inside Drawer clicked
-      const drawerLink = target.closest('#mobile-menu-drawer a');
-      if (drawerLink) {
-        lastClickTime = now;
+      // 4. Intercept Hyperlinks for Client-Side SPA Navigation (NO Page Reload)
+      const link = target.closest('a');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      // Allow default behavior for modifier clicks (Ctrl+Click, Cmd+Click, Shift+Click, middle click)
+      if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) {
+        return;
+      }
+
+      // Allow default behavior for external links, mailto, tel, downloads, or target="_blank"
+      if (
+        href.startsWith('http://') ||
+        href.startsWith('https://') ||
+        href.startsWith('//') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:') ||
+        href.startsWith('javascript:') ||
+        link.hasAttribute('download') ||
+        link.target === '_blank'
+      ) {
+        return;
+      }
+
+      // Allow standard jump/smooth-scroll for in-page anchors (e.g. href="#chairmans-address")
+      if (href.startsWith('#')) {
         setDrawerState(false);
+        return;
+      }
+
+      // Resolve URL against current origin
+      const currentOrigin = window.location.origin;
+      const targetUrl = new URL(href, currentOrigin);
+
+      // Verify origin matches
+      if (targetUrl.origin !== currentOrigin) {
+        return;
+      }
+
+      // If it's a hash jump on the same pathname (e.g. /#chairmans-address)
+      if (targetUrl.pathname === window.location.pathname && targetUrl.hash) {
+        setDrawerState(false);
+        return;
+      }
+
+      // PREVENT FULL BROWSER RELOAD
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Ensure mobile drawer is closed
+      setDrawerState(false);
+
+      const destination = targetUrl.pathname + targetUrl.search + targetUrl.hash;
+
+      // If user clicked the link of the page they are already on, smooth-scroll to top
+      if (targetUrl.pathname === window.location.pathname && !targetUrl.search && !targetUrl.hash) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      // Perform instant, smooth Client-side SPA navigation via Next.js router
+      router.push(destination);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+
+    // Prefetch routes on hover for instant 0ms transition
+    function handleMouseOver(e: MouseEvent) {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+
+      const link = target.closest('a');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
+      if (
+        href &&
+        href.startsWith('/') &&
+        !href.startsWith('//') &&
+        !link.hasAttribute('download') &&
+        link.target !== '_blank'
+      ) {
+        try {
+          router.prefetch(href);
+        } catch {
+          // ignore prefetch errors
+        }
       }
     }
 
@@ -118,43 +212,18 @@ export default function ClientNav() {
       }
     }
 
-    // Active link highlighting
-    function highlightActiveLinks() {
-      const cleanPath = (pathname.replace(/^\//, '').split('/')[0] || 'home').toLowerCase();
-
-      document.querySelectorAll('nav a[data-path], #mobile-menu-panel a[data-path]').forEach((link) => {
-        const href = (link.getAttribute('href') || '').replace(/^\//, '').toLowerCase();
-        const dataPath = (link.getAttribute('data-path') || '').toLowerCase();
-        const isMatch =
-          (cleanPath === 'home' || cleanPath === '')
-            ? (href === '' || href === 'home' || dataPath === 'home')
-            : (href === cleanPath || dataPath === cleanPath);
-
-        if (isMatch) {
-          link.classList.add('bg-primary-container', 'text-on-primary-container', 'font-semibold');
-          link.classList.remove('text-on-surface-variant');
-          link.setAttribute('aria-current', 'page');
-        } else {
-          link.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-semibold');
-          link.classList.add('text-on-surface-variant');
-          link.removeAttribute('aria-current');
-        }
-      });
-    }
-
-    // Attach click listener
-    document.addEventListener('click', handleClick);
+    document.addEventListener('click', handleDocumentClick, true);
+    document.addEventListener('mouseover', handleMouseOver, { passive: true });
     document.addEventListener('keydown', handleKeyDown);
     window.addEventListener('resize', handleResize);
 
-    highlightActiveLinks();
-
     return () => {
-      document.removeEventListener('click', handleClick);
+      document.removeEventListener('click', handleDocumentClick, true);
+      document.removeEventListener('mouseover', handleMouseOver);
       document.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('resize', handleResize);
     };
-  }, [pathname]);
+  }, [router]);
 
   return null;
 }
