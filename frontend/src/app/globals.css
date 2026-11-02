@@ -307,5 +307,37 @@ header nav a:active {
   transform: translateY(0);
 }
 
+/* Ensure navbar tab text is ALWAYS visible above sliding pills and active states */
+header nav a {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+header nav a[aria-current="page"] {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  z-index: 2 !important;
+}
+
+#navbar-active-slider {
+  position: absolute !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  background-color: #b95920 !important;
+  border-radius: 0.5rem !important;
+}
+
+#mobile-menu-panel a {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+#mobile-menu-panel a[aria-current="page"] {
+  color: #ffffff !important;
+  background-color: #b95920 !important;
+  font-weight: 600 !important;
+}
+
+
 
 

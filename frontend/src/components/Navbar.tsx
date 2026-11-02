@@ -61,18 +61,18 @@ export default function Navbar() {
                 aria-current={isActive ? 'page' : undefined}
                 className={`relative px-2.5 py-1.5 transition-colors shrink-0 rounded-lg ${
                   isActive
-                    ? 'text-on-primary-container font-semibold'
+                    ? 'text-white font-semibold'
                     : 'text-on-surface-variant hover:text-on-surface'
                 }`}
               >
                 {isActive && (
                   <motion.span
                     layoutId="navbar-active-pill"
-                    className="absolute inset-0 bg-primary-container rounded-lg -z-0 shadow-sm"
+                    className="absolute inset-0 bg-primary-container rounded-lg -z-10 shadow-sm pointer-events-none"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
-                <span className="relative z-10">{item.name}</span>
+                <span className="relative z-20">{item.name}</span>
               </Link>
             );
           })}

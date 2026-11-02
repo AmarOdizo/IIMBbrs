@@ -52,40 +52,61 @@ export default function ClientNav() {
           ? dataPath === 'home' || rawHref === '' || rawHref === 'home'
           : dataPath === cleanPath || rawHref === cleanPath;
 
+      // Ensure link text sits above background pills
+      link.style.position = 'relative';
+      link.style.zIndex = '2';
+
       if (isMatch) {
-        link.classList.add('bg-primary-container', 'text-on-primary-container', 'font-semibold');
+        link.classList.add('font-semibold');
         link.classList.remove('text-on-surface-variant');
         link.setAttribute('aria-current', 'page');
+        link.style.color = '#ffffff';
+
         if (link.closest('header nav')) {
           activeDesktopLink = link;
+          link.classList.remove('bg-primary-container');
+        } else {
+          link.classList.add('bg-primary-container');
         }
       } else {
-        link.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-semibold');
+        link.classList.remove('bg-primary-container', 'font-semibold');
         link.classList.add('text-on-surface-variant');
         link.removeAttribute('aria-current');
+        link.style.color = '';
       }
     });
 
-    // Animate Smooth Sliding Pill behind Active Desktop Tab
+    // Animate Smooth Sliding Pill strictly BEHIND the Active Desktop Tab (z-index 1)
     const desktopNav = document.querySelector<HTMLElement>('header nav.hidden.lg\\:flex, header nav');
     if (desktopNav && activeDesktopLink) {
       desktopNav.style.position = 'relative';
 
+      // Check if Framer Motion is already rendering its own active pill on this nav
+      const hasFramerPill = desktopNav.querySelector('[data-projection-id]');
+
       let slider = document.getElementById('navbar-active-slider');
+      if (hasFramerPill) {
+        if (slider) slider.style.display = 'none';
+        return;
+      }
+
       if (!slider) {
         slider = document.createElement('span');
         slider.id = 'navbar-active-slider';
-        slider.className = 'absolute bg-primary-container rounded-lg -z-0 pointer-events-none shadow-sm';
+        slider.className = 'absolute bg-primary-container rounded-lg pointer-events-none shadow-sm';
+        slider.style.zIndex = '1';
         slider.style.transition = 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)';
-        desktopNav.appendChild(slider);
+        desktopNav.insertBefore(slider, desktopNav.firstChild);
       }
 
       const activeEl = activeDesktopLink as HTMLAnchorElement;
+      slider.style.display = 'block';
       slider.style.left = `${activeEl.offsetLeft}px`;
       slider.style.top = `${activeEl.offsetTop}px`;
       slider.style.width = `${activeEl.offsetWidth}px`;
       slider.style.height = `${activeEl.offsetHeight}px`;
       slider.style.opacity = '1';
+      slider.style.zIndex = '1';
     }
   };
 
