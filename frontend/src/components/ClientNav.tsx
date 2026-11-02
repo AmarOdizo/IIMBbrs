@@ -135,15 +135,15 @@ export default function ClientNav() {
 
       const destination = targetUrl.pathname + targetUrl.search + targetUrl.hash;
 
-      // If user clicked the link of the page they are already on, smooth-scroll to top
+      // If user clicked the link of the page they are already on, jump to top
       if (targetUrl.pathname === window.location.pathname && !targetUrl.search && !targetUrl.hash) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'instant' });
         return;
       }
 
-      // Perform instant, smooth Client-side SPA navigation via Next.js router
+      // Perform instant, clean Client-side SPA navigation via Next.js router (no animations)
       router.push(destination);
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
 
     // Prefetch routes on hover for instant 0ms transition

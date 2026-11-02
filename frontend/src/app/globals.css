@@ -260,53 +260,6 @@ header:has(#mobile-menu-drawer.drawer-open) {
   font-weight: 600 !important;
 }
 
-/* ==========================================================
-   SMOOTH TAB & PAGE SLIDE TRANSITIONS
-   ========================================================== */
-
-/* Smooth entrance animation for all tab pages */
-@keyframes tabPageSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.tab-page-transition {
-  animation: tabPageSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: transform, opacity;
-}
-
-/* Smooth horizontal scroll & sliding for all tab bars & category strips */
-.overflow-x-auto,
-nav[class*="overflow-x"],
-[role="tablist"],
-.no-scrollbar,
-.scrollbar-none {
-  scroll-behavior: smooth !important;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Silky smooth transitions on all navbar & filter tab buttons */
-header nav a,
-#mobile-menu-panel a,
-button[role="tab"],
-.tab-button {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-header nav a:hover {
-  transform: translateY(-1px);
-}
-
-header nav a:active {
-  transform: translateY(0);
-}
-
 /* Persistent Global Navbar */
 #global-navbar {
   display: block !important;
@@ -317,29 +270,11 @@ header:not(#global-navbar) {
   display: none !important;
 }
 
-/* Ensure navbar tab text is ALWAYS visible above sliding pills and active states */
-header nav a {
-  position: relative !important;
-  z-index: 2 !important;
-}
-
+/* Navbar active state styling */
 header nav a[aria-current="page"] {
   color: #ffffff !important;
-  font-weight: 600 !important;
-  z-index: 2 !important;
-}
-
-#navbar-active-slider {
-  position: absolute !important;
-  z-index: 1 !important;
-  pointer-events: none !important;
   background-color: #b95920 !important;
-  border-radius: 0.5rem !important;
-}
-
-#mobile-menu-panel a {
-  position: relative !important;
-  z-index: 2 !important;
+  font-weight: 600 !important;
 }
 
 #mobile-menu-panel a[aria-current="page"] {
