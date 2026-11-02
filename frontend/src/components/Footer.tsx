@@ -15,7 +15,6 @@ export default function Footer() {
                 className="h-10 w-auto object-contain bg-white rounded-lg p-1 shadow-sm"
                 src="/assets/images/logo1.svg"
               />
-              <span className="font-title-md text-title-md text-surface-bright">IIM Bhubaneswar</span>
             </div>
             <p className="font-body-sm text-body-sm text-surface-variant/80 leading-relaxed">
               The Indian Institute of Metals — Bhubaneswar Chapter, advancing metallurgy, materials engineering, and
