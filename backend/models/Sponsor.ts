@@ -56,3 +56,4 @@ SponsorSchema.index({ orderIndex: 1, isActive: 1 });
 
 export const Sponsor: Model<ISponsor> =
   mongoose.models.Sponsor || mongoose.model<ISponsor>('Sponsor', SponsorSchema);
+

@@ -7,7 +7,7 @@ export default function ProgrammesPage() {
   return (
     <>
       <Navbar />
-      <main className="w-full pt-16 sm:pt-20 bg-slate-50 min-h-screen">
+      <main className="w-full pt-24 sm:pt-28 lg:pt-28 bg-surface min-h-screen">
         <ProgrammesList />
       </main>
       <Footer />

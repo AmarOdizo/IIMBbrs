@@ -8,3 +8,4 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   return siteSettingController.updateSiteSettings(req);
 }
+

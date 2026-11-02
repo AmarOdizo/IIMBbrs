@@ -39,3 +39,4 @@ export async function updateSiteSettings(req: NextRequest) {
     return errorResponse(message, 400);
   }
 }
+

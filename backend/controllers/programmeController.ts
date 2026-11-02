@@ -66,3 +66,4 @@ export async function deleteProgramme(req: NextRequest, id: string) {
     return errorResponse(message, 500);
   }
 }
+

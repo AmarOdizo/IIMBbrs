@@ -68,3 +68,4 @@ ProgrammeSchema.index({ orderIndex: 1, isActive: 1 });
 
 export const Programme: Model<IProgramme> =
   mongoose.models.Programme || mongoose.model<IProgramme>('Programme', ProgrammeSchema);
+

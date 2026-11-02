@@ -99,3 +99,4 @@ const SiteSettingSchema: Schema<ISiteSetting> = new Schema(
 
 export const SiteSetting: Model<ISiteSetting> =
   mongoose.models.SiteSetting || mongoose.model<ISiteSetting>('SiteSetting', SiteSettingSchema);
+
