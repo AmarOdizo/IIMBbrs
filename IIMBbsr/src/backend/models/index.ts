@@ -7,8 +7,5 @@ export { Event, type IEvent, type IEventSpeaker } from './Event';
 export { NewsCircular, type INewsCircular } from './NewsCircular';
 export { ContactInquiry, type IContactInquiry } from './ContactInquiry';
 export { GalleryItem, type IGalleryItem } from './GalleryItem';
-export { StudentChapter, type IStudentChapter } from './StudentChapter';
 export { AuditLog, type IAuditLog } from './AuditLog';
-export { Programme, type IProgramme } from './Programme';
 export { SiteSetting, type ISiteSetting } from './SiteSetting';
-export { Sponsor, type ISponsor } from './Sponsor';

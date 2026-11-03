@@ -20,7 +20,6 @@ import {
   MapPin,
   Users,
   Award,
-  GraduationCap,
   FileCheck,
   Ticket,
   BarChart3,
@@ -31,8 +30,6 @@ import {
   Check,
   FileText,
   Settings,
-  Sparkles,
-  Handshake,
 } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 
@@ -108,19 +105,6 @@ interface EventItem {
   isFeatured?: boolean;
 }
 
-interface ProgrammeItem {
-  _id: string;
-  title: string;
-  category: string;
-  annualSchedule: string;
-  description: string;
-  highlights: string[];
-  bannerImage?: string;
-  brochurePdfUrl?: string;
-  orderIndex: number;
-  isActive: boolean;
-}
-
 interface SiteSettingItem {
   _id?: string;
   chapterName: string;
@@ -140,17 +124,6 @@ interface SiteSettingItem {
   chairmanTitle: string;
   chairmanQuote: string;
   chairmanPhotoUrl?: string;
-}
-
-interface SponsorItem {
-  _id: string;
-  name: string;
-  tier: string;
-  logoUrl: string;
-  websiteUrl?: string;
-  description?: string;
-  orderIndex: number;
-  isActive: boolean;
 }
 
 interface RegistrationItem {
@@ -201,16 +174,6 @@ interface GalleryItem {
   description?: string;
 }
 
-interface StudentChapterItem {
-  _id: string;
-  institution: string;
-  establishedYear: number;
-  facultyAdvisor: string;
-  location: string;
-  memberCount: number;
-  highlights?: string;
-}
-
 interface ContactInquiryItem {
   _id: string;
   docketId: string;
@@ -241,18 +204,16 @@ export default function AdminPage() {
     | 'overview'
     | 'members'
     | 'applications'
-    | 'programmes'
     | 'events'
     | 'symposium'
-    | 'sponsors'
     | 'news'
     | 'gallery'
-    | 'student-chapters'
     | 'inquiries'
     | 'settings';
 
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [loadingData, setLoadingData] = useState(false);
+  const [savingSettings, setSavingSettings] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   // Data Lists
@@ -260,15 +221,12 @@ export default function AdminPage() {
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
   const [membersList, setMembersList] = useState<MemberItem[]>([]);
   const [applicationsList, setApplicationsList] = useState<ApplicationItem[]>([]);
-  const [programmesList, setProgrammesList] = useState<ProgrammeItem[]>([]);
   const [eventsList, setEventsList] = useState<EventItem[]>([]);
   const [registrationsList, setRegistrationsList] = useState<RegistrationItem[]>([]);
   const [papersList, setPapersList] = useState<PaperItem[]>([]);
   const [sympSubTab, setSympSubTab] = useState<'delegates' | 'papers'>('delegates');
-  const [sponsorsList, setSponsorsList] = useState<SponsorItem[]>([]);
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [galleryList, setGalleryList] = useState<GalleryItem[]>([]);
-  const [chaptersList, setChaptersList] = useState<StudentChapterItem[]>([]);
   const [inquiriesList, setInquiriesList] = useState<ContactInquiryItem[]>([]);
   const [siteSettings, setSiteSettings] = useState<SiteSettingItem>({
     chapterName: 'The Indian Institute of Metals • Bhubaneswar Chapter',
@@ -306,30 +264,6 @@ export default function AdminPage() {
     status: 'Active' as 'Active' | 'Inactive',
   });
 
-  const [showProgrammeModal, setShowProgrammeModal] = useState(false);
-  const [editingProgrammeId, setEditingProgrammeId] = useState<string | null>(null);
-  const [programmeForm, setProgrammeForm] = useState({
-    title: '',
-    category: 'Annual Tradition',
-    annualSchedule: 'Annually',
-    description: '',
-    highlights: '',
-    bannerImage: '',
-    brochurePdfUrl: '',
-    orderIndex: 1,
-  });
-
-  const [showSponsorModal, setShowSponsorModal] = useState(false);
-  const [editingSponsorId, setEditingSponsorId] = useState<string | null>(null);
-  const [sponsorForm, setSponsorForm] = useState({
-    name: '',
-    tier: 'Platinum Sponsor',
-    logoUrl: '',
-    websiteUrl: '',
-    description: '',
-    orderIndex: 1,
-  });
-
   const [showEventModal, setShowEventModal] = useState(false);
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
   const [eventForm, setEventForm] = useState({
@@ -362,17 +296,6 @@ export default function AdminPage() {
     category: 'Symposium',
     imageUrl: '',
     description: '',
-  });
-
-  const [showChapterModal, setShowChapterModal] = useState(false);
-  const [editingChapterId, setEditingChapterId] = useState<string | null>(null);
-  const [chapterForm, setChapterForm] = useState({
-    institution: '',
-    establishedYear: 2026,
-    facultyAdvisor: '',
-    location: 'Bhubaneswar',
-    memberCount: 50,
-    highlights: '',
   });
 
   // Check login on mount
@@ -419,10 +342,6 @@ export default function AdminPage() {
           });
           const json = await res.json();
           if (json.success) setApplicationsList(json.data || []);
-        } else if (activeTab === 'programmes') {
-          const res = await fetch('/api/programmes');
-          const json = await res.json();
-          if (json.success) setProgrammesList(json.data || []);
         } else if (activeTab === 'events') {
           const res = await fetch('/api/events');
           const json = await res.json();
@@ -436,10 +355,6 @@ export default function AdminPage() {
           const paperJson = await paperRes.json();
           if (regJson.success) setRegistrationsList(regJson.data || []);
           if (paperJson.success) setPapersList(paperJson.data || []);
-        } else if (activeTab === 'sponsors') {
-          const res = await fetch('/api/sponsors');
-          const json = await res.json();
-          if (json.success) setSponsorsList(json.data || []);
         } else if (activeTab === 'news') {
           const res = await fetch('/api/news');
           const json = await res.json();
@@ -448,10 +363,6 @@ export default function AdminPage() {
           const res = await fetch('/api/gallery');
           const json = await res.json();
           if (json.success) setGalleryList(json.data || []);
-        } else if (activeTab === 'student-chapters') {
-          const res = await fetch('/api/student-chapters');
-          const json = await res.json();
-          if (json.success) setChaptersList(json.data || []);
         } else if (activeTab === 'inquiries') {
           const res = await fetch('/api/contact', {
             headers: { Authorization: `Bearer ${token}` },
@@ -589,156 +500,18 @@ export default function AdminPage() {
     }
   };
 
-  // --- CRUD: PROGRAMMES ---
-  const handleOpenProgrammeModal = (item?: ProgrammeItem) => {
-    if (item) {
-      setEditingProgrammeId(item._id);
-      setProgrammeForm({
-        title: item.title,
-        category: item.category,
-        annualSchedule: item.annualSchedule,
-        description: item.description,
-        highlights: Array.isArray(item.highlights) ? item.highlights.join(', ') : '',
-        bannerImage: item.bannerImage || '',
-        brochurePdfUrl: item.brochurePdfUrl || '',
-        orderIndex: item.orderIndex || 1,
-      });
-    } else {
-      setEditingProgrammeId(null);
-      setProgrammeForm({
-        title: '',
-        category: 'Annual Tradition',
-        annualSchedule: 'Annually',
-        description: '',
-        highlights: '',
-        bannerImage: '',
-        brochurePdfUrl: '',
-        orderIndex: programmesList.length + 1,
-      });
-    }
-    setShowProgrammeModal(true);
-  };
-
-  const handleSaveProgramme = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const url = editingProgrammeId ? `/api/programmes/${editingProgrammeId}` : '/api/programmes';
-      const method = editingProgrammeId ? 'PUT' : 'POST';
-
-      const payload = {
-        ...programmeForm,
-        highlights: programmeForm.highlights
-          .split(',')
-          .map((h) => h.trim())
-          .filter(Boolean),
-      };
-
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(payload),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to save programme.');
-
-      showNotification('success', editingProgrammeId ? 'Programme updated!' : 'Programme added!');
-      setShowProgrammeModal(false);
-      const updated = await fetch('/api/programmes').then((r) => r.json());
-      if (updated.success) setProgrammesList(updated.data || []);
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Error saving programme.');
-    }
-  };
-
-  const handleDeleteProgramme = async (id: string, title: string) => {
-    if (!confirm(`Are you sure you want to delete programme "${title}"?`)) return;
-    try {
-      const res = await fetch(`/api/programmes/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Delete failed');
-      showNotification('success', 'Programme removed.');
-      setProgrammesList((prev) => prev.filter((p) => p._id !== id));
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Delete failed');
-    }
-  };
-
-  // --- CRUD: SPONSORS ---
-  const handleOpenSponsorModal = (item?: SponsorItem) => {
-    if (item) {
-      setEditingSponsorId(item._id);
-      setSponsorForm({
-        name: item.name,
-        tier: item.tier,
-        logoUrl: item.logoUrl,
-        websiteUrl: item.websiteUrl || '',
-        description: item.description || '',
-        orderIndex: item.orderIndex || 1,
-      });
-    } else {
-      setEditingSponsorId(null);
-      setSponsorForm({
-        name: '',
-        tier: 'Platinum Sponsor',
-        logoUrl: '',
-        websiteUrl: '',
-        description: '',
-        orderIndex: sponsorsList.length + 1,
-      });
-    }
-    setShowSponsorModal(true);
-  };
-
-  const handleSaveSponsor = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const url = editingSponsorId ? `/api/sponsors/${editingSponsorId}` : '/api/sponsors';
-      const method = editingSponsorId ? 'PUT' : 'POST';
-
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(sponsorForm),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to save sponsor.');
-
-      showNotification('success', editingSponsorId ? 'Sponsor updated!' : 'Sponsor added!');
-      setShowSponsorModal(false);
-      const updated = await fetch('/api/sponsors').then((r) => r.json());
-      if (updated.success) setSponsorsList(updated.data || []);
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Error saving sponsor.');
-    }
-  };
-
-  const handleDeleteSponsor = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete sponsor "${name}"?`)) return;
-    try {
-      const res = await fetch(`/api/sponsors/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Delete failed');
-      showNotification('success', 'Sponsor removed.');
-      setSponsorsList((prev) => prev.filter((s) => s._id !== id));
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Delete failed');
-    }
-  };
-
   // --- CRUD: SETTINGS SAVE ---
   const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSavingSettings(true);
     try {
+      // Exclude _id to prevent MongoDB immutable path error
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { _id, ...cleanSettings } = siteSettings;
       const res = await fetch('/api/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(siteSettings),
+        body: JSON.stringify(cleanSettings),
       });
       const json = await res.json();
       if (!res.ok || !json.success) throw new Error(json.error || 'Failed to update settings');
@@ -746,6 +519,8 @@ export default function AdminPage() {
       if (json.data) setSiteSettings(json.data);
     } catch (err) {
       showNotification('error', err instanceof Error ? err.message : 'Failed to save settings.');
+    } finally {
+      setSavingSettings(false);
     }
   };
 
@@ -963,69 +738,6 @@ export default function AdminPage() {
     }
   };
 
-  // --- CRUD: STUDENT CHAPTERS ---
-  const handleOpenChapterModal = (item?: StudentChapterItem) => {
-    if (item) {
-      setEditingChapterId(item._id);
-      setChapterForm({
-        institution: item.institution,
-        establishedYear: item.establishedYear,
-        facultyAdvisor: item.facultyAdvisor,
-        location: item.location,
-        memberCount: item.memberCount,
-        highlights: item.highlights || '',
-      });
-    } else {
-      setEditingChapterId(null);
-      setChapterForm({
-        institution: '',
-        establishedYear: 2026,
-        facultyAdvisor: '',
-        location: 'Bhubaneswar',
-        memberCount: 50,
-        highlights: '',
-      });
-    }
-    setShowChapterModal(true);
-  };
-
-  const handleSaveChapter = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const url = editingChapterId ? `/api/student-chapters/${editingChapterId}` : '/api/student-chapters';
-      const method = editingChapterId ? 'PUT' : 'POST';
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(chapterForm),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to save student chapter.');
-      showNotification('success', editingChapterId ? 'Chapter details updated.' : 'Student Chapter added!');
-      setShowChapterModal(false);
-      const updated = await fetch('/api/student-chapters').then((r) => r.json());
-      if (updated.success) setChaptersList(updated.data || []);
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Error saving chapter.');
-    }
-  };
-
-  const handleDeleteChapter = async (id: string, name: string) => {
-    if (!confirm(`Delete student chapter "${name}"?`)) return;
-    try {
-      const res = await fetch(`/api/student-chapters/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Delete failed');
-      showNotification('success', 'Student Chapter removed.');
-      setChaptersList((prev) => prev.filter((c) => c._id !== id));
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Delete failed');
-    }
-  };
-
   // --- CRUD: INQUIRIES ---
   const handleUpdateInquiryStatus = async (id: string, newStatus: string) => {
     try {
@@ -1205,19 +917,16 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* 13 Console Navigation Tabs */}
+        {/* Console Navigation Tabs */}
         <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
           {[
             { id: 'overview', label: 'Overview', icon: BarChart3 },
             { id: 'members', label: 'Members', icon: Users },
             { id: 'applications', label: 'Applications', icon: FileCheck },
-            { id: 'programmes', label: 'Programmes', icon: Sparkles },
             { id: 'events', label: 'Events', icon: Calendar },
             { id: 'symposium', label: 'Symposium 2026', icon: Ticket },
-            { id: 'sponsors', label: 'Sponsors', icon: Handshake },
             { id: 'news', label: 'News & Circulars', icon: Newspaper },
             { id: 'gallery', label: 'Gallery', icon: ImageIcon },
-            { id: 'student-chapters', label: 'Student Chapters', icon: GraduationCap },
             { id: 'inquiries', label: 'Inquiries', icon: Mail },
             { id: 'settings', label: 'Site Settings', icon: Settings },
           ].map((t) => {
@@ -1506,72 +1215,7 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= TAB 5: PROGRAMMES ================= */}
-            {activeTab === 'programmes' && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Flagship Chapter Programmes</h3>
-                    <p className="text-xs text-slate-500">Foundation Day, NMD Awards, AGM, Memorial Lectures, Conclave</p>
-                  </div>
-                  <button
-                    onClick={() => handleOpenProgrammeModal()}
-                    className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-sm"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Add Programme</span>
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {programmesList.map((p) => (
-                    <div
-                      key={p._id}
-                      className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between gap-4"
-                    >
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary uppercase">
-                            {p.category}
-                          </span>
-                          <span className="text-xs font-semibold text-slate-500">{p.annualSchedule}</span>
-                        </div>
-                        <h4 className="font-bold text-base text-slate-900 leading-snug">{p.title}</h4>
-                        <p className="text-xs text-slate-600 line-clamp-3">{p.description}</p>
-                        {p.highlights && p.highlights.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5 pt-2">
-                            {p.highlights.map((h, i) => (
-                              <span key={i} className="px-2 py-0.5 bg-slate-100 rounded text-[10px] text-slate-600">
-                                ✓ {h}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => handleOpenProgrammeModal(p)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-primary hover:bg-slate-100 transition flex items-center gap-1"
-                        >
-                          <Edit2 className="w-3.5 h-3.5" />
-                          <span>Edit</span>
-                        </button>
-                        <button
-                          onClick={() => handleDeleteProgramme(p._id, p.title)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 transition flex items-center gap-1"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                          <span>Delete</span>
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* ================= TAB 6: EVENTS ================= */}
+            {/* ================= TAB: EVENTS ================= */}
             {activeTab === 'events' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
@@ -1754,73 +1398,7 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= TAB 8: SPONSORS ================= */}
-            {activeTab === 'sponsors' && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Industry Sponsors &amp; Institutional Alliances</h3>
-                    <p className="text-xs text-slate-500">Corporate partners for symposia and annual endowment support</p>
-                  </div>
-                  <button
-                    onClick={() => handleOpenSponsorModal()}
-                    className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-sm"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Add Sponsor</span>
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {sponsorsList.map((s) => (
-                    <div
-                      key={s._id}
-                      className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col justify-between gap-3"
-                    >
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="px-2 py-0.5 bg-amber-50 text-amber-700 font-bold text-[10px] rounded-full">
-                            {s.tier}
-                          </span>
-                        </div>
-                        <h4 className="font-bold text-sm text-slate-900">{s.name}</h4>
-                        {s.description && <p className="text-xs text-slate-500 line-clamp-2">{s.description}</p>}
-                        {s.websiteUrl && (
-                          <a
-                            href={s.websiteUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-xs text-primary hover:underline flex items-center gap-1 font-medium"
-                          >
-                            <span>Visit Website</span>
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
-                        )}
-                      </div>
-
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => handleOpenSponsorModal(s)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-primary hover:bg-slate-100 transition flex items-center gap-1"
-                        >
-                          <Edit2 className="w-3.5 h-3.5" />
-                          <span>Edit</span>
-                        </button>
-                        <button
-                          onClick={() => handleDeleteSponsor(s._id, s.name)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 transition flex items-center gap-1"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                          <span>Delete</span>
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* ================= TAB 9: NEWS ================= */}
+            {/* ================= TAB: NEWS ================= */}
             {activeTab === 'news' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
@@ -1952,71 +1530,7 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= TAB 11: STUDENT CHAPTERS ================= */}
-            {activeTab === 'student-chapters' && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Affiliated Student Chapters</h3>
-                    <p className="text-xs text-slate-500">University and engineering college metallurgy study groups</p>
-                  </div>
-                  <button
-                    onClick={() => handleOpenChapterModal()}
-                    className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-sm"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Add Student Chapter</span>
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {chaptersList.map((ch) => (
-                    <div
-                      key={ch._id}
-                      className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col justify-between gap-3"
-                    >
-                      <div className="space-y-1.5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-semibold text-slate-400">Estd. {ch.establishedYear}</span>
-                          <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-bold rounded-full text-[10px]">
-                            {ch.memberCount}+ Members
-                          </span>
-                        </div>
-                        <h4 className="font-bold text-sm text-slate-900">{ch.institution}</h4>
-                        <div className="text-xs text-slate-500">
-                          <div>Advisor: <span className="font-semibold text-slate-700">{ch.facultyAdvisor}</span></div>
-                          <div>Location: <span className="text-slate-700">{ch.location}</span></div>
-                        </div>
-                        {ch.highlights && (
-                          <p className="text-xs text-slate-600 mt-2 bg-slate-50 p-2 rounded-lg line-clamp-2">
-                            {ch.highlights}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => handleOpenChapterModal(ch)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-primary hover:bg-slate-100 transition flex items-center gap-1"
-                        >
-                          <Edit2 className="w-3.5 h-3.5" />
-                          <span>Edit</span>
-                        </button>
-                        <button
-                          onClick={() => handleDeleteChapter(ch._id, ch.institution)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 transition flex items-center gap-1"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                          <span>Delete</span>
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* ================= TAB 12: INQUIRIES ================= */}
+            {/* ================= TAB: INQUIRIES ================= */}
             {activeTab === 'inquiries' && (
               <div className="space-y-4">
                 <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
@@ -2171,6 +1685,24 @@ export default function AdminPage() {
                           className="w-full px-3 py-2 border rounded-xl"
                         />
                       </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Symposium Email</label>
+                        <input
+                          type="email"
+                          value={siteSettings.symposiumEmail || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, symposiumEmail: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Office Hours</label>
+                        <input
+                          type="text"
+                          value={siteSettings.officeHours || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, officeHours: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -2251,15 +1783,33 @@ export default function AdminPage() {
                           className="w-full px-3 py-2 border rounded-xl"
                         />
                       </div>
+                      <div>
+                        <label className="block font-semibold text-slate-700 mb-1">Chairman Photo URL</label>
+                        <input
+                          type="text"
+                          value={siteSettings.chairmanPhotoUrl || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, chairmanPhotoUrl: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl"
+                          placeholder="https://..."
+                        />
+                      </div>
                     </div>
                   </div>
 
                   <div className="pt-4 border-t flex justify-end">
                     <button
                       type="submit"
-                      className="px-6 py-2.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-container shadow-sm transition"
+                      disabled={savingSettings}
+                      className="px-6 py-2.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-container shadow-sm transition disabled:opacity-50 flex items-center gap-2"
                     >
-                      Save Site Settings
+                      {savingSettings ? (
+                        <>
+                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                          <span>Saving Settings...</span>
+                        </>
+                      ) : (
+                        <span>Save Site Settings</span>
+                      )}
                     </button>
                   </div>
                 </form>
@@ -2379,231 +1929,6 @@ export default function AdminPage() {
                   className="px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-container"
                 >
                   {editingMemberId ? 'Update Member' : 'Enroll Member'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ================= MODAL: PROGRAMME ================= */}
-      {showProgrammeModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="font-bold text-slate-900 text-base">
-                {editingProgrammeId ? 'Edit Programme' : 'Add Flagship Programme'}
-              </h3>
-              <button onClick={() => setShowProgrammeModal(false)} className="text-slate-400 hover:text-slate-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={handleSaveProgramme} className="space-y-3 text-xs">
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Programme Title</label>
-                <input
-                  type="text"
-                  required
-                  value={programmeForm.title}
-                  onChange={(e) => setProgrammeForm({ ...programmeForm, title: e.target.value })}
-                  placeholder="e.g. Annual Foundation Day & Fellowship Conferment"
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Category</label>
-                  <select
-                    value={programmeForm.category}
-                    onChange={(e) => setProgrammeForm({ ...programmeForm, category: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl bg-white"
-                  >
-                    <option value="Annual Tradition">Annual Tradition</option>
-                    <option value="Honors & Recognition">Honors & Recognition</option>
-                    <option value="Constitutional Governance">Constitutional Governance</option>
-                    <option value="Endowed Memorial Oration">Endowed Memorial Oration</option>
-                    <option value="Youth & Academic Outreach">Youth & Academic Outreach</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Annual Schedule</label>
-                  <input
-                    type="text"
-                    required
-                    value={programmeForm.annualSchedule}
-                    onChange={(e) => setProgrammeForm({ ...programmeForm, annualSchedule: e.target.value })}
-                    placeholder="e.g. 24 February Annually"
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Description</label>
-                <textarea
-                  rows={3}
-                  required
-                  value={programmeForm.description}
-                  onChange={(e) => setProgrammeForm({ ...programmeForm, description: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  Key Highlights / Pillars (Comma separated)
-                </label>
-                <input
-                  type="text"
-                  value={programmeForm.highlights}
-                  onChange={(e) => setProgrammeForm({ ...programmeForm, highlights: e.target.value })}
-                  placeholder="Life Citations, Milestone Track Release, Keynote Lecture"
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Banner Image URL</label>
-                <input
-                  type="text"
-                  value={programmeForm.bannerImage}
-                  onChange={(e) => setProgrammeForm({ ...programmeForm, bannerImage: e.target.value })}
-                  placeholder="https://... or /assets/images/..."
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Brochure / Guidelines PDF URL</label>
-                <input
-                  type="text"
-                  value={programmeForm.brochurePdfUrl}
-                  onChange={(e) => setProgrammeForm({ ...programmeForm, brochurePdfUrl: e.target.value })}
-                  placeholder="/uploads/circulars/guidelines.pdf"
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div className="pt-3 border-t flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowProgrammeModal(false)}
-                  className="px-4 py-2 border rounded-xl font-semibold hover:bg-slate-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-container"
-                >
-                  Save Programme
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ================= MODAL: SPONSOR ================= */}
-      {showSponsorModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="font-bold text-slate-900 text-base">
-                {editingSponsorId ? 'Edit Sponsor Details' : 'Add Corporate Sponsor'}
-              </h3>
-              <button onClick={() => setShowSponsorModal(false)} className="text-slate-400 hover:text-slate-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={handleSaveSponsor} className="space-y-3 text-xs">
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Sponsor Company Name</label>
-                <input
-                  type="text"
-                  required
-                  value={sponsorForm.name}
-                  onChange={(e) => setSponsorForm({ ...sponsorForm, name: e.target.value })}
-                  placeholder="e.g. Tata Steel Kalinganagar"
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Sponsorship Tier</label>
-                  <select
-                    value={sponsorForm.tier}
-                    onChange={(e) => setSponsorForm({ ...sponsorForm, tier: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl bg-white"
-                  >
-                    <option value="Title Sponsor">Title Sponsor</option>
-                    <option value="Platinum Sponsor">Platinum Sponsor</option>
-                    <option value="Gold Sponsor">Gold Sponsor</option>
-                    <option value="Silver Sponsor">Silver Sponsor</option>
-                    <option value="Knowledge Partner">Knowledge Partner</option>
-                    <option value="Institutional Partner">Institutional Partner</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Order Index</label>
-                  <input
-                    type="number"
-                    value={sponsorForm.orderIndex}
-                    onChange={(e) => setSponsorForm({ ...sponsorForm, orderIndex: parseInt(e.target.value) || 1 })}
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Logo Image (ImageUpload or URL)</label>
-                <input
-                  type="text"
-                  required
-                  value={sponsorForm.logoUrl}
-                  onChange={(e) => setSponsorForm({ ...sponsorForm, logoUrl: e.target.value })}
-                  placeholder="/assets/images/logo1.svg or URL"
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Company Website URL</label>
-                <input
-                  type="url"
-                  value={sponsorForm.websiteUrl}
-                  onChange={(e) => setSponsorForm({ ...sponsorForm, websiteUrl: e.target.value })}
-                  placeholder="https://www.tatasteel.com"
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Description / Contribution</label>
-                <textarea
-                  rows={2}
-                  value={sponsorForm.description}
-                  onChange={(e) => setSponsorForm({ ...sponsorForm, description: e.target.value })}
-                  placeholder="Pioneering industrial partner in Eastern Indian steelmaking..."
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div className="pt-3 border-t flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowSponsorModal(false)}
-                  className="px-4 py-2 border rounded-xl font-semibold hover:bg-slate-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-container"
-                >
-                  Save Sponsor
                 </button>
               </div>
             </form>
@@ -2905,110 +2230,6 @@ export default function AdminPage() {
                   className="px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-container"
                 >
                   Save Photo
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ================= MODAL: STUDENT CHAPTER ================= */}
-      {showChapterModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="font-bold text-slate-900 text-base">
-                {editingChapterId ? 'Edit Student Chapter' : 'Add Affiliated Student Chapter'}
-              </h3>
-              <button onClick={() => setShowChapterModal(false)} className="text-slate-400 hover:text-slate-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={handleSaveChapter} className="space-y-3 text-xs">
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">University / Institute</label>
-                <input
-                  type="text"
-                  required
-                  value={chapterForm.institution}
-                  onChange={(e) => setChapterForm({ ...chapterForm, institution: e.target.value })}
-                  placeholder="e.g. School of Minerals (SMMME), IIT Bhubaneswar"
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Established Year</label>
-                  <input
-                    type="number"
-                    required
-                    value={chapterForm.establishedYear}
-                    onChange={(e) => setChapterForm({ ...chapterForm, establishedYear: parseInt(e.target.value) || 2026 })}
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Member Count</label>
-                  <input
-                    type="number"
-                    required
-                    value={chapterForm.memberCount}
-                    onChange={(e) => setChapterForm({ ...chapterForm, memberCount: parseInt(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Faculty Advisor</label>
-                  <input
-                    type="text"
-                    required
-                    value={chapterForm.facultyAdvisor}
-                    onChange={(e) => setChapterForm({ ...chapterForm, facultyAdvisor: e.target.value })}
-                    placeholder="e.g. Dr. S. K. Dash"
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Location</label>
-                  <input
-                    type="text"
-                    required
-                    value={chapterForm.location}
-                    onChange={(e) => setChapterForm({ ...chapterForm, location: e.target.value })}
-                    placeholder="e.g. Argul Campus, Jatni"
-                    className="w-full px-3 py-2 border rounded-xl"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Activities &amp; Highlights</label>
-                <textarea
-                  rows={2}
-                  value={chapterForm.highlights}
-                  onChange={(e) => setChapterForm({ ...chapterForm, highlights: e.target.value })}
-                  placeholder="Annual Metallurgy Quiz, Metallography Poster Contests..."
-                  className="w-full px-3 py-2 border rounded-xl"
-                />
-              </div>
-
-              <div className="pt-3 border-t flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowChapterModal(false)}
-                  className="px-4 py-2 border rounded-xl font-semibold hover:bg-slate-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-container"
-                >
-                  Save Chapter
                 </button>
               </div>
             </form>

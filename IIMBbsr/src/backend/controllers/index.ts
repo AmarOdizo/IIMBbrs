@@ -7,7 +7,4 @@ export * as eventController from './eventController';
 export * as newsController from './newsController';
 export * as contactController from './contactController';
 export * as galleryController from './galleryController';
-export * as studentChapterController from './studentChapterController';
-export * as programmeController from './programmeController';
 export * as siteSettingController from './siteSettingController';
-export * as sponsorController from './sponsorController';

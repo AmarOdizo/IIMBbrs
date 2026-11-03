@@ -8,7 +8,6 @@ import { Member } from './models/Member';
 import { Event } from './models/Event';
 import { NewsCircular } from './models/NewsCircular';
 import { GalleryItem } from './models/GalleryItem';
-import { StudentChapter } from './models/StudentChapter';
 import { MembershipApplication } from './models/MembershipApplication';
 import { SymposiumRegistration } from './models/SymposiumRegistration';
 import { PaperSubmission } from './models/PaperSubmission';
@@ -121,17 +120,6 @@ app.get('/api/gallery', async (req: Request, res: Response) => {
     if (category && category !== 'All') filter.category = category;
     const items = await GalleryItem.find(filter).sort({ date: -1 });
     res.json({ success: true, count: items.length, data: items });
-  } catch (err: any) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
-// ==================== STUDENT CHAPTERS ====================
-app.get('/api/student-chapters', async (req: Request, res: Response) => {
-  try {
-    await connectDB();
-    const chapters = await StudentChapter.find().sort({ establishedYear: 1 });
-    res.json({ success: true, count: chapters.length, data: chapters });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });
   }

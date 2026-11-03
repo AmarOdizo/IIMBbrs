@@ -18,7 +18,7 @@ export default function Navbar() {
     { name: 'Committee', href: '/committee', path: 'committee', icon: 'groups' },
     { name: 'Members', href: '/members', path: 'members', icon: 'badge' },
     { name: 'Events', href: '/events', path: 'events', icon: 'event' },
-    { name: 'Programmes', href: '/programmes', path: 'programmes', icon: 'workspace_premium' },
+    { name: 'Awards', href: '/awards', path: 'awards', icon: 'workspace_premium' },
     { name: 'Student Chapters', href: '/student-chapters', path: 'student-chapters', icon: 'school' },
     { name: 'Gallery', href: '/gallery', path: 'gallery', icon: 'photo_library' },
     { name: 'News', href: '/news', path: 'news', icon: 'newspaper' },
@@ -78,11 +78,12 @@ export default function Navbar() {
         {/* Desktop & Tablet Action CTA + Mobile Hamburger Toggle */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <Link
-            href="/membership"
-            data-path="join-chapter"
-            className="hidden sm:inline-flex items-center px-3 sm:px-4 py-2 rounded-lg font-label-md text-xs sm:text-label-md font-semibold shrink-0 shadow-sm transition-all bg-primary text-on-primary hover:bg-primary-container"
+            href="/privacy-terms"
+            data-path="privacy-terms"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg font-label-md text-xs sm:text-label-md font-semibold shrink-0 shadow-sm transition-all bg-primary text-on-primary hover:bg-primary-container"
           >
-            <span>Join Chapter</span>
+            <span className="material-symbols-outlined text-[17px]">verified_user</span>
+            <span>Privacy &amp; Terms</span>
           </Link>
 
           {/* Hamburger Button (Mobile & Tablet: < 1024px) */}
@@ -166,11 +167,11 @@ export default function Navbar() {
           {/* Drawer Footer Action Area */}
           <div className="p-4 border-t border-surface-variant/20 bg-surface-container-lowest space-y-3">
             <Link
-              href="/membership"
+              href="/privacy-terms"
               className="w-full py-2.5 px-4 rounded-xl font-label-md text-sm font-semibold text-center bg-primary text-on-primary hover:bg-primary-container transition-all flex items-center justify-center gap-2 shadow-sm"
             >
-              <span className="material-symbols-outlined text-base">how_to_reg</span>
-              <span>Join Chapter (2026)</span>
+              <span className="material-symbols-outlined text-base">verified_user</span>
+              <span>Privacy &amp; Terms</span>
             </Link>
             <div className="text-[11px] text-secondary text-center leading-relaxed">
               <span>CSIR-IMMT, Bhubaneswar • IIM HQ Kolkata</span>

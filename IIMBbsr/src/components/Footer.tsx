@@ -55,10 +55,10 @@ export default function Footer() {
             </Link>
             <Link
               className="font-body-sm text-body-sm text-surface-variant/80 hover:text-surface-bright transition-colors"
-              data-path="programmes"
-              href="/programmes"
+              data-path="awards"
+              href="/awards"
             >
-              Programmes
+              Awards &amp; Honors
             </Link>
             <Link
               className="font-body-sm text-body-sm text-surface-variant/80 hover:text-surface-bright transition-colors"
@@ -103,9 +103,9 @@ export default function Footer() {
             <Link
               className="font-body-sm text-body-sm text-surface-variant/80 hover:text-surface-bright transition-colors"
               data-path="join-chapter"
-              href="/membership"
+              href="/members?tab=join"
             >
-              Membership Tiers
+              Join Chapter / Tiers
             </Link>
             <Link
               className="font-body-sm text-body-sm text-surface-variant/80 hover:text-surface-bright transition-colors"
@@ -132,10 +132,14 @@ export default function Footer() {
           <p className="text-center md:text-left">
             © 2025–2026 The Indian Institute of Metals — Bhubaneswar Chapter. All rights reserved.
           </p>
-          <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-surface-variant/80">language</span>
-            <span className="material-symbols-outlined text-surface-variant/80">share</span>
-            <span className="material-symbols-outlined text-surface-variant/80">mail</span>
+          <div className="flex items-center gap-4 text-xs">
+            <Link href="/privacy-terms?tab=privacy" className="hover:text-surface-bright transition-colors">
+              Privacy Policy
+            </Link>
+            <span>•</span>
+            <Link href="/privacy-terms?tab=terms" className="hover:text-surface-bright transition-colors">
+              Terms &amp; Conditions
+            </Link>
           </div>
         </div>
       </div>
