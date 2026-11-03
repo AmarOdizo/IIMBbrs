@@ -1,9 +1,17 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Navbar from '@/components/Navbar';
 import ClientNav from '@/components/ClientNav';
 import JsonLd from '@/components/JsonLd';
 import { SITE_URL, siteMetadata, getOrganizationSchema, getWebSiteSchema } from '@/lib/seo';
 import './globals.css';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: '#994106',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

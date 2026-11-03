@@ -9,26 +9,30 @@ export default function ClientNav() {
 
   // Mobile Drawer State Controller
   const setDrawerState = (open: boolean) => {
-    const drawer = document.getElementById('mobile-menu-drawer');
-    const toggle = document.getElementById('mobile-menu-toggle');
-    const iconOpen = document.getElementById('menu-icon-open');
-    const iconClose = document.getElementById('menu-icon-close');
+    const drawers = document.querySelectorAll('#mobile-menu-drawer');
+    const toggles = document.querySelectorAll('#mobile-menu-toggle');
+    const iconOpens = document.querySelectorAll('#menu-icon-open');
+    const iconCloses = document.querySelectorAll('#menu-icon-close');
 
-    if (!drawer) return;
+    if (drawers.length === 0) return;
 
     if (open) {
-      drawer.classList.add('drawer-open');
-      drawer.setAttribute('aria-hidden', 'false');
-      toggle?.setAttribute('aria-expanded', 'true');
-      if (iconOpen) iconOpen.classList.add('hidden');
-      if (iconClose) iconClose.classList.remove('hidden');
+      drawers.forEach((drawer) => {
+        drawer.classList.add('drawer-open');
+        drawer.setAttribute('aria-hidden', 'false');
+      });
+      toggles.forEach((toggle) => toggle.setAttribute('aria-expanded', 'true'));
+      iconOpens.forEach((icon) => icon.classList.add('hidden'));
+      iconCloses.forEach((icon) => icon.classList.remove('hidden'));
       document.body.style.overflow = 'hidden';
     } else {
-      drawer.classList.remove('drawer-open');
-      drawer.setAttribute('aria-hidden', 'true');
-      toggle?.setAttribute('aria-expanded', 'false');
-      if (iconOpen) iconOpen.classList.remove('hidden');
-      if (iconClose) iconClose.classList.add('hidden');
+      drawers.forEach((drawer) => {
+        drawer.classList.remove('drawer-open');
+        drawer.setAttribute('aria-hidden', 'true');
+      });
+      toggles.forEach((toggle) => toggle.setAttribute('aria-expanded', 'false'));
+      iconOpens.forEach((icon) => icon.classList.remove('hidden'));
+      iconCloses.forEach((icon) => icon.classList.add('hidden'));
       document.body.style.overflow = '';
     }
   };

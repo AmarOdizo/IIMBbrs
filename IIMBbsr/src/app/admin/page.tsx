@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useSyncExternalStore } from 'react';
+import React, { useState, useEffect, useMemo, useSyncExternalStore } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -174,19 +174,10 @@ function getStoredToken(): string | null {
   }
 }
 
-let cachedUserRaw: string | null = null;
-let cachedUserObj: AdminUser | null = null;
-
-function getStoredUser(): AdminUser | null {
+function getStoredUserRaw(): string | null {
   if (typeof window === 'undefined') return null;
   try {
-    const raw = localStorage.getItem('iimbbsr_admin_user');
-    if (raw === cachedUserRaw) {
-      return cachedUserObj;
-    }
-    cachedUserRaw = raw;
-    cachedUserObj = raw ? (JSON.parse(raw) as AdminUser) : null;
-    return cachedUserObj;
+    return localStorage.getItem('iimbbsr_admin_user');
   } catch {
     return null;
   }
@@ -199,21 +190,39 @@ function subscribeStorage(callback: () => void) {
 
 export default function AdminPage() {
   const syncedToken = useSyncExternalStore(subscribeStorage, getStoredToken, () => null);
-  const syncedUser = useSyncExternalStore(subscribeStorage, getStoredUser, () => null);
+  const syncedUserRaw = useSyncExternalStore(subscribeStorage, getStoredUserRaw, () => null);
 
   const [overrideToken, setOverrideToken] = useState<string | null | undefined>(undefined);
-  const [overrideUser, setOverrideUser] = useState<AdminUser | null | undefined>(undefined);
+  const [overrideUserRaw, setOverrideUserRaw] = useState<string | null | undefined>(undefined);
 
   const token = overrideToken !== undefined ? overrideToken : syncedToken;
-  const adminUser = overrideUser !== undefined ? overrideUser : syncedUser;
+  const userRaw = overrideUserRaw !== undefined ? overrideUserRaw : syncedUserRaw;
+
+  const adminUser = useMemo<AdminUser | null>(() => {
+    if (!userRaw) return null;
+    try {
+      return JSON.parse(userRaw) as AdminUser;
+    } catch {
+      return null;
+    }
+  }, [userRaw]);
 
   const setToken = (t: string | null) => {
     setOverrideToken(t);
+    try {
+      if (t) localStorage.setItem('iimbbsr_admin_token', t);
+      else localStorage.removeItem('iimbbsr_admin_token');
+    } catch {}
     if (typeof window !== 'undefined') window.dispatchEvent(new Event('storage'));
   };
 
   const setAdminUser = (u: AdminUser | null) => {
-    setOverrideUser(u);
+    const raw = u ? JSON.stringify(u) : null;
+    setOverrideUserRaw(raw);
+    try {
+      if (raw) localStorage.setItem('iimbbsr_admin_user', raw);
+      else localStorage.removeItem('iimbbsr_admin_user');
+    } catch {}
     if (typeof window !== 'undefined') window.dispatchEvent(new Event('storage'));
   };
 
