@@ -10,7 +10,6 @@ import {
   SymposiumRegistration,
   PaperSubmission,
   ContactInquiry,
-  SiteSetting,
 } from './models';
 import { hashPassword } from './utils/auth';
 import {
@@ -449,31 +448,6 @@ export async function seedDatabase() {
         ipAddress: '127.0.0.1',
       });
       console.log('✅ Council Reconciliation Audit Log recorded.');
-    }
-
-    // 13. Seed Site Settings
-    const settingCount = await SiteSetting.countDocuments();
-    if (settingCount === 0) {
-      await SiteSetting.create({
-        chapterName: 'The Indian Institute of Metals • Bhubaneswar Chapter',
-        tagline: 'Advancing Metallurgy, Mineral Processing & Advanced Materials in Odisha',
-        secretariatAddress: 'CSIR – Institute of Minerals and Materials Technology (CSIR-IMMT), Acharya Vihar, Bhubaneswar - 751013, Odisha, India',
-        primaryEmail: 'secretary@iimbhubaneswar.in',
-        membershipEmail: 'membership@iimbhubaneswar.in',
-        symposiumEmail: 'symposium2026@iimbhubaneswar.in',
-        primaryPhone: '+91 674 237 9401',
-        secondaryPhone: '+91 674 237 4112',
-        officeHours: 'Mon - Fri: 9:30 AM - 5:30 PM IST',
-        activeMembersCount: '750+',
-        partnerInstitutionsCount: '30+',
-        studentChaptersCount: '4',
-        symposiaCount: '18',
-        chairmanName: 'Dr. Ashok Kumar Mohanty, FIE, FIIM',
-        chairmanTitle: 'Chairman, IIM Bhubaneswar Chapter • Chief Scientist (Retd.), CSIR-IMMT',
-        chairmanQuote: 'Odisha produces over half of India’s iron ore and bauxite. As we transition towards green hydrogen direct-reduction and circular slag utilisation, the IIM Bhubaneswar Chapter serves as the intellectual crucible transforming resource abundance into sustainable technological sovereignty.',
-        chairmanPhotoUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAXJLb17-gAgiAbTuy8BbvJYrloluT-VtCz2Srii32Kl6kmr8754QzKuV0JdNNvve6Sus3DvgQTAObVcV-Ci4BdAGzoG4Vju6YPVhKfe4Z3goGnvDkqAjXlPdfXVbgbkv2CKKd0tufy0Y44iwCX5KRiHSLI4uQt0wa73raNAua88vSdfUQ6-P98KizsHgZ0BNrtLIr_603BX0P5RGtWdpgCPInzBhwJPJMBKuSCRl5mxx9zJm200HmF',
-      });
-      console.log('✅ Seeded Chapter Site Settings.');
     }
 
     console.log('🎉 Database seeding completed: All active dynamic collections populated!');

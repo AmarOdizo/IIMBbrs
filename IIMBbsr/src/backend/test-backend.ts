@@ -10,7 +10,6 @@ import {
   PaperSubmission,
   ContactInquiry,
   AuditLog,
-  SiteSetting,
 } from './models';
 import { comparePassword, generateToken } from './utils/auth';
 
@@ -38,7 +37,6 @@ async function runTests() {
       { name: 'PaperSubmission', model: PaperSubmission, min: 1 },
       { name: 'ContactInquiry', model: ContactInquiry, min: 1 },
       { name: 'AuditLog', model: AuditLog, min: 1 },
-      { name: 'SiteSetting', model: SiteSetting, min: 0 },
     ];
 
     for (const check of checks) {
@@ -96,31 +94,8 @@ async function runTests() {
     console.log(`   ✅ Latest Council Action: ${latestAudit?.action} by ${latestAudit?.adminName}`);
     console.log(`   ✅ Details: ${latestAudit?.details}\n`);
 
-    // 6. Test Site Settings Update
-    console.log('6️⃣ Testing Site Settings Update (checking immutable _id safety)...');
-    let setting = await SiteSetting.findOne();
-    if (!setting) {
-      setting = await SiteSetting.create({
-        chapterName: 'The Indian Institute of Metals • Bhubaneswar Chapter',
-        tagline: 'Advancing Metallurgy, Mineral Processing & Advanced Materials in Odisha',
-      });
-    }
-    const updatePayload = {
-      _id: setting._id.toString(),
-      chapterName: 'The Indian Institute of Metals • Bhubaneswar Chapter (Verified)',
-      tagline: 'Advancing Metallurgy, Mineral Processing & Advanced Materials in Odisha',
-    };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { _id, ...cleanData } = updatePayload;
-    const updated = await SiteSetting.findByIdAndUpdate(
-      setting._id,
-      { $set: cleanData },
-      { new: true, runValidators: true }
-    );
-    console.log(`   ✅ Site settings successfully updated: ${updated?.chapterName}\n`);
-
     console.log('========================================================');
-    console.log('🎉 ALL BACKEND CHECKS PASSED: 12/12 COLLECTIONS OPERATIONAL');
+    console.log('🎉 ALL BACKEND CHECKS PASSED: ALL ACTIVE DYNAMIC COLLECTIONS OPERATIONAL');
     console.log('========================================================');
     process.exit(0);
   } catch (error) {

@@ -8,4 +8,3 @@ export { NewsCircular, type INewsCircular } from './NewsCircular';
 export { ContactInquiry, type IContactInquiry } from './ContactInquiry';
 export { GalleryItem, type IGalleryItem } from './GalleryItem';
 export { AuditLog, type IAuditLog } from './AuditLog';
-export { SiteSetting, type ISiteSetting } from './SiteSetting';

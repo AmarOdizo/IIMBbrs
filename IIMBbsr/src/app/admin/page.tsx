@@ -29,7 +29,6 @@ import {
   Eye,
   Check,
   FileText,
-  Settings,
 } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 
@@ -103,27 +102,6 @@ interface EventItem {
   registrationUrl?: string;
   status: 'Upcoming' | 'Ongoing' | 'Completed' | 'Cancelled';
   isFeatured?: boolean;
-}
-
-interface SiteSettingItem {
-  _id?: string;
-  chapterName: string;
-  tagline: string;
-  secretariatAddress: string;
-  primaryEmail: string;
-  membershipEmail: string;
-  symposiumEmail: string;
-  primaryPhone: string;
-  secondaryPhone?: string;
-  officeHours: string;
-  activeMembersCount: string;
-  partnerInstitutionsCount: string;
-  studentChaptersCount: string;
-  symposiaCount: string;
-  chairmanName: string;
-  chairmanTitle: string;
-  chairmanQuote: string;
-  chairmanPhotoUrl?: string;
 }
 
 interface RegistrationItem {
@@ -208,12 +186,10 @@ export default function AdminPage() {
     | 'symposium'
     | 'news'
     | 'gallery'
-    | 'inquiries'
-    | 'settings';
+    | 'inquiries';
 
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [loadingData, setLoadingData] = useState(false);
-  const [savingSettings, setSavingSettings] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   // Data Lists
@@ -228,25 +204,6 @@ export default function AdminPage() {
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [galleryList, setGalleryList] = useState<GalleryItem[]>([]);
   const [inquiriesList, setInquiriesList] = useState<ContactInquiryItem[]>([]);
-  const [siteSettings, setSiteSettings] = useState<SiteSettingItem>({
-    chapterName: 'The Indian Institute of Metals • Bhubaneswar Chapter',
-    tagline: 'Advancing Metallurgy, Mineral Processing & Advanced Materials in Odisha',
-    secretariatAddress: 'CSIR – Institute of Minerals and Materials Technology (CSIR-IMMT), Acharya Vihar, Bhubaneswar - 751013, Odisha, India',
-    primaryEmail: 'secretary@iimbhubaneswar.in',
-    membershipEmail: 'membership@iimbhubaneswar.in',
-    symposiumEmail: 'symposium2026@iimbhubaneswar.in',
-    primaryPhone: '+91 674 237 9401',
-    secondaryPhone: '+91 674 237 4112',
-    officeHours: 'Mon - Fri: 9:30 AM - 5:30 PM IST',
-    activeMembersCount: '750+',
-    partnerInstitutionsCount: '30+',
-    studentChaptersCount: '4',
-    symposiaCount: '18',
-    chairmanName: 'Dr. Ashok Kumar Mohanty, FIE, FIIM',
-    chairmanTitle: 'Chairman, IIM Bhubaneswar Chapter • Chief Scientist (Retd.), CSIR-IMMT',
-    chairmanQuote: 'Odisha produces over half of India’s iron ore and bauxite. As we transition towards green hydrogen direct-reduction and circular slag utilisation, the IIM Bhubaneswar Chapter serves as the intellectual crucible transforming resource abundance into sustainable technological sovereignty.',
-    chairmanPhotoUrl: '',
-  });
 
   // Search
   const [searchQuery, setSearchQuery] = useState('');
@@ -369,10 +326,6 @@ export default function AdminPage() {
           });
           const json = await res.json();
           if (json.success) setInquiriesList(json.data || []);
-        } else if (activeTab === 'settings') {
-          const res = await fetch('/api/settings');
-          const json = await res.json();
-          if (json.success && json.data) setSiteSettings(json.data);
         }
       } catch (err) {
         console.error('Failed to load tab data:', err);
@@ -497,30 +450,6 @@ export default function AdminPage() {
       setMembersList((prev) => prev.filter((m) => m._id !== id));
     } catch (err) {
       showNotification('error', err instanceof Error ? err.message : 'Delete failed');
-    }
-  };
-
-  // --- CRUD: SETTINGS SAVE ---
-  const handleSaveSettings = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSavingSettings(true);
-    try {
-      // Exclude _id to prevent MongoDB immutable path error
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { _id, ...cleanSettings } = siteSettings;
-      const res = await fetch('/api/settings', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(cleanSettings),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to update settings');
-      showNotification('success', 'Site settings updated successfully!');
-      if (json.data) setSiteSettings(json.data);
-    } catch (err) {
-      showNotification('error', err instanceof Error ? err.message : 'Failed to save settings.');
-    } finally {
-      setSavingSettings(false);
     }
   };
 
@@ -928,7 +857,6 @@ export default function AdminPage() {
             { id: 'news', label: 'News & Circulars', icon: Newspaper },
             { id: 'gallery', label: 'Gallery', icon: ImageIcon },
             { id: 'inquiries', label: 'Inquiries', icon: Mail },
-            { id: 'settings', label: 'Site Settings', icon: Settings },
           ].map((t) => {
             const Icon = t.icon;
             const active = activeTab === t.id;
@@ -1594,225 +1522,6 @@ export default function AdminPage() {
                     </table>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {/* ================= TAB 13: SITE SETTINGS ================= */}
-            {activeTab === 'settings' && (
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 max-w-4xl">
-                <div className="border-b pb-4 mb-6">
-                  <h3 className="font-bold text-slate-900 text-base">Global Chapter Settings</h3>
-                  <p className="text-xs text-slate-500">
-                    Update secretariat postal address, phone numbers, official email IDs, and home page metrics
-                  </p>
-                </div>
-
-                <form onSubmit={handleSaveSettings} className="space-y-6 text-xs">
-                  <div>
-                    <h4 className="font-bold text-slate-900 text-sm mb-3">1. Identity &amp; Secretariat Address</h4>
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Chapter Name</label>
-                        <input
-                          type="text"
-                          required
-                          value={siteSettings.chapterName}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, chapterName: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Tagline</label>
-                        <input
-                          type="text"
-                          value={siteSettings.tagline}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, tagline: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Secretariat Postal Address</label>
-                        <textarea
-                          rows={2}
-                          required
-                          value={siteSettings.secretariatAddress}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, secretariatAddress: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border-t pt-5">
-                    <h4 className="font-bold text-slate-900 text-sm mb-3">2. Official Communication Channels</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Primary Office Phone</label>
-                        <input
-                          type="text"
-                          required
-                          value={siteSettings.primaryPhone}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, primaryPhone: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Secondary / Mobile Phone</label>
-                        <input
-                          type="text"
-                          value={siteSettings.secondaryPhone || ''}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, secondaryPhone: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">General Secretary Email</label>
-                        <input
-                          type="email"
-                          required
-                          value={siteSettings.primaryEmail}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, primaryEmail: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Membership Email</label>
-                        <input
-                          type="email"
-                          required
-                          value={siteSettings.membershipEmail}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, membershipEmail: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Symposium Email</label>
-                        <input
-                          type="email"
-                          value={siteSettings.symposiumEmail || ''}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, symposiumEmail: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Office Hours</label>
-                        <input
-                          type="text"
-                          value={siteSettings.officeHours || ''}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, officeHours: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border-t pt-5">
-                    <h4 className="font-bold text-slate-900 text-sm mb-3">3. Homepage Stats Counters</h4>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Active Members</label>
-                        <input
-                          type="text"
-                          value={siteSettings.activeMembersCount}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, activeMembersCount: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Partner Institutions</label>
-                        <input
-                          type="text"
-                          value={siteSettings.partnerInstitutionsCount}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, partnerInstitutionsCount: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Student Chapters</label>
-                        <input
-                          type="text"
-                          value={siteSettings.studentChaptersCount}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, studentChaptersCount: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">National Symposia</label>
-                        <input
-                          type="text"
-                          value={siteSettings.symposiaCount}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, symposiaCount: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border-t pt-5">
-                    <h4 className="font-bold text-slate-900 text-sm mb-3">4. Chairman's Homepage Message</h4>
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block font-semibold text-slate-700 mb-1">Chairman Name</label>
-                          <input
-                            type="text"
-                            required
-                            value={siteSettings.chairmanName}
-                            onChange={(e) => setSiteSettings({ ...siteSettings, chairmanName: e.target.value })}
-                            className="w-full px-3 py-2 border rounded-xl"
-                          />
-                        </div>
-                        <div>
-                          <label className="block font-semibold text-slate-700 mb-1">Chairman Title</label>
-                          <input
-                            type="text"
-                            required
-                            value={siteSettings.chairmanTitle}
-                            onChange={(e) => setSiteSettings({ ...siteSettings, chairmanTitle: e.target.value })}
-                            className="w-full px-3 py-2 border rounded-xl"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Chairman Quote / Message</label>
-                        <textarea
-                          rows={3}
-                          required
-                          value={siteSettings.chairmanQuote}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, chairmanQuote: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-semibold text-slate-700 mb-1">Chairman Photo URL</label>
-                        <input
-                          type="text"
-                          value={siteSettings.chairmanPhotoUrl || ''}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, chairmanPhotoUrl: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-xl"
-                          placeholder="https://..."
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t flex justify-end">
-                    <button
-                      type="submit"
-                      disabled={savingSettings}
-                      className="px-6 py-2.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-container shadow-sm transition disabled:opacity-50 flex items-center gap-2"
-                    >
-                      {savingSettings ? (
-                        <>
-                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                          <span>Saving Settings...</span>
-                        </>
-                      ) : (
-                        <span>Save Site Settings</span>
-                      )}
-                    </button>
-                  </div>
-                </form>
               </div>
             )}
           </>

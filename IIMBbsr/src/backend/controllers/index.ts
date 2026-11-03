@@ -7,4 +7,3 @@ export * as eventController from './eventController';
 export * as newsController from './newsController';
 export * as contactController from './contactController';
 export * as galleryController from './galleryController';
-export * as siteSettingController from './siteSettingController';
