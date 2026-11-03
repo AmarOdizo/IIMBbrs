@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   Lock,
   LogOut,
@@ -19,16 +20,12 @@ import {
   ExternalLink,
   MapPin,
   Users,
-  Award,
   FileCheck,
   Ticket,
   BarChart3,
   Search,
-  Filter,
-  RefreshCw,
-  Eye,
-  Check,
-  FileText,
+  Building2,
+  ShieldCheck,
 } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 
@@ -167,9 +164,25 @@ interface ContactInquiryItem {
 }
 
 export default function AdminPage() {
-  const [token, setToken] = useState<string | null>(null);
-  const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
-  const [authChecking, setAuthChecking] = useState(true);
+  const [token, setToken] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('iimbbsr_admin_token');
+    }
+    return null;
+  });
+  const [adminUser, setAdminUser] = useState<AdminUser | null>(() => {
+    if (typeof window !== 'undefined') {
+      const savedUser = localStorage.getItem('iimbbsr_admin_user');
+      if (savedUser) {
+        try {
+          return JSON.parse(savedUser);
+        } catch {
+          return null;
+        }
+      }
+    }
+    return null;
+  });
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState('');
@@ -254,22 +267,6 @@ export default function AdminPage() {
     imageUrl: '',
     description: '',
   });
-
-  // Check login on mount
-  useEffect(() => {
-    const savedToken = localStorage.getItem('iimbbsr_admin_token');
-    const savedUser = localStorage.getItem('iimbbsr_admin_user');
-    if (savedToken && savedUser) {
-      try {
-        setToken(savedToken);
-        setAdminUser(JSON.parse(savedUser));
-      } catch {
-        localStorage.removeItem('iimbbsr_admin_token');
-        localStorage.removeItem('iimbbsr_admin_user');
-      }
-    }
-    setAuthChecking(false);
-  }, []);
 
   // Fetch data on activeTab or token changes
   useEffect(() => {
@@ -686,105 +683,145 @@ export default function AdminPage() {
     }
   };
 
-  // --- AUTH CHECK LOADING ---
-  if (authChecking) {
-    return (
-      <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-6">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-500 mb-3" />
-        <p className="text-sm font-medium text-slate-400">Verifying security token...</p>
-      </div>
-    );
-  }
-
   // --- LOGIN SCREEN ---
   if (!token) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex flex-col items-center justify-center p-4 sm:p-6">
-        <div className="w-full max-w-md bg-white/5 border border-white/10 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-2xl flex flex-col gap-6">
-          <div className="flex flex-col items-center text-center gap-2">
-            <span className="p-3 bg-amber-500/10 text-amber-400 rounded-xl mb-1">
-              <Lock className="w-7 h-7" />
+      <div className="min-h-screen bg-gradient-to-br from-[#0a101d] via-[#0f172a] to-[#0a101d] text-white flex flex-col justify-between">
+        {/* Top Chapter Affiliate Bar */}
+        <div className="bg-black/50 backdrop-blur-md border-b border-white/10 text-slate-300 font-label-sm text-[10px] sm:text-xs tracking-wider uppercase">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-2">
+            <span className="truncate font-semibold text-slate-200">THE INDIAN INSTITUTE OF METALS • BHUBANESWAR CHAPTER</span>
+            <span className="text-slate-400 hidden md:inline shrink-0">
+              AFFILIATED TO IIM HEAD OFFICE, KOLKATA (IIM-INDIA.NET)
             </span>
-            <h1 className="text-2xl font-bold tracking-tight">Secretariat Admin Terminal</h1>
-            <p className="text-xs text-slate-400">
-              Complete Management Console: Members, Programmes, Settings &amp; Symposia
-            </p>
           </div>
+        </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5" htmlFor="loginEmail">
-                Admin Email Address
-              </label>
-              <input
-                id="loginEmail"
-                type="email"
-                required
-                value={loginEmail}
-                onChange={(e) => setLoginEmail(e.target.value)}
-                placeholder="admin@iimbhubaneswar.in"
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
-              />
-            </div>
+        {/* Center Login Box */}
+        <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 my-auto">
+          <div className="w-full max-w-md bg-white/[0.04] border border-white/10 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative overflow-hidden">
+            {/* Subtle brand glow accent */}
+            <div className="absolute -top-24 -left-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5" htmlFor="loginPassword">
-                Security Password
-              </label>
-              <input
-                id="loginPassword"
-                type="password"
-                required
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
-              />
-            </div>
-
-            {loginError && (
-              <div className="p-3 rounded-lg bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{loginError}</span>
+            {/* Official Logo & Brand Header */}
+            <div className="flex flex-col items-center text-center gap-3 relative z-10">
+              <div className="bg-white p-3 rounded-2xl shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300">
+                <Image
+                  src="/assets/images/logo1.svg"
+                  alt="The Indian Institute of Metals Logo"
+                  width={180}
+                  height={54}
+                  className="h-12 sm:h-14 w-auto object-contain"
+                  priority
+                />
               </div>
-            )}
 
-            <button
-              type="submit"
-              disabled={loginLoading}
-              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-semibold text-sm shadow-lg transition flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              {loginLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Authenticating...</span>
-                </>
-              ) : (
-                <>
-                  <Lock className="w-4 h-4" />
-                  <span>Authenticate Session</span>
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Quick Demo Credentials Autofill */}
-          <div className="pt-4 border-t border-white/10 flex flex-col gap-2">
-            <div className="flex items-center justify-between text-[11px] text-slate-400">
-              <span>Seeded Super Admin Credentials:</span>
-              <button
-                type="button"
-                onClick={handleFillDemoCreds}
-                className="text-amber-400 hover:underline font-semibold"
-              >
-                Auto-fill
-              </button>
+              <div className="space-y-1">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                  The Indian Institute of Metals
+                </h1>
+                <p className="text-xs sm:text-sm font-medium text-amber-400">
+                  Bhubaneswar Chapter Secretariat
+                </p>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 text-[10px] uppercase tracking-wider text-slate-300 font-semibold border border-white/10 mt-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>Executive Admin Terminal</span>
+                </div>
+              </div>
             </div>
-            <div className="p-2.5 rounded-lg bg-white/5 font-mono text-[11px] text-slate-300 flex flex-col gap-1">
-              <span>Email: admin@iimbhubaneswar.in</span>
-              <span>Pass : Admin@123</span>
+
+            <form onSubmit={handleLogin} className="space-y-4 relative z-10">
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5" htmlFor="loginEmail">
+                  Admin Email Address
+                </label>
+                <input
+                  id="loginEmail"
+                  type="email"
+                  required
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  placeholder="admin@iimbhubaneswar.in"
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5" htmlFor="loginPassword">
+                  Security Password
+                </label>
+                <input
+                  id="loginPassword"
+                  type="password"
+                  required
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+                />
+              </div>
+
+              {loginError && (
+                <div className="p-3 rounded-lg bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{loginError}</span>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loginLoading}
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-semibold text-sm shadow-lg transition flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+              >
+                {loginLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Authenticating Session...</span>
+                  </>
+                ) : (
+                  <>
+                    <Lock className="w-4 h-4" />
+                    <span>Sign In to Executive Console</span>
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Quick Demo Credentials Autofill */}
+            <div className="pt-4 border-t border-white/10 flex flex-col gap-2 relative z-10">
+              <div className="flex items-center justify-between text-[11px] text-slate-400">
+                <span>Council Administrator Credentials:</span>
+                <button
+                  type="button"
+                  onClick={handleFillDemoCreds}
+                  className="text-amber-400 hover:underline font-semibold"
+                >
+                  Auto-fill
+                </button>
+              </div>
+              <div className="p-2.5 rounded-lg bg-white/5 font-mono text-[11px] text-slate-300 flex flex-col gap-1">
+                <span>Email: admin@iimbhubaneswar.in</span>
+                <span>Pass : Admin@123</span>
+              </div>
+            </div>
+
+            {/* Link back to public site */}
+            <div className="text-center pt-2 border-t border-white/5 relative z-10">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors"
+              >
+                <span>← Return to Public Website (iimbhubaneswar.in)</span>
+                <ExternalLink className="w-3 h-3" />
+              </Link>
             </div>
           </div>
+        </div>
+
+        {/* Bottom Institutional Seal Footer */}
+        <div className="py-3 px-4 text-center text-[11px] text-slate-400 border-t border-white/5 bg-black/40">
+          <span>CSIR – Institute of Minerals and Materials Technology (CSIR-IMMT), Acharya Vihar, Bhubaneswar - 751013, Odisha, India</span>
         </div>
       </div>
     );
@@ -793,31 +830,77 @@ export default function AdminPage() {
   // --- AUTHENTICATED CONSOLE ---
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
-      {/* Top Banner Navigation */}
+      {/* Top Affiliate Micro-bar */}
+      <div className="bg-slate-950 border-b border-slate-800 text-slate-300 text-[10px] sm:text-xs tracking-wider uppercase font-medium">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 truncate">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+            <span className="font-semibold text-slate-200 truncate">THE INDIAN INSTITUTE OF METALS • BHUBANESWAR CHAPTER</span>
+            <span className="hidden md:inline text-slate-600">|</span>
+            <span className="hidden md:inline text-slate-400">CSIR-IMMT CAMPUS, ACHARYA VIHAR</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-3 text-slate-400 text-[10px] shrink-0">
+            <span>AFFILIATED TO IIM HEAD OFFICE, KOLKATA (IIM-INDIA.NET)</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header Navigation */}
       <header className="sticky top-0 z-40 bg-slate-900 border-b border-slate-800 text-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Image src="/assets/images/logo1.svg" alt="IIM Logo" width={34} height={34} className="object-contain" />
-            <div>
-              <div className="font-bold text-sm tracking-tight text-white flex items-center gap-2">
-                <span>IIM Bhubaneswar Chapter</span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold tracking-wider uppercase">
-                  15 Collections Live
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between gap-4">
+          {/* Brand Logo & Titles */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            <Link
+              href="/"
+              title="Open Public Site"
+              target="_blank"
+              className="bg-white p-1.5 sm:p-2 rounded-xl shadow-sm border border-slate-200/20 hover:scale-105 transition-transform shrink-0 flex items-center justify-center"
+            >
+              <Image
+                src="/assets/images/logo1.svg"
+                alt="IIM Bhubaneswar Chapter Official Logo"
+                width={140}
+                height={48}
+                className="h-9 sm:h-11 w-auto object-contain"
+                priority
+              />
+            </Link>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-bold text-sm sm:text-base tracking-tight text-white leading-tight">
+                  The Indian Institute of Metals
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-semibold tracking-wider uppercase hidden sm:inline">
+                  Admin Console
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">Secretariat Management Console</p>
+              <p className="text-[11px] sm:text-xs text-slate-400 leading-tight">
+                Bhubaneswar Chapter Secretariat • Council Operations
+              </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex flex-col text-right">
-              <span className="text-xs font-semibold text-white">{adminUser?.name || 'Administrator'}</span>
-              <span className="text-[10px] text-slate-400">{adminUser?.designation || adminUser?.role}</span>
+          {/* Right Action Area */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <Link
+              href="/"
+              target="_blank"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-semibold border border-white/10 transition"
+              title="Preview public chapter portal"
+            >
+              <span>View Public Portal</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </Link>
+
+            <div className="hidden sm:flex flex-col text-right px-2.5 py-1 bg-white/5 rounded-xl border border-white/5">
+              <span className="text-xs font-semibold text-white leading-tight">{adminUser?.name || 'Administrator'}</span>
+              <span className="text-[10px] text-amber-400 leading-tight">{adminUser?.designation || adminUser?.role || 'Super Admin'}</span>
             </div>
+
             <button
               onClick={handleLogout}
-              className="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-white/10 hover:bg-rose-600/80 text-white text-xs font-semibold transition flex items-center gap-1.5"
-              title="Logout"
+              className="p-2 sm:px-3 sm:py-2 rounded-xl bg-rose-500/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
+              title="Logout Session"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Logout</span>
@@ -845,6 +928,68 @@ export default function AdminPage() {
             <span>{feedback.message}</span>
           </div>
         )}
+
+        {/* ================= PRIMARY CHAPTER SECRETARIAT BANNER (EXECUTIVE APEX CONSOLE) ================= */}
+        <section aria-label="Official Chapter Banner" className="relative rounded-3xl bg-gradient-to-r from-[#08111e] via-[#0e1c33] to-[#08111e] border border-amber-500/30 shadow-[0_12px_40px_rgba(2,6,23,0.35)] overflow-hidden">
+          {/* Top hairline gold metallic accent */}
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400/80 to-transparent"></div>
+          {/* Subtle ambient light blooms */}
+          <div className="absolute -top-16 -left-16 w-52 h-52 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="relative z-10 p-5 sm:p-7 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            {/* Left: Official Emblem & High-Authority Titles */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+              <div className="bg-white p-3 sm:p-3.5 rounded-2xl shadow-xl border-2 border-amber-400/30 ring-1 ring-black/10 shrink-0 flex items-center justify-center hover:scale-[1.02] transition-transform">
+                <Image
+                  src="/assets/images/logo1.svg"
+                  alt="The Indian Institute of Metals Crest"
+                  width={160}
+                  height={56}
+                  className="h-11 sm:h-14 w-auto object-contain"
+                  priority
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                {/* Government / Secretariat Meta Bar */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Official Secretariat Console</span>
+                  </span>
+                  <span className="text-white/20">•</span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] sm:text-[11px] font-semibold flex items-center gap-1.5 shadow-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Active Council Session 2026</span>
+                  </span>
+                </div>
+
+                {/* Primary Institutional Title */}
+                <h1 className="text-xl sm:text-2xl lg:text-[26px] font-bold tracking-tight text-white leading-tight">
+                  The Indian Institute of Metals • Bhubaneswar Chapter
+                </h1>
+
+                {/* Subtitle / Charter Description */}
+                <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+                  Secretariat Operations Terminal for Council Rolls, National Symposia (AHSS-2026), Official Circulars &amp; Public Intake.
+                </p>
+              </div>
+            </div>
+
+            {/* Right: Dignified Secretariat Badges */}
+            <div className="flex flex-wrap lg:flex-col items-start lg:items-end gap-2 shrink-0">
+              <div className="px-3.5 py-1.5 rounded-xl bg-white/[0.06] backdrop-blur-md border border-white/10 flex items-center gap-2 text-xs text-slate-200 shadow-sm">
+                <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span className="font-medium">CSIR-IMMT Campus, Bhubaneswar</span>
+              </div>
+              <div className="px-3.5 py-1.5 rounded-xl bg-white/[0.06] backdrop-blur-md border border-white/10 flex items-center gap-2 text-xs text-slate-300 shadow-sm">
+                <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span>Affiliated to IIM HQ, Kolkata (1946)</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Console Navigation Tabs */}
         <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
@@ -1429,6 +1574,7 @@ export default function AdminPage() {
                       className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between"
                     >
                       <div className="h-44 relative bg-slate-100">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={g.imageUrl} alt={g.title} className="w-full h-full object-cover" />
                         <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-bold bg-black/60 text-white backdrop-blur">
                           {g.category}
@@ -1527,6 +1673,34 @@ export default function AdminPage() {
           </>
         )}
       </main>
+
+      {/* Institutional Admin Footer */}
+      <footer className="mt-auto border-t border-slate-200 bg-white py-4 px-4 sm:px-6 lg:px-8 text-xs text-slate-500">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 text-center sm:text-left">
+            <div className="bg-slate-100 p-1 rounded-md border border-slate-200">
+              <Image
+                src="/assets/images/logo1.svg"
+                alt="IIM Logo"
+                width={28}
+                height={28}
+                className="h-5 w-auto object-contain"
+              />
+            </div>
+            <span>
+              © 2025–2026 <strong>The Indian Institute of Metals (IIM) — Bhubaneswar Chapter</strong>. Regional Secretariat: CSIR-IMMT, Bhubaneswar.
+            </span>
+          </div>
+          <div className="flex items-center gap-4 text-[11px] text-slate-400">
+            <span>Affiliated to IIM Head Office, Kolkata</span>
+            <span>•</span>
+            <Link href="/" target="_blank" className="text-primary hover:underline font-semibold flex items-center gap-1">
+              <span>View Public Portal</span>
+              <ExternalLink className="w-3 h-3" />
+            </Link>
+          </div>
+        </div>
+      </footer>
 
       {/* ================= MODAL: MEMBER ================= */}
       {showMemberModal && (
@@ -1688,7 +1862,7 @@ export default function AdminPage() {
                   <label className="block font-semibold text-slate-700 mb-1">Status</label>
                   <select
                     value={eventForm.status}
-                    onChange={(e) => setEventForm({ ...eventForm, status: e.target.value as any })}
+                    onChange={(e) => setEventForm({ ...eventForm, status: e.target.value as EventItem['status'] })}
                     className="w-full px-3 py-2 border rounded-xl bg-white"
                   >
                     <option value="Upcoming">Upcoming</option>
