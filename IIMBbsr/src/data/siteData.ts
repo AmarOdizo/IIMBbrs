@@ -29,6 +29,13 @@ export const siteConfig = {
   membershipEmail: "membership@iimbhubaneswar.in",
   phone: "+91 674 237 9401 / +91 674 237 4112",
   timing: "Mon - Fri: 9:30 AM - 5:30 PM IST",
+  social: {
+    facebook: "https://www.facebook.com/TheIndianInstituteofMetals",
+    twitter: "https://twitter.com/IIM_HeadOffice",
+    instagram: "https://www.instagram.com/indianinstituteofmetals",
+    youtube: "https://www.youtube.com/@theindianinstituteofmetals4921",
+    linkedin: "https://www.linkedin.com/company/the-indian-institute-of-metals/",
+  },
   stats: [
     { label: "Active Members", value: "750+" },
     { label: "Partner Institutions", value: "30+" },

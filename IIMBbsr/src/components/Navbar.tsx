@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import SocialLinksBar from '@/components/SocialLinks';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -268,6 +269,10 @@ export default function Navbar() {
 
           {/* Drawer Footer Action Area */}
           <div className="p-4 border-t border-surface-variant/20 bg-surface-container-lowest space-y-3">
+            <div className="flex flex-col items-center gap-1.5 pt-1">
+              <span className="text-[11px] font-semibold text-secondary uppercase tracking-wider">Connect With Us</span>
+              <SocialLinksBar className="justify-center" />
+            </div>
             <Link
               href="/privacy-terms"
               onClick={() => handleClose()}

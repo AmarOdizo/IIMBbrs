@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import SocialLinksBar from '@/components/SocialLinks';
 
 export default function Footer() {
   return (
@@ -20,6 +21,12 @@ export default function Footer() {
               The Indian Institute of Metals — Bhubaneswar Chapter, advancing metallurgy, materials engineering, and
               mineral processing across Odisha's industrial core.
             </p>
+            <div className="pt-2">
+              <span className="block font-label-sm text-[11px] text-tertiary-fixed uppercase tracking-wider mb-2">
+                Official Social Media
+              </span>
+              <SocialLinksBar />
+            </div>
           </div>
           <div className="flex flex-col gap-2">
             <span className="font-label-md text-label-md text-tertiary-fixed uppercase tracking-wider mb-2">

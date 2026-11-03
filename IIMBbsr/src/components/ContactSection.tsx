@@ -24,6 +24,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
+import SocialLinksBar from '@/components/SocialLinks';
 
 const FUNCTIONAL_DESKS = [
   {
@@ -607,6 +608,27 @@ export default function ContactSection() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Official Digital & Social Channels */}
+      <section className="max-w-7xl mx-auto w-full px-6 lg:px-12 py-10">
+        <div className="bg-surface-container-lowest rounded-2xl p-6 lg:p-8 shadow-sm border border-slate-200/60">
+          <div className="flex flex-col gap-2 mb-6">
+            <div className="flex items-center gap-2">
+              <span className="h-px w-6 bg-primary" />
+              <span className="font-label-md text-label-md text-primary tracking-widest uppercase font-semibold">
+                Social Connect
+              </span>
+            </div>
+            <h2 className="font-headline-md text-2xl sm:text-3xl font-bold text-on-surface">
+              Official Digital &amp; Social Media Channels
+            </h2>
+            <p className="font-body-md text-body-md text-secondary max-w-2xl">
+              Connect with The Indian Institute of Metals across verified official channels for event broadcasts, technical publications, symposium updates, and research announcements.
+            </p>
+          </div>
+          <SocialLinksBar variant="expanded" />
         </div>
       </section>
 
