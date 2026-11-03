@@ -166,7 +166,6 @@ interface ContactInquiryItem {
 }
 
 export default function AdminPage() {
-  console.log('>>> AdminPage component rendered on client');
   const [token, setTokenState] = useState<string | null>(null);
   const [adminUser, setAdminUserState] = useState<AdminUser | null>(null);
   useEffect(() => {
@@ -174,7 +173,6 @@ export default function AdminPage() {
       try {
         const storedToken = localStorage.getItem('iimbbsr_admin_token');
         const storedUser = localStorage.getItem('iimbbsr_admin_user');
-        console.log('>>> AdminPage syncAuth ran, storedToken=', storedToken);
         setTokenState(storedToken || null);
         if (storedUser) {
           try {
