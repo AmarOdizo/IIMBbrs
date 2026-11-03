@@ -107,13 +107,15 @@ export default function Footer() {
             >
               Latest News &amp; Circulars
             </Link>
-            <Link
+            <a
               className="font-body-sm text-body-sm text-surface-variant/80 hover:text-surface-bright transition-colors"
               data-path="join-chapter"
-              href="/members?tab=join"
+              href="https://iim-india.net"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Join Chapter / Tiers
-            </Link>
+              Join Chapter (iim-india.net)
+            </a>
             <Link
               className="font-body-sm text-body-sm text-surface-variant/80 hover:text-surface-bright transition-colors"
               data-path="contact"
@@ -140,12 +142,14 @@ export default function Footer() {
             © 2025–2026 The Indian Institute of Metals — Bhubaneswar Chapter. All rights reserved.
           </p>
           <div className="flex items-center gap-4 text-xs">
-            <Link href="/privacy-terms?tab=privacy" className="hover:text-surface-bright transition-colors">
+            <Link href="/privacy" className="hover:text-surface-bright transition-colors">
               Privacy Policy
             </Link>
-            <span>•</span>
-            <Link href="/privacy-terms?tab=terms" className="hover:text-surface-bright transition-colors">
-              Terms &amp; Conditions
+            <Link href="/terms" className="hover:text-surface-bright transition-colors">
+              Terms of Use
+            </Link>
+            <Link href="/admin" className="text-tertiary-fixed hover:underline transition-colors font-medium">
+              Admin Login
             </Link>
           </div>
         </div>

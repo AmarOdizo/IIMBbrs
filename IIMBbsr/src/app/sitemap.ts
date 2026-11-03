@@ -4,7 +4,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://iimbhubaneswar.in';
   const lastModified = new Date();
 
-  // All 16 public, indexable canonical routes
+  // Canonical routes as specified in the proposal sitemap
   const publicRoutes: Array<{
     path: string;
     priority: number;
@@ -16,17 +16,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/members', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/events', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/awards', priority: 0.9, changeFrequency: 'monthly' },
-    { path: '/symposium', priority: 0.9, changeFrequency: 'monthly' },
     { path: '/student-chapters', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/gallery', priority: 0.7, changeFrequency: 'monthly' },
-    { path: '/gallery-ahss', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/news', priority: 0.8, changeFrequency: 'daily' },
-    { path: '/news-detail', priority: 0.7, changeFrequency: 'weekly' },
-    { path: '/membership', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/contact', priority: 0.7, changeFrequency: 'monthly' },
-    { path: '/privacy-terms', priority: 0.5, changeFrequency: 'yearly' },
-    { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
-    { path: '/terms', priority: 0.3, changeFrequency: 'yearly' },
+    { path: '/privacy', priority: 0.5, changeFrequency: 'yearly' },
+    { path: '/terms', priority: 0.5, changeFrequency: 'yearly' },
+    { path: '/membership', priority: 0.6, changeFrequency: 'monthly' },
+    { path: '/symposium', priority: 0.8, changeFrequency: 'monthly' },
   ];
 
   return publicRoutes.map((route) => ({
@@ -36,4 +33,3 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route.priority,
   }));
 }
-

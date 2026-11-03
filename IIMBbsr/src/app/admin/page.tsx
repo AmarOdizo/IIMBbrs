@@ -1,5 +1,7 @@
 'use client';
 
+import * as XLSX from 'xlsx';
+
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,6 +23,7 @@ import {
   MapPin,
   Users,
   FileCheck,
+  FileSpreadsheet,
   Ticket,
   BarChart3,
   Search,
@@ -255,6 +258,141 @@ export default function AdminPage() {
 
   // Modals
   const [showMemberModal, setShowMemberModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importPreview, setImportPreview] = useState<any[]>([]);
+  const [importLoading, setImportLoading] = useState(false);
+  const [importStatus, setImportStatus] = useState<string | null>(null);
+
+  const handleSpreadsheetFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setImportStatus(null);
+      const buffer = await file.arrayBuffer();
+      const workbook = XLSX.read(buffer, { type: 'array' });
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+      const rawJson: any[] = XLSX.utils.sheet_to_json(worksheet);
+
+      const parsedRows: any[] = [];
+      rawJson.forEach((row) => {
+        const memberCode = (
+          row.memberCode ||
+          row.membershipId ||
+          row['Member Code'] ||
+          row['Membership ID'] ||
+          row['Roll No'] ||
+          row['RollNo'] ||
+          ''
+        ).toString().trim();
+
+        const name = (
+          row.name ||
+          row['Full Name'] ||
+          row['Name'] ||
+          row['Member Name'] ||
+          ''
+        ).toString().trim();
+
+        if (memberCode && name) {
+          parsedRows.push({
+            memberCode: memberCode.toUpperCase(),
+            name,
+            category: (row.category || row['Category'] || 'Life Member').toString().trim(),
+            organization: (row.organization || row['Organization'] || row['Institution'] || 'General').toString().trim(),
+            designation: (row.designation || row['Designation'] || '').toString().trim(),
+            email: (row.email || row['Email'] || '').toString().trim(),
+            phone: (row.phone || row['Phone'] || row['Mobile'] || '').toString().trim(),
+            city: (row.city || row['City'] || 'Bhubaneswar').toString().trim(),
+            state: (row.state || row['State'] || 'Odisha').toString().trim(),
+          });
+        }
+      });
+
+      if (parsedRows.length === 0) {
+        setImportStatus('Error: No valid member rows found. Ensure sheet has headers like "Membership ID" and "Full Name".');
+      }
+      setImportPreview(parsedRows);
+    } catch (err: any) {
+      setImportStatus('Failed to read Excel/CSV file: ' + err.message);
+    }
+  };
+
+  const downloadSampleExcel = () => {
+    const sampleData = [
+      {
+        'Membership ID': 'LM-901',
+        'Full Name': 'Dr. Rajesh Mohapatra',
+        'Category': 'Life Member',
+        'Organization': 'CSIR-IMMT Bhubaneswar',
+        'Designation': 'Senior Principal Scientist',
+        'Email': 'rajesh@immt.res.in',
+        'Phone': '9876543210',
+        'City': 'Bhubaneswar',
+        'State': 'Odisha',
+      },
+      {
+        'Membership ID': 'AM-204',
+        'Full Name': 'Er. Sunita Jena',
+        'Category': 'Annual Member',
+        'Organization': 'Tata Steel Kalinganagar',
+        'Designation': 'Plant Metallurgist',
+        'Email': 'sunita@tatasteel.com',
+        'Phone': '9876543211',
+        'City': 'Jajpur',
+        'State': 'Odisha',
+      },
+      {
+        'Membership ID': 'SM-105',
+        'Full Name': 'Ananya Das',
+        'Category': 'Student Member',
+        'Organization': 'IIT Bhubaneswar',
+        'Designation': 'Research Scholar',
+        'Email': 'ananya@iitbbs.ac.in',
+        'Phone': '9876543212',
+        'City': 'Bhubaneswar',
+        'State': 'Odisha',
+      },
+    ];
+    const ws = XLSX.utils.json_to_sheet(sampleData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Members');
+    XLSX.writeFile(wb, 'IIM_Bhubaneswar_Members_Roster_Template.xlsx');
+  };
+
+  const handleExecuteImport = async () => {
+    if (importPreview.length === 0) return;
+    setImportLoading(true);
+    setImportStatus(null);
+    try {
+      const res = await fetch('/api/members/import', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ members: importPreview }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setImportStatus(`Success: ${json.data.inserted} added, ${json.data.updated} updated.`);
+        const mRes = await fetch('/api/members?limit=200');
+        const mJson = await mRes.json();
+        if (mJson.success) setMembersList(mJson.data || []);
+        setTimeout(() => {
+          setShowImportModal(false);
+          setImportPreview([]);
+          setImportStatus(null);
+        }, 1500);
+      } else {
+        setImportStatus(`Error: ${json.error}`);
+      }
+    } catch (err: any) {
+      setImportStatus(`Error: ${err.message}`);
+    } finally {
+      setImportLoading(false);
+    }
+  };
   const [editingMemberId, setEditingMemberId] = useState<string | null>(null);
   const [memberForm, setMemberForm] = useState({
     memberCode: '',
@@ -1221,13 +1359,24 @@ export default function AdminPage() {
                       className="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
-                  <button
-                    onClick={() => handleOpenMemberModal()}
-                    className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow-sm"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Enroll Member</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowImportModal(true)}
+                      className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow-sm"
+                      title="Upload Excel or CSV roster"
+                    >
+                      <FileSpreadsheet className="w-4 h-4" />
+                      <span>Import Excel / CSV</span>
+                    </button>
+                    <button
+                      onClick={() => handleOpenMemberModal()}
+                      className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow-sm"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Enroll Member</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -1798,6 +1947,134 @@ export default function AdminPage() {
       </footer>
 
       {/* ================= MODAL: MEMBER ================= */}
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl flex flex-col gap-4">
+            <div className="flex items-center justify-between border-b pb-3">
+              <div className="flex items-center gap-2">
+                <FileCheck className="w-5 h-5 text-emerald-600" />
+                <h3 className="font-bold text-slate-900 text-base">
+                  Import Members Roster (Excel / CSV)
+                </h3>
+              </div>
+              <button
+                onClick={() => {
+                  setShowImportModal(false);
+                  setImportPreview([]);
+                  setImportStatus(null);
+                }}
+                className="text-slate-400 hover:text-slate-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Upload the official Chapter membership Excel or CSV roster (containing member code, full name, category, organization, designation, email, phone).
+            </p>
+
+            <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <span className="text-xs text-slate-600 font-medium">Need the format template?</span>
+              <button
+                type="button"
+                onClick={downloadSampleExcel}
+                className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
+              >
+                <span>Download Sample Excel Template (.xlsx)</span>
+              </button>
+            </div>
+
+            <div className="p-4 border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center gap-2 bg-slate-50/50">
+              <input
+                type="file"
+                id="memberRosterFile"
+                accept=".xlsx, .xls, .csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/csv"
+                onChange={handleSpreadsheetFileChange}
+                className="text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-container cursor-pointer"
+              />
+              <span className="text-[11px] text-slate-400">Supported formats: .XLSX (Microsoft Excel), .XLS, or .CSV</span>
+            </div>
+
+            {importPreview.length > 0 && (
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-800">
+                    Preview: {importPreview.length} records ready to import
+                  </span>
+                </div>
+                <div className="max-h-48 overflow-y-auto border border-slate-200 rounded-xl">
+                  <table className="w-full text-left text-[11px] text-slate-600">
+                    <thead className="bg-slate-100 text-slate-700 sticky top-0">
+                      <tr>
+                        <th className="p-2 font-semibold">Roll No</th>
+                        <th className="p-2 font-semibold">Name</th>
+                        <th className="p-2 font-semibold">Category</th>
+                        <th className="p-2 font-semibold">Organization</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {importPreview.slice(0, 10).map((r, i) => (
+                        <tr key={i} className="hover:bg-slate-50">
+                          <td className="p-2 font-mono font-medium">{r.memberCode || r.membershipId || r['Membership ID']}</td>
+                          <td className="p-2 font-medium">{r.name || r['Name']}</td>
+                          <td className="p-2">{r.category || r['Category'] || 'Life Member'}</td>
+                          <td className="p-2">{r.organization || r['Organization']}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {importPreview.length > 10 && (
+                    <div className="p-2 text-center text-[10px] text-slate-400 bg-slate-50">
+                      + {importPreview.length - 10} more records in file
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {importStatus && (
+              <div
+                className={`p-3 rounded-xl text-xs font-medium ${
+                  importStatus.startsWith('Success')
+                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                    : 'bg-red-50 text-red-800 border border-red-200'
+                }`}
+              >
+                {importStatus}
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-3 pt-3 border-t">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowImportModal(false);
+                  setImportPreview([]);
+                  setImportStatus(null);
+                }}
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={importPreview.length === 0 || importLoading}
+                onClick={handleExecuteImport}
+                className="px-5 py-2 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-xl shadow-sm transition flex items-center gap-1.5"
+              >
+                {importLoading ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Importing...</span>
+                  </>
+                ) : (
+                  <span>Confirm &amp; Import {importPreview.length} Members</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {showMemberModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4">

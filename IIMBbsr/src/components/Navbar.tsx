@@ -148,14 +148,17 @@ export default function Navbar() {
 
         {/* Desktop & Tablet Action CTA + Mobile Hamburger Toggle */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          <Link
-            href="/privacy-terms"
-            data-path="privacy-terms"
+          <a
+            href="https://iim-india.net"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-path="join-chapter"
             className="hidden sm:inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg font-label-md text-xs sm:text-label-md font-semibold shrink-0 shadow-sm transition-all bg-primary text-on-primary hover:bg-primary-container"
+            title="Register with Indian Institute of Metals Kolkata Head Office"
           >
-            <span className="material-symbols-outlined text-[17px]">verified_user</span>
-            <span>Privacy &amp; Terms</span>
-          </Link>
+            <span className="material-symbols-outlined text-[17px]">how_to_reg</span>
+            <span>Join Chapter</span>
+          </a>
 
           {/* Hamburger Button (Mobile & Tablet: < 1024px) */}
           <button
@@ -256,11 +259,17 @@ export default function Navbar() {
                   aria-current={isActive ? 'page' : undefined}
                   className={`drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg font-label-md text-sm transition-colors ${
                     isActive
-                      ? 'bg-primary-container text-on-primary-container font-semibold'
+                      ? 'bg-primary-container text-white font-semibold'
                       : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-xl text-primary">{item.icon}</span>
+                  <span
+                    className={`material-symbols-outlined text-xl ${
+                      isActive ? 'text-white' : 'text-primary'
+                    }`}
+                  >
+                    {item.icon}
+                  </span>
                   <span>{item.name}</span>
                 </Link>
               );
@@ -273,14 +282,16 @@ export default function Navbar() {
               <span className="text-[11px] font-semibold text-secondary uppercase tracking-wider">Connect With Us</span>
               <SocialLinksBar className="justify-center" />
             </div>
-            <Link
-              href="/privacy-terms"
+            <a
+              href="https://iim-india.net"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => handleClose()}
               className="w-full py-2.5 px-4 rounded-xl font-label-md text-sm font-semibold text-center bg-primary text-on-primary hover:bg-primary-container transition-all flex items-center justify-center gap-2 shadow-sm"
             >
-              <span className="material-symbols-outlined text-base">verified_user</span>
-              <span>Privacy &amp; Terms</span>
-            </Link>
+              <span className="material-symbols-outlined text-base">how_to_reg</span>
+              <span>Join Chapter (iim-india.net)</span>
+            </a>
             <div className="text-[11px] text-secondary text-center leading-relaxed">
               <span>CSIR-IMMT, Bhubaneswar • IIM HQ Kolkata</span>
             </div>

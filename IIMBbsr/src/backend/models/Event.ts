@@ -23,6 +23,7 @@ export interface IEvent extends Document {
   speakers: IEventSpeaker[];
   bannerImage?: string;
   registrationUrl?: string;
+  brochurePdfUrl?: string;
   status: 'Upcoming' | 'Ongoing' | 'Completed' | 'Cancelled';
   isFeatured: boolean;
   createdAt: Date;
@@ -79,6 +80,10 @@ const EventSchema: Schema<IEvent> = new Schema(
       default: '',
     },
     registrationUrl: {
+      type: String,
+      default: '',
+    },
+    brochurePdfUrl: {
       type: String,
       default: '',
     },

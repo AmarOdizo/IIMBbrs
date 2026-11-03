@@ -23,6 +23,20 @@ export async function getGalleryItems(req: NextRequest) {
   }
 }
 
+export async function getGalleryItemById(id: string) {
+  try {
+    await connectDB();
+    const item = await GalleryItem.findById(id);
+    if (!item) {
+      return errorResponse('Gallery item not found', 404);
+    }
+    return successResponse(item);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Invalid gallery item ID';
+    return errorResponse(message, 500);
+  }
+}
+
 export async function createGalleryItem(req: NextRequest) {
   const auth = await requireAuth(req);
   if (!auth.authenticated) {
@@ -49,7 +63,10 @@ export async function updateGalleryItem(req: NextRequest, id: string) {
   try {
     await connectDB();
     const body = await req.json();
-    const updated = await GalleryItem.findByIdAndUpdate(id, body, { new: true });
+    const updated = await GalleryItem.findByIdAndUpdate(id, body, {
+      new: true,
+      runValidators: true,
+    });
     if (!updated) {
       return errorResponse('Gallery item not found', 404);
     }

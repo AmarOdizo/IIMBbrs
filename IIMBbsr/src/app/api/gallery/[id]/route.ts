@@ -1,6 +1,14 @@
 import { NextRequest } from 'next/server';
 import { galleryController } from '@/backend/controllers';
 
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  return galleryController.getGalleryItemById(id);
+}
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }

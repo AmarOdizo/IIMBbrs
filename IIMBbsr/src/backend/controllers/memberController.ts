@@ -141,3 +141,105 @@ export async function deleteMember(req: NextRequest, id: string) {
     return errorResponse(message, 500);
   }
 }
+
+export async function importMembers(req: NextRequest) {
+  const auth = await requireAuth(req);
+  if (!auth.authenticated || !auth.user) {
+    return errorResponse(auth.error || 'Unauthorized', 401);
+  }
+
+  try {
+    await connectDB();
+    const body = await req.json();
+    const membersData = Array.isArray(body.members) ? body.members : (Array.isArray(body) ? body : []);
+
+    if (membersData.length === 0) {
+      return errorResponse('No member records provided for import', 400);
+    }
+
+    const validCategories: Array<'Life Member' | 'Corporate Member' | 'Student Member' | 'Annual Member' | 'Donor Member'> = [
+      'Life Member',
+      'Corporate Member',
+      'Student Member',
+      'Annual Member',
+      'Donor Member',
+    ];
+    let inserted = 0;
+    let updated = 0;
+    const errors: string[] = [];
+
+    for (let i = 0; i < membersData.length; i++) {
+      const row = membersData[i];
+      const memberCode = (row.memberCode || row.membershipId || row['Membership ID'] || row['Member Code'] || '').toString().trim().toUpperCase();
+      const name = (row.name || row['Name'] || row['Member Name'] || '').toString().trim();
+      const rawCategory = (row.category || row['Category'] || 'Life Member').toString().trim();
+      const organization = (row.organization || row['Organization'] || row['Institution'] || 'General').toString().trim();
+      const designation = (row.designation || row['Designation'] || '').toString().trim();
+      const email = (row.email || row['Email'] || '').toString().trim();
+      const phone = (row.phone || row['Phone'] || row['Mobile'] || '').toString().trim();
+      const city = (row.city || row['City'] || 'Bhubaneswar').toString().trim();
+      const state = (row.state || row['State'] || 'Odisha').toString().trim();
+
+      if (!memberCode || !name) {
+        errors.push(`Row ${i + 1}: Missing Member Code or Name`);
+        continue;
+      }
+
+      const category: 'Life Member' | 'Corporate Member' | 'Student Member' | 'Annual Member' | 'Donor Member' =
+        validCategories.find(c => c.toLowerCase() === rawCategory.toLowerCase()) || 'Life Member';
+
+      const existing = await Member.findOne({ memberCode });
+      if (existing) {
+        await Member.updateOne(
+          { memberCode },
+          {
+            $set: {
+              name,
+              category,
+              organization,
+              designation,
+              city,
+              state,
+              ...(email ? { email } : {}),
+              ...(phone ? { phone } : {}),
+            },
+          }
+        );
+        updated++;
+      } else {
+        await Member.create({
+          memberCode,
+          name,
+          category,
+          organization,
+          designation,
+          city,
+          state,
+          email,
+          phone,
+          status: 'Active',
+          joinedYear: row.joinedYear || new Date().getFullYear(),
+        });
+        inserted++;
+      }
+    }
+
+    await AuditLog.create({
+      adminId: auth.user.id,
+      adminName: auth.user.name,
+      action: 'BULK_IMPORT_MEMBERS',
+      targetEntity: 'Member',
+      details: `Bulk imported ${inserted} new members, updated ${updated} members from Excel/CSV sheet.`,
+    });
+
+    return successResponse({
+      inserted,
+      updated,
+      total: inserted + updated,
+      errors: errors.slice(0, 10),
+    }, `Successfully imported ${inserted} new members and updated ${updated} existing records.`);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Failed to import members';
+    return errorResponse(message, 500);
+  }
+}
