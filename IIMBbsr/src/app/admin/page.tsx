@@ -166,6 +166,7 @@ interface ContactInquiryItem {
 }
 
 export default function AdminPage() {
+  console.log('>>> AdminPage component rendered on client');
   const [token, setTokenState] = useState<string | null>(null);
   const [adminUser, setAdminUserState] = useState<AdminUser | null>(null);
   useEffect(() => {
