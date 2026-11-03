@@ -18,6 +18,21 @@ function getNetworkIp(): string {
   return fallback || '127.0.0.1';
 }
 
+function getAllNetworkIps(): string[] {
+  const nets = os.networkInterfaces();
+  const ips = new Set<string>();
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name] || []) {
+      const isIpv4 = net.family === 'IPv4' || (net.family as unknown as number) === 4;
+      if (isIpv4 && !net.internal) {
+        ips.add(net.address);
+        ips.add(`${net.address}:3000`);
+      }
+    }
+  }
+  return Array.from(ips);
+}
+
 if (process.env.NODE_ENV !== 'production') {
   const ip = getNetworkIp();
   const port = process.env.PORT || '3000';
@@ -28,6 +43,16 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: [
+    'localhost',
+    'localhost:3000',
+    '127.0.0.1',
+    '127.0.0.1:3000',
+    '192.168.1.12',
+    '192.168.1.12:3000',
+    ...getAllNetworkIps(),
+    '*.local',
+  ],
   images: {
     remotePatterns: [
       {
