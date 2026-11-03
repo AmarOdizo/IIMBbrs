@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useSyncExternalStore } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -165,65 +165,56 @@ interface ContactInquiryItem {
   createdAt: string;
 }
 
-function getStoredToken(): string | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    return localStorage.getItem('iimbbsr_admin_token');
-  } catch {
-    return null;
-  }
-}
-
-function getStoredUserRaw(): string | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    return localStorage.getItem('iimbbsr_admin_user');
-  } catch {
-    return null;
-  }
-}
-
-function subscribeStorage(callback: () => void) {
-  window.addEventListener('storage', callback);
-  return () => window.removeEventListener('storage', callback);
-}
-
 export default function AdminPage() {
-  const syncedToken = useSyncExternalStore(subscribeStorage, getStoredToken, () => null);
-  const syncedUserRaw = useSyncExternalStore(subscribeStorage, getStoredUserRaw, () => null);
+  const [token, setTokenState] = useState<string | null>(null);
+  const [adminUser, setAdminUserState] = useState<AdminUser | null>(null);
+  useEffect(() => {
+    const syncAuth = () => {
+      try {
+        const storedToken = localStorage.getItem('iimbbsr_admin_token');
+        const storedUser = localStorage.getItem('iimbbsr_admin_user');
+        console.log('>>> AdminPage syncAuth ran, storedToken=', storedToken);
+        setTokenState(storedToken || null);
+        if (storedUser) {
+          try {
+            setAdminUserState(JSON.parse(storedUser));
+          } catch {
+            setAdminUserState(null);
+          }
+        } else {
+          setAdminUserState(null);
+        }
+      } catch {
+        setTokenState(null);
+        setAdminUserState(null);
+      }
+    };
 
-  const [overrideToken, setOverrideToken] = useState<string | null | undefined>(undefined);
-  const [overrideUserRaw, setOverrideUserRaw] = useState<string | null | undefined>(undefined);
+    const timer = setTimeout(() => {
+      syncAuth();
+    }, 0);
 
-  const token = overrideToken !== undefined ? overrideToken : syncedToken;
-  const userRaw = overrideUserRaw !== undefined ? overrideUserRaw : syncedUserRaw;
-
-  const adminUser = useMemo<AdminUser | null>(() => {
-    if (!userRaw) return null;
-    try {
-      return JSON.parse(userRaw) as AdminUser;
-    } catch {
-      return null;
-    }
-  }, [userRaw]);
+    window.addEventListener('storage', syncAuth);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('storage', syncAuth);
+    };
+  }, []);
 
   const setToken = (t: string | null) => {
-    setOverrideToken(t);
+    setTokenState(t);
     try {
       if (t) localStorage.setItem('iimbbsr_admin_token', t);
       else localStorage.removeItem('iimbbsr_admin_token');
     } catch {}
-    if (typeof window !== 'undefined') window.dispatchEvent(new Event('storage'));
   };
 
   const setAdminUser = (u: AdminUser | null) => {
-    const raw = u ? JSON.stringify(u) : null;
-    setOverrideUserRaw(raw);
+    setAdminUserState(u);
     try {
-      if (raw) localStorage.setItem('iimbbsr_admin_user', raw);
+      if (u) localStorage.setItem('iimbbsr_admin_user', JSON.stringify(u));
       else localStorage.removeItem('iimbbsr_admin_user');
     } catch {}
-    if (typeof window !== 'undefined') window.dispatchEvent(new Event('storage'));
   };
 
   // Login form state
@@ -382,16 +373,23 @@ export default function AdminPage() {
   };
 
   // Login handler
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (e?: React.FormEvent | React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
     setLoginError(null);
     setLoginLoading(true);
+
+    const emailEl = typeof document !== 'undefined' ? (document.getElementById('loginEmail') as HTMLInputElement | null) : null;
+    const passEl = typeof document !== 'undefined' ? (document.getElementById('loginPassword') as HTMLInputElement | null) : null;
+    const effectiveEmail = (loginEmail || emailEl?.value || '').trim();
+    const effectivePassword = loginPassword || passEl?.value || '';
 
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: loginEmail.trim(), password: loginPassword }),
+        body: JSON.stringify({ email: effectiveEmail, password: effectivePassword }),
       });
 
       const json = await res.json();
@@ -428,6 +426,26 @@ export default function AdminPage() {
     setLoginEmail('admin@iimbhubaneswar.in');
     setLoginPassword('Admin@123');
     setLoginError(null);
+
+    if (typeof document !== 'undefined') {
+      const emailInput = document.getElementById('loginEmail') as HTMLInputElement | null;
+      const passInput = document.getElementById('loginPassword') as HTMLInputElement | null;
+      
+      const setVal = (el: HTMLInputElement | null, val: string) => {
+        if (!el) return;
+        const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+        if (nativeSetter) {
+          nativeSetter.call(el, val);
+        } else {
+          el.value = val;
+        }
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+
+      setVal(emailInput, 'admin@iimbhubaneswar.in');
+      setVal(passInput, 'Admin@123');
+    }
   };
 
   // --- CRUD: MEMBERS ---
@@ -818,9 +836,11 @@ export default function AdminPage() {
               )}
 
               <button
+                id="login-submit-btn"
                 type="submit"
+                onClick={handleLogin}
                 disabled={loginLoading}
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-semibold text-sm shadow-lg transition flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-semibold text-sm shadow-lg transition flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer touch-manipulation select-none"
               >
                 {loginLoading ? (
                   <>
@@ -842,9 +862,10 @@ export default function AdminPage() {
                 <span className="font-medium text-slate-300">Demo Login Credentials:</span>
                 <button
                   type="button"
+                  id="autofill-admin-btn"
+                  data-autofill="admin"
                   onClick={handleFillDemoCreds}
-                  onTouchEnd={handleFillDemoCreds}
-                  className="px-3 py-1.5 min-h-[38px] rounded-lg bg-amber-500/20 hover:bg-amber-500/30 active:bg-amber-500/40 text-amber-300 hover:text-amber-200 border border-amber-500/40 font-bold text-xs flex items-center gap-1.5 transition touch-manipulation cursor-pointer"
+                  className="px-3 py-1.5 min-h-[38px] rounded-lg bg-amber-500/20 hover:bg-amber-500/30 active:bg-amber-500/40 text-amber-300 hover:text-amber-200 border border-amber-500/40 font-bold text-xs flex items-center gap-1.5 transition touch-manipulation cursor-pointer select-none"
                   title="Auto-fill demo credentials"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
@@ -855,9 +876,9 @@ export default function AdminPage() {
               {/* Tap-to-fill credential card */}
               <button
                 type="button"
+                data-autofill="admin"
                 onClick={handleFillDemoCreds}
-                onTouchEnd={handleFillDemoCreds}
-                className="w-full p-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.10] active:bg-white/[0.14] border border-white/10 active:border-amber-400/50 text-left transition font-mono text-xs text-slate-200 flex flex-col gap-1.5 group cursor-pointer touch-manipulation shadow-sm"
+                className="w-full p-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.10] active:bg-white/[0.14] border border-white/10 active:border-amber-400/50 text-left transition font-mono text-xs text-slate-200 flex flex-col gap-1.5 group cursor-pointer touch-manipulation shadow-sm select-none"
               >
                 <div className="flex items-center justify-between text-[11px] text-slate-400 font-sans border-b border-white/10 pb-1">
                   <span className="flex items-center gap-1">
