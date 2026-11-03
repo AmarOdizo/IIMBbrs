@@ -9,26 +9,30 @@ export default function ClientNav() {
 
   // Mobile Drawer State Controller
   const setDrawerState = (open: boolean) => {
-    const drawer = document.getElementById('mobile-menu-drawer');
-    const toggle = document.getElementById('mobile-menu-toggle');
-    const iconOpen = document.getElementById('menu-icon-open');
-    const iconClose = document.getElementById('menu-icon-close');
+    const drawers = document.querySelectorAll('#mobile-menu-drawer');
+    const toggles = document.querySelectorAll('#mobile-menu-toggle');
+    const iconOpens = document.querySelectorAll('#menu-icon-open');
+    const iconCloses = document.querySelectorAll('#menu-icon-close');
 
-    if (!drawer) return;
+    if (drawers.length === 0) return;
 
     if (open) {
-      drawer.classList.add('drawer-open');
-      drawer.setAttribute('aria-hidden', 'false');
-      toggle?.setAttribute('aria-expanded', 'true');
-      if (iconOpen) iconOpen.classList.add('hidden');
-      if (iconClose) iconClose.classList.remove('hidden');
+      drawers.forEach((drawer) => {
+        drawer.classList.add('drawer-open');
+        drawer.setAttribute('aria-hidden', 'false');
+      });
+      toggles.forEach((toggle) => toggle.setAttribute('aria-expanded', 'true'));
+      iconOpens.forEach((icon) => icon.classList.add('hidden'));
+      iconCloses.forEach((icon) => icon.classList.remove('hidden'));
       document.body.style.overflow = 'hidden';
     } else {
-      drawer.classList.remove('drawer-open');
-      drawer.setAttribute('aria-hidden', 'true');
-      toggle?.setAttribute('aria-expanded', 'false');
-      if (iconOpen) iconOpen.classList.remove('hidden');
-      if (iconClose) iconClose.classList.add('hidden');
+      drawers.forEach((drawer) => {
+        drawer.classList.remove('drawer-open');
+        drawer.setAttribute('aria-hidden', 'true');
+      });
+      toggles.forEach((toggle) => toggle.setAttribute('aria-expanded', 'false'));
+      iconOpens.forEach((icon) => icon.classList.remove('hidden'));
+      iconCloses.forEach((icon) => icon.classList.add('hidden'));
       document.body.style.overflow = '';
     }
   };
@@ -40,42 +44,16 @@ export default function ClientNav() {
 
   // Global Click and Event Interceptor
   useEffect(() => {
-    let lastToggleTime = 0;
-
-    function handleDocumentClick(e: MouseEvent) {
+function handleDocumentClick(e: MouseEvent) {
       const target = e.target as HTMLElement | null;
       if (!target) return;
-
-      const now = Date.now();
-
-      // 1. Mobile Hamburger Toggle Button
-      const toggle = target.closest('#mobile-menu-toggle');
-      if (toggle) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (now - lastToggleTime < 200) return;
-        lastToggleTime = now;
-
-        const drawer = document.getElementById('mobile-menu-drawer');
-        const isOpen = drawer?.classList.contains('drawer-open');
-        setDrawerState(!isOpen);
-        return;
-      }
-
-      // 2. Mobile Drawer Close Button
-      const closeBtn = target.closest('#mobile-menu-close');
-      if (closeBtn) {
-        e.preventDefault();
-        e.stopPropagation();
-        setDrawerState(false);
-        return;
-      }
-
-      // 3. Mobile Backdrop Click
-      if (target.id === 'mobile-menu-backdrop') {
-        e.preventDefault();
-        e.stopPropagation();
-        setDrawerState(false);
+// 1. Mobile Hamburger Toggle Button, Close Button, and Backdrop
+      // Handled natively by Navbar component state for instant mobile touch response
+      if (
+        target.closest('#mobile-menu-toggle') ||
+        target.closest('#mobile-menu-close') ||
+        target.id === 'mobile-menu-backdrop'
+      ) {
         return;
       }
 

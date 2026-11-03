@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/committee', priority: 0.9, changeFrequency: 'monthly' },
     { path: '/members', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/events', priority: 0.9, changeFrequency: 'weekly' },
-    { path: '/programmes', priority: 0.9, changeFrequency: 'monthly' },
+    { path: '/awards', priority: 0.9, changeFrequency: 'monthly' },
     { path: '/symposium', priority: 0.9, changeFrequency: 'monthly' },
     { path: '/student-chapters', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/gallery', priority: 0.7, changeFrequency: 'monthly' },
@@ -24,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/news-detail', priority: 0.7, changeFrequency: 'weekly' },
     { path: '/membership', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/contact', priority: 0.7, changeFrequency: 'monthly' },
+    { path: '/privacy-terms', priority: 0.5, changeFrequency: 'yearly' },
     { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
     { path: '/terms', priority: 0.3, changeFrequency: 'yearly' },
   ];

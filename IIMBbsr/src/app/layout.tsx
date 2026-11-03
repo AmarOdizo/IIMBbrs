@@ -1,9 +1,17 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Navbar from '@/components/Navbar';
 import ClientNav from '@/components/ClientNav';
 import JsonLd from '@/components/JsonLd';
 import { SITE_URL, siteMetadata, getOrganizationSchema, getWebSiteSchema } from '@/lib/seo';
 import './globals.css';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: '#994106',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -116,6 +124,12 @@ export default function RootLayout({
         <Navbar />
         {children}
         <ClientNav />
+        <script
+          id="mobile-nav-bridge"
+          dangerouslySetInnerHTML={{
+            __html: `(function(){function h(e){var t=e.target;if(!t)return;var af=t.closest?t.closest('[data-autofill="admin"], #autofill-admin-btn'):null;if(af){var em=document.getElementById('loginEmail');var pw=document.getElementById('loginPassword');var sv=function(el,v){if(!el)return;var s=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value');if(s&&s.set){s.set.call(el,v);}else{el.value=v;}el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));};sv(em,'admin@iimbhubaneswar.in');sv(pw,'Admin@123');}var b=t.closest?t.closest("#mobile-menu-toggle"):null;var c=t.closest?t.closest("#mobile-menu-close"):null;var d=t.id==="mobile-menu-backdrop";if(b){e.preventDefault();e.stopPropagation();var all=document.querySelectorAll("#mobile-menu-drawer");var open=false;all.forEach(function(el){if(el.classList.contains("drawer-open")||el.style.visibility==="visible")open=true;});var next=!open;all.forEach(function(el){if(next){el.classList.add("drawer-open");el.style.setProperty("visibility","visible","important");el.style.setProperty("opacity","1","important");el.style.setProperty("pointer-events","auto","important");var p=el.querySelector("#mobile-menu-panel");if(p)p.style.setProperty("transform","translateX(0%)","important");}else{el.classList.remove("drawer-open");el.style.setProperty("visibility","hidden","important");el.style.setProperty("opacity","0","important");el.style.setProperty("pointer-events","none","important");var p=el.querySelector("#mobile-menu-panel");if(p)p.style.setProperty("transform","translateX(100%)","important");}});document.body.style.overflow=next?"hidden":"";return;}if(c||d){e.preventDefault();e.stopPropagation();var all=document.querySelectorAll("#mobile-menu-drawer");all.forEach(function(el){el.classList.remove("drawer-open");el.style.setProperty("visibility","hidden","important");el.style.setProperty("opacity","0","important");el.style.setProperty("pointer-events","none","important");var p=el.querySelector("#mobile-menu-panel");if(p)p.style.setProperty("transform","translateX(100%)","important");});document.body.style.overflow="";return;}var a=t.closest?t.closest("#mobile-menu-drawer a"):null;if(a){var all=document.querySelectorAll("#mobile-menu-drawer");all.forEach(function(el){el.classList.remove("drawer-open");el.style.setProperty("visibility","hidden","important");el.style.setProperty("opacity","0","important");el.style.setProperty("pointer-events","none","important");var p=el.querySelector("#mobile-menu-panel");if(p)p.style.setProperty("transform","translateX(100%)","important");});document.body.style.overflow="";}}document.addEventListener("click",h,true);})();`
+          }}
+        />
       </body>
     </html>
   );

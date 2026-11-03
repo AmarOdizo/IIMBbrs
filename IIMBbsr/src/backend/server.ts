@@ -5,11 +5,9 @@ import connectDB from './db';
 
 // Models
 import { Member } from './models/Member';
-import { CommitteeMember } from './models/CommitteeMember';
 import { Event } from './models/Event';
 import { NewsCircular } from './models/NewsCircular';
 import { GalleryItem } from './models/GalleryItem';
-import { StudentChapter } from './models/StudentChapter';
 import { MembershipApplication } from './models/MembershipApplication';
 import { SymposiumRegistration } from './models/SymposiumRegistration';
 import { PaperSubmission } from './models/PaperSubmission';
@@ -83,17 +81,6 @@ app.get('/api/members', async (req: Request, res: Response) => {
   }
 });
 
-// ==================== COMMITTEE ROUTES ====================
-app.get('/api/committee', async (req: Request, res: Response) => {
-  try {
-    await connectDB();
-    const members = await CommitteeMember.find({ isActive: true }).sort({ displayOrder: 1 });
-    res.json({ success: true, count: members.length, data: members });
-  } catch (err: any) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
 // ==================== EVENTS ROUTES ====================
 app.get('/api/events', async (req: Request, res: Response) => {
   try {
@@ -133,17 +120,6 @@ app.get('/api/gallery', async (req: Request, res: Response) => {
     if (category && category !== 'All') filter.category = category;
     const items = await GalleryItem.find(filter).sort({ date: -1 });
     res.json({ success: true, count: items.length, data: items });
-  } catch (err: any) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
-// ==================== STUDENT CHAPTERS ====================
-app.get('/api/student-chapters', async (req: Request, res: Response) => {
-  try {
-    await connectDB();
-    const chapters = await StudentChapter.find().sort({ establishedYear: 1 });
-    res.json({ success: true, count: chapters.length, data: chapters });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });
   }

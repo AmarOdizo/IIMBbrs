@@ -62,6 +62,13 @@ export function getOrganizationSchema() {
       url: siteMetadata.parentOrganization.url,
     },
     foundingDate: '1978',
+    sameAs: [
+      'https://www.facebook.com/TheIndianInstituteofMetals',
+      'https://twitter.com/IIM_HeadOffice',
+      'https://www.instagram.com/indianinstituteofmetals',
+      'https://www.youtube.com/@theindianinstituteofmetals4921',
+      'https://www.linkedin.com/company/the-indian-institute-of-metals/',
+    ],
   };
 }
 

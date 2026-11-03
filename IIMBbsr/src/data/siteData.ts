@@ -10,7 +10,7 @@ export const navItems: NavItem[] = [
   { label: 'Members', href: '/members' },
   { label: 'Events', href: '/events' },
   { label: 'Symposium', href: '/symposium' },
-  { label: 'Programmes', href: '/programmes' },
+  { label: 'Awards', href: '/awards' },
   { label: 'Student Chapters', href: '/student-chapters' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'News', href: '/news' },
@@ -29,6 +29,13 @@ export const siteConfig = {
   membershipEmail: "membership@iimbhubaneswar.in",
   phone: "+91 674 237 9401 / +91 674 237 4112",
   timing: "Mon - Fri: 9:30 AM - 5:30 PM IST",
+  social: {
+    facebook: "https://www.facebook.com/TheIndianInstituteofMetals",
+    twitter: "https://twitter.com/IIM_HeadOffice",
+    instagram: "https://www.instagram.com/indianinstituteofmetals",
+    youtube: "https://www.youtube.com/@theindianinstituteofmetals4921",
+    linkedin: "https://www.linkedin.com/company/the-indian-institute-of-metals/",
+  },
   stats: [
     { label: "Active Members", value: "750+" },
     { label: "Partner Institutions", value: "30+" },
@@ -122,6 +129,54 @@ export const committeeMembers: Officer[] = [
     bio: "Electrodeposition, electrochemistry, and functional surface engineering. Coordinates women in metallurgy initiatives and student chapter colloquia.",
     tags: ["Electrochemistry", "Corrosion Science", "Surface Coating"],
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    name: "Dr. Rahul Mitra",
+    role: "Executive Council Member",
+    category: "Executive Member",
+    title: "Chief Scientist & Group Leader",
+    institution: "CSIR – Institute of Minerals and Materials Technology (CSIR-IMMT)",
+    email: "rahul.mitra@immt.res.in",
+    location: "Room 108, Materials Characterization Wing, CSIR-IMMT",
+    bio: "Specializing in mineral characterization, high-temperature oxidation of superalloys, and phase kinetics in structural materials.",
+    tags: ["Materials Characterization", "Phase Kinetics", "High-Temp Alloys"],
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    name: "Er. Soumya R. Mohanty",
+    role: "Executive Council Member",
+    category: "Executive Member",
+    title: "Chief of Quality Assurance & Technology",
+    institution: "Jindal Steel & Power Ltd (JSPL), Angul",
+    email: "soumya.mohanty@jindalsteel.com",
+    location: "JSPL Quality & Technology Center, Angul",
+    bio: "Leading advanced metallurgical testing, automotive-grade steel compliance, and circular economy slag recycling.",
+    tags: ["Quality Assurance", "Steel Metallurgy", "Slag Recycling"],
+    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    name: "Prof. Swapan K. Das",
+    role: "Senior Advisory Patron",
+    category: "Advisory",
+    title: "Former Director & Emeritus Professor",
+    institution: "IIT Bhubaneswar / CSIR-IMMT",
+    email: "skdas@iitbbs.ac.in",
+    location: "Emeritus Faculty Wing, IIT Bhubaneswar",
+    bio: "Senior advisor on metallurgy curriculum, national accreditation, and international metallurgical collaborations across Asia.",
+    tags: ["Metallurgical Thermodynamics", "Academic Advisory", "National Policy"],
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    name: "Dr. Vibhuti N. Misra",
+    role: "Senior Advisory Patron",
+    category: "Advisory",
+    title: "Former Director, Regional Research Laboratory",
+    institution: "CSIR-IMMT Bhubaneswar",
+    email: "vnmisra@immt.res.in",
+    location: "Advisory Council Secretariat, CSIR-IMMT",
+    bio: "Eminent metallurgist providing strategic counsel on mineral beneficiation, sustainable smelting, and regional industrial partnerships.",
+    tags: ["Extractive Metallurgy", "Mineral Beneficiation", "Industrial R&D"],
+    image: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=400"
   }
 ];
 

@@ -2,10 +2,8 @@ import connectDB from './db';
 import {
   Admin,
   Member,
-  CommitteeMember,
   NewsCircular,
   GalleryItem,
-  StudentChapter,
   Event,
   MembershipApplication,
   SymposiumRegistration,
@@ -31,10 +29,8 @@ async function runTests() {
     const checks = [
       { name: 'Admin', model: Admin, min: 1 },
       { name: 'Member', model: Member, min: 1 },
-      { name: 'CommitteeMember', model: CommitteeMember, min: 1 },
       { name: 'NewsCircular', model: NewsCircular, min: 1 },
       { name: 'GalleryItem', model: GalleryItem, min: 1 },
-      { name: 'StudentChapter', model: StudentChapter, min: 1 },
       { name: 'Event', model: Event, min: 1 },
       { name: 'MembershipApplication', model: MembershipApplication, min: 1 },
       { name: 'SymposiumRegistration', model: SymposiumRegistration, min: 1 },
@@ -99,7 +95,7 @@ async function runTests() {
     console.log(`   ✅ Details: ${latestAudit?.details}\n`);
 
     console.log('========================================================');
-    console.log('🎉 ALL BACKEND CHECKS PASSED: 12/12 COLLECTIONS OPERATIONAL');
+    console.log('🎉 ALL BACKEND CHECKS PASSED: ALL ACTIVE DYNAMIC COLLECTIONS OPERATIONAL');
     console.log('========================================================');
     process.exit(0);
   } catch (error) {
