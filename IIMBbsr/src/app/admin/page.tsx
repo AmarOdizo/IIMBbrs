@@ -26,6 +26,8 @@ import {
   Search,
   Building2,
   ShieldCheck,
+  Sparkles,
+  KeyRound,
 } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 
@@ -164,25 +166,21 @@ interface ContactInquiryItem {
 }
 
 export default function AdminPage() {
-  const [token, setToken] = useState<string | null>(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('iimbbsr_admin_token');
-    }
-    return null;
-  });
-  const [adminUser, setAdminUser] = useState<AdminUser | null>(() => {
-    if (typeof window !== 'undefined') {
-      const savedUser = localStorage.getItem('iimbbsr_admin_user');
-      if (savedUser) {
-        try {
-          return JSON.parse(savedUser);
-        } catch {
-          return null;
-        }
+  const [token, setToken] = useState<string | null>(null);
+  const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
+
+  useEffect(() => {
+    try {
+      const savedToken = localStorage.getItem('iimbbsr_admin_token');
+      if (savedToken) {
+        setToken(savedToken);
+        const savedUser = localStorage.getItem('iimbbsr_admin_user');
+        if (savedUser) setAdminUser(JSON.parse(savedUser));
       }
+    } catch {
+      // ignore
     }
-    return null;
-  });
+  }, []);
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState('');
@@ -378,9 +376,14 @@ export default function AdminPage() {
     showNotification('success', 'Logged out successfully.');
   };
 
-  const handleFillDemoCreds = () => {
+  const handleFillDemoCreds = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setLoginEmail('admin@iimbhubaneswar.in');
     setLoginPassword('Admin@123');
+    setLoginError(null);
   };
 
   // --- CRUD: MEMBERS ---
@@ -713,6 +716,7 @@ export default function AdminPage() {
                   width={180}
                   height={54}
                   className="h-12 sm:h-14 w-auto object-contain"
+                  style={{ width: 'auto', height: 'auto' }}
                   priority
                 />
               </div>
@@ -789,21 +793,46 @@ export default function AdminPage() {
             </form>
 
             {/* Quick Demo Credentials Autofill */}
-            <div className="pt-4 border-t border-white/10 flex flex-col gap-2 relative z-10">
-              <div className="flex items-center justify-between text-[11px] text-slate-400">
-                <span>Council Administrator Credentials:</span>
+            <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5 relative z-10">
+              <div className="flex items-center justify-between text-xs text-slate-300">
+                <span className="font-medium text-slate-300">Demo Login Credentials:</span>
                 <button
                   type="button"
                   onClick={handleFillDemoCreds}
-                  className="text-amber-400 hover:underline font-semibold"
+                  onTouchEnd={handleFillDemoCreds}
+                  className="px-3 py-1.5 min-h-[38px] rounded-lg bg-amber-500/20 hover:bg-amber-500/30 active:bg-amber-500/40 text-amber-300 hover:text-amber-200 border border-amber-500/40 font-bold text-xs flex items-center gap-1.5 transition touch-manipulation cursor-pointer"
+                  title="Auto-fill demo credentials"
                 >
-                  Auto-fill
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Auto-fill</span>
                 </button>
               </div>
-              <div className="p-2.5 rounded-lg bg-white/5 font-mono text-[11px] text-slate-300 flex flex-col gap-1">
-                <span>Email: admin@iimbhubaneswar.in</span>
-                <span>Pass : Admin@123</span>
-              </div>
+
+              {/* Tap-to-fill credential card */}
+              <button
+                type="button"
+                onClick={handleFillDemoCreds}
+                onTouchEnd={handleFillDemoCreds}
+                className="w-full p-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.10] active:bg-white/[0.14] border border-white/10 active:border-amber-400/50 text-left transition font-mono text-xs text-slate-200 flex flex-col gap-1.5 group cursor-pointer touch-manipulation shadow-sm"
+              >
+                <div className="flex items-center justify-between text-[11px] text-slate-400 font-sans border-b border-white/10 pb-1">
+                  <span className="flex items-center gap-1">
+                    <KeyRound className="w-3 h-3 text-amber-400" />
+                    <span>Executive Access (Tap to fill)</span>
+                  </span>
+                  <span className="text-amber-400 font-semibold group-hover:underline">Tap here</span>
+                </div>
+                <div className="flex flex-col gap-0.5 text-[11px] sm:text-xs text-slate-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-400">Email:</span>
+                    <span className="font-semibold text-white">admin@iimbhubaneswar.in</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-400">Password:</span>
+                    <span className="font-semibold text-white">Admin@123</span>
+                  </div>
+                </div>
+              </button>
             </div>
 
             {/* Link back to public site */}
@@ -862,6 +891,7 @@ export default function AdminPage() {
                 width={140}
                 height={48}
                 className="h-9 sm:h-11 w-auto object-contain"
+                style={{ width: 'auto', height: 'auto' }}
                 priority
               />
             </Link>
@@ -947,6 +977,7 @@ export default function AdminPage() {
                   width={160}
                   height={56}
                   className="h-11 sm:h-14 w-auto object-contain"
+                  style={{ width: 'auto', height: 'auto' }}
                   priority
                 />
               </div>
@@ -961,7 +992,7 @@ export default function AdminPage() {
                   <span className="text-white/20">•</span>
                   <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] sm:text-[11px] font-semibold flex items-center gap-1.5 shadow-xs">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Active Council Session 2026</span>
+                    <span>Council Active Session 2026</span>
                   </span>
                 </div>
 
@@ -972,7 +1003,7 @@ export default function AdminPage() {
 
                 {/* Subtitle / Charter Description */}
                 <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                  Secretariat Operations Terminal for Council Rolls, National Symposia (AHSS-2026), Official Circulars &amp; Public Intake.
+                  Secretariat terminal for Member Records, Applications, Symposia (AHSS 2026), Events, Circulars &amp; Inquiries.
                 </p>
               </div>
             </div>
@@ -981,11 +1012,11 @@ export default function AdminPage() {
             <div className="flex flex-wrap lg:flex-col items-start lg:items-end gap-2 shrink-0">
               <div className="px-3.5 py-1.5 rounded-xl bg-white/[0.06] backdrop-blur-md border border-white/10 flex items-center gap-2 text-xs text-slate-200 shadow-sm">
                 <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span className="font-medium">CSIR-IMMT Campus, Bhubaneswar</span>
+                <span className="font-medium">CSIR-IMMT Campus, BBS</span>
               </div>
               <div className="px-3.5 py-1.5 rounded-xl bg-white/[0.06] backdrop-blur-md border border-white/10 flex items-center gap-2 text-xs text-slate-300 shadow-sm">
                 <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span>Affiliated to IIM HQ, Kolkata (1946)</span>
+                <span>Affiliated to IIM HQ, Kolkata</span>
               </div>
             </div>
           </div>

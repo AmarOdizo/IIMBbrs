@@ -1,11 +1,84 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Adjust state when route changes (official React pattern without cascading effects)
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setIsMenuOpen(false);
+  }
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMenuOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Close on resize to desktop (>= 1024px)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) setIsMenuOpen(false);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Close drawer on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMenuOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Close on resize to desktop (>= 1024px)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) setIsMenuOpen(false);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Hide Navbar completely on /admin routes
   if (pathname.startsWith('/admin')) {
@@ -27,8 +100,29 @@ export default function Navbar() {
 
   const currentPath = (pathname.replace(/^\//, '').split('/')[0] || 'home').toLowerCase();
 
+  const handleToggle = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsMenuOpen((prev) => !prev);
+  };
+
+  const handleClose = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setIsMenuOpen(false);
+  };
+
   return (
-    <header id="global-navbar" className="fixed top-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.06)] border-b border-surface-variant/20">
+    <header
+      id="global-navbar"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isMenuOpen
+          ? 'h-screen h-[100dvh] bottom-0 backdrop-blur-none bg-transparent'
+          : 'bg-surface/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.06)] border-b border-surface-variant/20'
+      }`}
+    >
       {/* Top Chapter Affiliate Bar */}
       <div className="bg-on-background text-surface-variant font-label-sm text-[10px] sm:text-label-sm tracking-wider uppercase border-b border-surface-variant/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between gap-2">
@@ -53,7 +147,7 @@ export default function Navbar() {
         <nav className="hidden lg:flex items-center gap-1 font-label-md text-label-md">
           {navLinks.map((item) => {
             const isActive =
-              (currentPath === 'home' || currentPath === '')
+              currentPath === 'home' || currentPath === ''
                 ? item.path === 'home'
                 : currentPath === item.path;
 
@@ -90,14 +184,23 @@ export default function Navbar() {
           <button
             id="mobile-menu-toggle"
             type="button"
-            className="lg:hidden p-2 rounded-lg text-on-surface hover:bg-surface-container-high transition-colors focus:outline-none focus:ring-2 focus:ring-primary/40"
+            onClick={handleToggle}
+            onTouchEnd={handleToggle}
+            className="lg:hidden p-2 rounded-lg text-on-surface hover:bg-surface-container-high transition-colors focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer touch-manipulation select-none active:scale-95"
+            style={{ touchAction: 'manipulation' }}
             aria-label="Toggle navigation menu"
-            aria-expanded="false"
+            aria-expanded={isMenuOpen}
           >
-            <span className="material-symbols-outlined text-2xl block" id="menu-icon-open">
+            <span
+              className={`material-symbols-outlined text-2xl ${isMenuOpen ? 'hidden' : 'block'}`}
+              id="menu-icon-open"
+            >
               menu
             </span>
-            <span className="material-symbols-outlined text-2xl hidden" id="menu-icon-close">
+            <span
+              className={`material-symbols-outlined text-2xl ${isMenuOpen ? 'block' : 'hidden'}`}
+              id="menu-icon-close"
+            >
               close
             </span>
           </button>
@@ -107,16 +210,25 @@ export default function Navbar() {
       {/* Mobile Navigation Drawer & Backdrop */}
       <div
         id="mobile-menu-drawer"
-        className="fixed inset-0 z-50 transition-opacity duration-300 pointer-events-none opacity-0 invisible"
-        aria-hidden="true"
+        className={`fixed inset-0 z-50 transition-opacity duration-300 ${
+          isMenuOpen
+            ? 'drawer-open pointer-events-auto opacity-100 visible'
+            : 'pointer-events-none opacity-0 invisible'
+        }`}
+        aria-hidden={!isMenuOpen}
       >
         {/* Backdrop */}
-        <div id="mobile-menu-backdrop" className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" />
+        <div
+          id="mobile-menu-backdrop"
+          onClick={handleClose}
+          onTouchEnd={handleClose}
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity cursor-pointer touch-manipulation"
+        />
 
         {/* Slide-out Drawer Panel */}
         <div
           id="mobile-menu-panel"
-          className="absolute top-0 right-0 bottom-0 w-[85%] max-w-[340px] bg-surface shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out border-l border-surface-variant/20 z-10"
+          className="absolute top-0 right-0 bottom-0 w-[85%] max-w-[340px] bg-surface shadow-2xl flex flex-col justify-between transform transition-transform duration-300 ease-out border-l border-surface-variant/20 z-10"
         >
           {/* Drawer Header */}
           <div className="p-4 border-b border-surface-variant/20 flex items-center justify-between bg-surface-container-low">
@@ -130,7 +242,10 @@ export default function Navbar() {
             <button
               id="mobile-menu-close"
               type="button"
-              className="p-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors"
+              onClick={handleClose}
+              onTouchEnd={handleClose}
+              className="p-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors cursor-pointer touch-manipulation"
+              style={{ touchAction: 'manipulation' }}
               aria-label="Close menu"
             >
               <span className="material-symbols-outlined text-xl">close</span>
@@ -141,7 +256,7 @@ export default function Navbar() {
           <div className="flex-1 overflow-y-auto py-3 px-3 space-y-1">
             {navLinks.map((item) => {
               const isActive =
-                (currentPath === 'home' || currentPath === '')
+                currentPath === 'home' || currentPath === ''
                   ? item.path === 'home'
                   : currentPath === item.path;
 
@@ -150,6 +265,8 @@ export default function Navbar() {
                   key={item.href}
                   href={item.href}
                   data-path={item.path}
+                  onClick={() => setIsMenuOpen(false)}
+                  onTouchEnd={() => setIsMenuOpen(false)}
                   aria-current={isActive ? 'page' : undefined}
                   className={`drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg font-label-md text-sm transition-colors ${
                     isActive
@@ -168,6 +285,8 @@ export default function Navbar() {
           <div className="p-4 border-t border-surface-variant/20 bg-surface-container-lowest space-y-3">
             <Link
               href="/privacy-terms"
+              onClick={() => setIsMenuOpen(false)}
+              onTouchEnd={() => setIsMenuOpen(false)}
               className="w-full py-2.5 px-4 rounded-xl font-label-md text-sm font-semibold text-center bg-primary text-on-primary hover:bg-primary-container transition-all flex items-center justify-center gap-2 shadow-sm"
             >
               <span className="material-symbols-outlined text-base">verified_user</span>

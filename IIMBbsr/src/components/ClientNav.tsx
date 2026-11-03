@@ -40,42 +40,16 @@ export default function ClientNav() {
 
   // Global Click and Event Interceptor
   useEffect(() => {
-    let lastToggleTime = 0;
-
-    function handleDocumentClick(e: MouseEvent) {
+function handleDocumentClick(e: MouseEvent) {
       const target = e.target as HTMLElement | null;
       if (!target) return;
-
-      const now = Date.now();
-
-      // 1. Mobile Hamburger Toggle Button
-      const toggle = target.closest('#mobile-menu-toggle');
-      if (toggle) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (now - lastToggleTime < 200) return;
-        lastToggleTime = now;
-
-        const drawer = document.getElementById('mobile-menu-drawer');
-        const isOpen = drawer?.classList.contains('drawer-open');
-        setDrawerState(!isOpen);
-        return;
-      }
-
-      // 2. Mobile Drawer Close Button
-      const closeBtn = target.closest('#mobile-menu-close');
-      if (closeBtn) {
-        e.preventDefault();
-        e.stopPropagation();
-        setDrawerState(false);
-        return;
-      }
-
-      // 3. Mobile Backdrop Click
-      if (target.id === 'mobile-menu-backdrop') {
-        e.preventDefault();
-        e.stopPropagation();
-        setDrawerState(false);
+// 1. Mobile Hamburger Toggle Button, Close Button, and Backdrop
+      // Handled natively by Navbar component state for instant mobile touch response
+      if (
+        target.closest('#mobile-menu-toggle') ||
+        target.closest('#mobile-menu-close') ||
+        target.id === 'mobile-menu-backdrop'
+      ) {
         return;
       }
 
