@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useSyncExternalStore } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -165,22 +165,57 @@ interface ContactInquiryItem {
   createdAt: string;
 }
 
-export default function AdminPage() {
-  const [token, setToken] = useState<string | null>(null);
-  const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
+function getStoredToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return localStorage.getItem('iimbbsr_admin_token');
+  } catch {
+    return null;
+  }
+}
 
-  useEffect(() => {
-    try {
-      const savedToken = localStorage.getItem('iimbbsr_admin_token');
-      if (savedToken) {
-        setToken(savedToken);
-        const savedUser = localStorage.getItem('iimbbsr_admin_user');
-        if (savedUser) setAdminUser(JSON.parse(savedUser));
-      }
-    } catch {
-      // ignore
+let cachedUserRaw: string | null = null;
+let cachedUserObj: AdminUser | null = null;
+
+function getStoredUser(): AdminUser | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem('iimbbsr_admin_user');
+    if (raw === cachedUserRaw) {
+      return cachedUserObj;
     }
-  }, []);
+    cachedUserRaw = raw;
+    cachedUserObj = raw ? (JSON.parse(raw) as AdminUser) : null;
+    return cachedUserObj;
+  } catch {
+    return null;
+  }
+}
+
+function subscribeStorage(callback: () => void) {
+  window.addEventListener('storage', callback);
+  return () => window.removeEventListener('storage', callback);
+}
+
+export default function AdminPage() {
+  const syncedToken = useSyncExternalStore(subscribeStorage, getStoredToken, () => null);
+  const syncedUser = useSyncExternalStore(subscribeStorage, getStoredUser, () => null);
+
+  const [overrideToken, setOverrideToken] = useState<string | null | undefined>(undefined);
+  const [overrideUser, setOverrideUser] = useState<AdminUser | null | undefined>(undefined);
+
+  const token = overrideToken !== undefined ? overrideToken : syncedToken;
+  const adminUser = overrideUser !== undefined ? overrideUser : syncedUser;
+
+  const setToken = (t: string | null) => {
+    setOverrideToken(t);
+    if (typeof window !== 'undefined') window.dispatchEvent(new Event('storage'));
+  };
+
+  const setAdminUser = (u: AdminUser | null) => {
+    setOverrideUser(u);
+    if (typeof window !== 'undefined') window.dispatchEvent(new Event('storage'));
+  };
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState('');
