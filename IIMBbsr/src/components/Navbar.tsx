@@ -163,7 +163,7 @@ export default function Navbar() {
           <Link
             href="/admin"
             data-path="admin-login"
-            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg font-label-md text-xs sm:text-label-md font-semibold shrink-0 shadow-sm transition-all bg-surface-container-high hover:bg-primary text-on-surface hover:text-white border border-surface-variant/40 hover:border-primary"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-lg font-label-md text-xs sm:text-label-md font-semibold shrink-0 shadow-sm transition-all bg-surface-container-high hover:bg-primary text-on-surface hover:text-white border border-surface-variant/40 hover:border-primary"
             title="Executive Admin Console Login"
           >
             <span className="material-symbols-outlined text-[17px]">admin_panel_settings</span>
