@@ -30,8 +30,6 @@ import {
   Search,
   Building2,
   ShieldCheck,
-  Sparkles,
-  KeyRound,
 } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 
@@ -572,36 +570,6 @@ export default function AdminPage() {
     showNotification('success', 'Logged out successfully.');
   };
 
-  const handleFillDemoCreds = (e?: React.MouseEvent | React.TouchEvent) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setLoginEmail('admin@iimbhubaneswar.in');
-    setLoginPassword('Admin@123');
-    setLoginError(null);
-
-    if (typeof document !== 'undefined') {
-      const emailInput = document.getElementById('loginEmail') as HTMLInputElement | null;
-      const passInput = document.getElementById('loginPassword') as HTMLInputElement | null;
-      
-      const setVal = (el: HTMLInputElement | null, val: string) => {
-        if (!el) return;
-        const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-        if (nativeSetter) {
-          nativeSetter.call(el, val);
-        } else {
-          el.value = val;
-        }
-        el.dispatchEvent(new Event('input', { bubbles: true }));
-        el.dispatchEvent(new Event('change', { bubbles: true }));
-      };
-
-      setVal(emailInput, 'admin@iimbhubaneswar.in');
-      setVal(passInput, 'Admin@123');
-    }
-  };
-
   // --- CRUD: MEMBERS ---
   const handleOpenMemberModal = (item?: MemberItem) => {
     if (item) {
@@ -1018,49 +986,7 @@ export default function AdminPage() {
               </button>
             </form>
 
-            {/* Quick Demo Credentials Autofill */}
-            <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5 relative z-10">
-              <div className="flex items-center justify-between text-xs text-slate-300">
-                <span className="font-medium text-slate-300">Demo Login Credentials:</span>
-                <button
-                  type="button"
-                  id="autofill-admin-btn"
-                  data-autofill="admin"
-                  onClick={handleFillDemoCreds}
-                  className="px-3 py-1.5 min-h-[38px] rounded-lg bg-amber-500/20 hover:bg-amber-500/30 active:bg-amber-500/40 text-amber-300 hover:text-amber-200 border border-amber-500/40 font-bold text-xs flex items-center gap-1.5 transition touch-manipulation cursor-pointer select-none"
-                  title="Auto-fill demo credentials"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Auto-fill</span>
-                </button>
-              </div>
 
-              {/* Tap-to-fill credential card */}
-              <button
-                type="button"
-                data-autofill="admin"
-                onClick={handleFillDemoCreds}
-                className="w-full p-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.10] active:bg-white/[0.14] border border-white/10 active:border-amber-400/50 text-left transition font-mono text-xs text-slate-200 flex flex-col gap-1.5 group cursor-pointer touch-manipulation shadow-sm select-none"
-              >
-                <div className="flex items-center justify-between text-[11px] text-slate-400 font-sans border-b border-white/10 pb-1">
-                  <span className="flex items-center gap-1">
-                    <KeyRound className="w-3 h-3 text-amber-400" />
-                    <span>Executive Access (Tap to fill)</span>
-                  </span>
-                  <span className="text-amber-400 font-semibold group-hover:underline">Tap here</span>
-                </div>
-                <div className="flex flex-col gap-0.5 text-[11px] sm:text-xs text-slate-300">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Email:</span>
-                    <span className="font-semibold text-white">admin@iimbhubaneswar.in</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Password:</span>
-                    <span className="font-semibold text-white">Admin@123</span>
-                  </div>
-                </div>
-              </button>
-            </div>
 
             {/* Link back to public site */}
             <div className="text-center pt-2 border-t border-white/5 relative z-10">
