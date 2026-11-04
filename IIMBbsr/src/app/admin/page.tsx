@@ -8,6 +8,7 @@ import Link from 'next/link';
 import {
   Lock,
   LogOut,
+  ArrowLeft,
   Plus,
   Trash2,
   Edit2,
@@ -893,9 +894,17 @@ export default function AdminPage() {
         <div className="bg-black/50 backdrop-blur-md border-b border-white/10 text-slate-300 font-label-sm text-[10px] sm:text-xs tracking-wider uppercase">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-2">
             <span className="truncate font-semibold text-slate-200">THE INDIAN INSTITUTE OF METALS • BHUBANESWAR CHAPTER</span>
-            <span className="text-slate-400 hidden md:inline shrink-0">
-              AFFILIATED TO IIM HEAD OFFICE, KOLKATA (IIM-INDIA.NET)
-            </span>
+            <div className="flex items-center gap-3 shrink-0">
+              <span className="text-slate-400 hidden md:inline">AFFILIATED TO IIM HQ, KOLKATA</span>
+              <Link
+                href="/"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition"
+                title="Return to Public Website"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Public Portal</span>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -1130,12 +1139,13 @@ export default function AdminPage() {
             </div>
 
             <button
+              id="admin-logout-btn"
               onClick={handleLogout}
-              className="p-2 sm:px-3 sm:py-2 rounded-xl bg-rose-500/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
-              title="Logout Session"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 active:from-rose-800 active:to-rose-900 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 cursor-pointer touch-manipulation select-none"
+              title="Sign Out / Logout of Admin Console"
             >
-              <LogOut className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Logout</span>
+              <LogOut className="w-4 h-4 shrink-0" />
+              <span>Sign Out</span>
             </button>
           </div>
         </div>
@@ -1253,6 +1263,14 @@ export default function AdminPage() {
               </button>
             );
           })}
+          <button
+            onClick={handleLogout}
+            className="ml-auto px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition shrink-0 flex items-center gap-1.5 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 shadow-sm cursor-pointer select-none"
+            title="Sign Out of Admin Console"
+          >
+            <LogOut className="w-4 h-4 shrink-0" />
+            <span>Sign Out</span>
+          </button>
         </div>
 
         {/* Loading Spinner */}
@@ -1942,6 +1960,15 @@ export default function AdminPage() {
               <span>View Public Portal</span>
               <ExternalLink className="w-3 h-3" />
             </Link>
+            <span>•</span>
+            <button
+              onClick={handleLogout}
+              className="text-rose-600 hover:text-rose-700 font-bold hover:underline flex items-center gap-1 cursor-pointer"
+              title="Sign Out Session"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Sign Out</span>
+            </button>
           </div>
         </div>
       </footer>
