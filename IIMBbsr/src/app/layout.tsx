@@ -125,9 +125,205 @@ export default function RootLayout({
         {children}
         <ClientNav />
         <script
-          id="mobile-nav-bridge"
+          id="global-portal-bridge"
           dangerouslySetInnerHTML={{
-            __html: `(function(){function h(e){var t=e.target;if(!t)return;var af=t.closest?t.closest('[data-autofill="admin"], #autofill-admin-btn'):null;if(af){var em=document.getElementById('loginEmail');var pw=document.getElementById('loginPassword');var sv=function(el,v){if(!el)return;var s=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value');if(s&&s.set){s.set.call(el,v);}else{el.value=v;}el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));};sv(em,'admin@iimbhubaneswar.in');sv(pw,'Admin@123');}var b=t.closest?t.closest("#mobile-menu-toggle"):null;var c=t.closest?t.closest("#mobile-menu-close"):null;var d=t.id==="mobile-menu-backdrop";if(b){e.preventDefault();e.stopPropagation();var all=document.querySelectorAll("#mobile-menu-drawer");var open=false;all.forEach(function(el){if(el.classList.contains("drawer-open")||el.style.visibility==="visible")open=true;});var next=!open;all.forEach(function(el){if(next){el.classList.add("drawer-open");el.style.setProperty("visibility","visible","important");el.style.setProperty("opacity","1","important");el.style.setProperty("pointer-events","auto","important");var p=el.querySelector("#mobile-menu-panel");if(p)p.style.setProperty("transform","translateX(0%)","important");}else{el.classList.remove("drawer-open");el.style.setProperty("visibility","hidden","important");el.style.setProperty("opacity","0","important");el.style.setProperty("pointer-events","none","important");var p=el.querySelector("#mobile-menu-panel");if(p)p.style.setProperty("transform","translateX(100%)","important");}});document.body.style.overflow=next?"hidden":"";return;}if(c||d){e.preventDefault();e.stopPropagation();var all=document.querySelectorAll("#mobile-menu-drawer");all.forEach(function(el){el.classList.remove("drawer-open");el.style.setProperty("visibility","hidden","important");el.style.setProperty("opacity","0","important");el.style.setProperty("pointer-events","none","important");var p=el.querySelector("#mobile-menu-panel");if(p)p.style.setProperty("transform","translateX(100%)","important");});document.body.style.overflow="";return;}var a=t.closest?t.closest("#mobile-menu-drawer a"):null;if(a){var all=document.querySelectorAll("#mobile-menu-drawer");all.forEach(function(el){el.classList.remove("drawer-open");el.style.setProperty("visibility","hidden","important");el.style.setProperty("opacity","0","important");el.style.setProperty("pointer-events","none","important");var p=el.querySelector("#mobile-menu-panel");if(p)p.style.setProperty("transform","translateX(100%)","important");});document.body.style.overflow="";}}document.addEventListener("click",h,true);})();`
+            __html: `(function(){
+  // 1. Mobile Menu & Login Autofill Handler
+  function h(e){
+    var t=e.target;if(!t)return;
+    var b=t.closest?t.closest("#mobile-menu-toggle"):null;
+    var c=t.closest?t.closest("#mobile-menu-close"):null;
+    var d=t.id==="mobile-menu-backdrop";
+    if(b){
+      e.preventDefault();e.stopPropagation();
+      var all=document.querySelectorAll("#mobile-menu-drawer");
+      var open=false;
+      all.forEach(function(el){if(el.classList.contains("drawer-open")||el.style.visibility==="visible")open=true;});
+      var next=!open;
+      all.forEach(function(el){
+        if(next){
+          el.classList.add("drawer-open");
+          el.style.setProperty("visibility","visible","important");
+          el.style.setProperty("opacity","1","important");
+          el.style.setProperty("pointer-events","auto","important");
+          var p=el.querySelector("#mobile-menu-panel");
+          if(p)p.style.setProperty("transform","translateX(0%)","important");
+        }else{
+          el.classList.remove("drawer-open");
+          el.style.setProperty("visibility","hidden","important");
+          el.style.setProperty("opacity","0","important");
+          el.style.setProperty("pointer-events","none","important");
+          var p=el.querySelector("#mobile-menu-panel");
+          if(p)p.style.setProperty("transform","translateX(100%)","important");
+        }
+      });
+      document.body.style.overflow=next?"hidden":"";
+      return;
+    }
+    if(c||d){
+      e.preventDefault();e.stopPropagation();
+      var all=document.querySelectorAll("#mobile-menu-drawer");
+      all.forEach(function(el){
+        el.classList.remove("drawer-open");
+        el.style.setProperty("visibility","hidden","important");
+        el.style.setProperty("opacity","0","important");
+        el.style.setProperty("pointer-events","none","important");
+        var p=el.querySelector("#mobile-menu-panel");
+        if(p)p.style.setProperty("transform","translateX(100%)","important");
+      });
+      document.body.style.overflow="";
+      return;
+    }
+    var a=t.closest?t.closest("#mobile-menu-drawer a"):null;
+    if(a){
+      var all=document.querySelectorAll("#mobile-menu-drawer");
+      all.forEach(function(el){
+        el.classList.remove("drawer-open");
+        el.style.setProperty("visibility","hidden","important");
+        el.style.setProperty("opacity","0","important");
+        el.style.setProperty("pointer-events","none","important");
+        var p=el.querySelector("#mobile-menu-panel");
+        if(p)p.style.setProperty("transform","translateX(100%)","important");
+      });
+      document.body.style.overflow="";
+    }
+  }
+  document.addEventListener("click",h,true);
+
+  // 2. Global ICS Download
+  window.downloadSympIcs = function() {
+    var ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//IIM Bhubaneswar//Symposium AHSS 2026//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      'UID:ahss-2026-' + Date.now() + '@iimbhubaneswar.in',
+      'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z',
+      'DTSTART;TZID=Asia/Kolkata:20260328T090000',
+      'DTEND;TZID=Asia/Kolkata:20260329T180000',
+      'SUMMARY:18th National Symposium on Advanced High-Strength Steels (AHSS-2026)',
+      'DESCRIPTION:18th National Symposium on AHSS & Decarbonized Ironmaking at CSIR-IMMT Bhubaneswar.',
+      'LOCATION:Dr. Nilamani Sen Auditorium, CSIR-IMMT, Bhubaneswar, Odisha',
+      'STATUS:CONFIRMED',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+    var blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    var url = window.URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'AHSS_2026_IIM_Bhubaneswar.ics';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
+  // 3. Symposium Specimen Switcher
+  window.switchSympV3Image = function(idx) {
+    var img = document.getElementById('symp-v3-bg-img');
+    var b0 = document.getElementById('symp-v3-img-btn-0');
+    var b1 = document.getElementById('symp-v3-img-btn-1');
+    if (!img) return;
+    img.style.opacity = '0.3';
+    setTimeout(function() {
+      if (idx === 0) {
+        img.src = '/assets/images/hero_ahss_structure.jpg';
+        if (b0) b0.className = 'px-2.5 py-1 rounded-lg bg-primary text-white font-semibold transition-all flex items-center gap-1 text-xs shadow-sm hover:scale-105';
+        if (b1) b1.className = 'px-2.5 py-1 rounded-lg bg-white/10 text-white/80 hover:text-white hover:bg-white/20 font-medium transition-all flex items-center gap-1 text-xs hover:scale-105';
+      } else {
+        img.src = '/assets/images/hero_green_steel.jpg';
+        if (b1) b1.className = 'px-2.5 py-1 rounded-lg bg-primary text-white font-semibold transition-all flex items-center gap-1 text-xs shadow-sm hover:scale-105';
+        if (b0) b0.className = 'px-2.5 py-1 rounded-lg bg-white/10 text-white/80 hover:text-white hover:bg-white/20 font-medium transition-all flex items-center gap-1 text-xs hover:scale-105';
+      }
+      img.style.opacity = '1';
+    }, 150);
+  };
+
+  // 4. Symposium Schedule Day Switcher
+  window.switchDayTab = function(dayNumber) {
+    var day1Panel = document.getElementById('day1Panel');
+    var day2Panel = document.getElementById('day2Panel');
+    var day1Btn = document.getElementById('tabDay1Btn');
+    var day2Btn = document.getElementById('tabDay2Btn');
+    if (!day1Panel || !day2Panel || !day1Btn || !day2Btn) return;
+    if (dayNumber === 1) {
+      day1Panel.classList.remove('hidden');
+      day1Panel.classList.add('flex');
+      day2Panel.classList.add('hidden');
+      day2Panel.classList.remove('flex');
+      day1Btn.className = "px-4 py-2 rounded font-label-md text-label-md font-semibold bg-primary text-on-primary transition-all shadow-sm";
+      day2Btn.className = "px-4 py-2 rounded font-label-md text-label-md font-semibold text-on-surface-variant hover:text-on-surface transition-all";
+    } else {
+      day1Panel.classList.add('hidden');
+      day1Panel.classList.remove('flex');
+      day2Panel.classList.remove('hidden');
+      day2Panel.classList.add('flex');
+      day2Btn.className = "px-4 py-2 rounded font-label-md text-label-md font-semibold bg-primary text-on-primary transition-all shadow-sm";
+      day1Btn.className = "px-4 py-2 rounded font-label-md text-label-md font-semibold text-on-surface-variant hover:text-on-surface transition-all";
+    }
+  };
+
+  // 5. Homepage Hero Specimen Switcher
+  window.switchHeroV3Image = function(idx) {
+    var img = document.getElementById('hero-v3-bg-img');
+    var b0 = document.getElementById('v3-img-btn-0');
+    var b1 = document.getElementById('v3-img-btn-1');
+    if (!img) return;
+    img.style.opacity = '0.3';
+    setTimeout(function() {
+      if (idx === 0) {
+        img.src = '/assets/images/hero_blast_furnace.jpg';
+        if (b0) b0.className = 'px-2.5 py-1 rounded-lg bg-primary text-white font-semibold transition-all flex items-center gap-1 text-xs shadow-sm hover:scale-105';
+        if (b1) b1.className = 'px-2.5 py-1 rounded-lg bg-white/10 text-white/80 hover:text-white hover:bg-white/20 font-medium transition-all flex items-center gap-1 text-xs hover:scale-105';
+      } else {
+        img.src = '/assets/images/hero_green_steel.jpg';
+        if (b1) b1.className = 'px-2.5 py-1 rounded-lg bg-primary text-white font-semibold transition-all flex items-center gap-1 text-xs shadow-sm hover:scale-105';
+        if (b0) b0.className = 'px-2.5 py-1 rounded-lg bg-white/10 text-white/80 hover:text-white hover:bg-white/20 font-medium transition-all flex items-center gap-1 text-xs hover:scale-105';
+      }
+      img.style.opacity = '1';
+    }, 150);
+  };
+
+  // 6. Committee Term Switcher
+  window.switchTerm = function(termYear, el) {
+    var tabs = document.querySelectorAll('.term-tab');
+    tabs.forEach(function(tab) {
+      tab.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+      tab.classList.add('text-on-surface-variant', 'hover:text-on-surface', 'hover:bg-surface-container-high');
+    });
+    if (el) {
+      el.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+      el.classList.remove('text-on-surface-variant', 'hover:text-on-surface', 'hover:bg-surface-container-high');
+    }
+    var label = document.getElementById('activeTermLabel');
+    if (label) label.textContent = termYear;
+  };
+
+  // 7. Committee Past Chairmen Filter & Export
+  window.filterRoster = function(query) {
+    var q = (query || '').toLowerCase().trim();
+    var rows = document.querySelectorAll('#chairmenTable tbody tr');
+    rows.forEach(function(row) {
+      var text = (row.innerText || '').toLowerCase();
+      row.style.display = text.includes(q) ? '' : 'none';
+    });
+  };
+
+  window.exportRoster = function() {
+    alert('Historical Roster (1998-2025) ready for export in CSV/PDF format. (Prototype demonstration).');
+  };
+
+  // 8. Not Found Search
+  window.handleRegistrySearch = function() {
+    var inp = document.getElementById('registrySearchInput');
+    if (inp && inp.value.trim()) {
+      window.location.href = '/members?q=' + encodeURIComponent(inp.value.trim());
+    }
+  };
+})();`
           }}
         />
       </body>
