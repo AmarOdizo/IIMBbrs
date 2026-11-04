@@ -14,6 +14,47 @@ export default function ContactForm() {
     messageBody: '',
   });
 
+  // Handle URL parameters & hash navigation (e.g. from Send Council Note)
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const cat = searchParams.get('category');
+      if (cat) {
+        setFormData((prev) => ({
+          ...prev,
+          category: cat,
+          subjectRef:
+            cat === 'secretariat' && !prev.subjectRef
+              ? 'Council Memorandum / Executive Note'
+              : prev.subjectRef,
+        }));
+      }
+
+      if (
+        window.location.hash === '#contact-form' ||
+        window.location.hash === '#contact-form-section' ||
+        cat === 'secretariat'
+      ) {
+        setTimeout(() => {
+          const formEl =
+            document.getElementById('contact-form') ||
+            document.getElementById('contact-form-section');
+          if (formEl) {
+            formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Highlight / focus
+            const firstInput = formEl.querySelector<HTMLInputElement>('#fullName');
+            if (firstInput && window.location.hash) {
+              firstInput.focus({ preventScroll: true });
+            }
+          }
+        }, 150);
+      }
+    } catch (e) {
+      console.warn('Error handling contact form params:', e);
+    }
+  }, []);
+
   const [attachment, setAttachment] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<{ docketId: string; message: string } | null>(null);

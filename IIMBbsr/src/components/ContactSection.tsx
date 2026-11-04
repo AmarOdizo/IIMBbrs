@@ -261,7 +261,7 @@ export default function ContactSection() {
       </section>
 
       {/* 3. Interactive Correspondence Form & Secretariat Office Matrix */}
-      <section className="max-w-7xl mx-auto w-full px-6 lg:px-12 py-8">
+      <section id="contact-form-section" className="max-w-7xl mx-auto w-full px-6 lg:px-12 py-8 scroll-mt-24 sm:scroll-mt-32">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Secretariat Protocol & Office Coordinates (5 cols) */}
           <div className="lg:col-span-5 flex flex-col gap-6">
@@ -379,7 +379,7 @@ export default function ContactSection() {
           </div>
 
           {/* Right Column: Institutional Contact Form (7 cols) */}
-          <div className="lg:col-span-7 bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-sm border border-slate-200/60">
+          <div id="contact-form" className="lg:col-span-7 bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-sm border border-slate-200/60 scroll-mt-24 sm:scroll-mt-32 ring-1 ring-primary/20">
             <div className="mb-6 pb-4 border-b border-slate-100">
               <span className="font-label-sm text-xs text-primary tracking-widest uppercase font-semibold">
                 Direct Transmission Portal
