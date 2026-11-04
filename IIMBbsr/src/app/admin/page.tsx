@@ -1287,20 +1287,14 @@ export default function AdminPage() {
               );
             })}
           </nav>
-          <div className="flex items-center gap-2.5 shrink-0">
-            <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80 shrink-0">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Council Live</span>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 shrink-0 shadow-2xs cursor-pointer select-none"
-              title="Sign Out of Admin Console"
-            >
-              <LogOut className="w-3.5 h-3.5 shrink-0" />
-              <span className="hidden sm:inline">Sign Out</span>
-            </button>
-          </div>
+          <button
+            onClick={handleLogout}
+            className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 shrink-0 shadow-2xs cursor-pointer select-none"
+            title="Sign Out of Admin Console"
+          >
+            <LogOut className="w-3.5 h-3.5 shrink-0" />
+            <span className="hidden sm:inline">Sign Out</span>
+          </button>
         </div>
       </div>
 
