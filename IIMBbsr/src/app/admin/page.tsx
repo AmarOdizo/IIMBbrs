@@ -1181,9 +1181,9 @@ export default function AdminPage() {
       {/* Full-Width Sticky Sub-Navbar: Located right under Banner, Locks cleanly at TOP (top-0) under Browser Search on Scroll */}
       <div
         id="admin-tabs-bar"
-        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all mt-6"
+        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all mt-6 h-14 flex items-center"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 py-2 overflow-x-auto scrollbar-none">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-3 overflow-x-auto scrollbar-none">
           <nav className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none">
             {[
               { id: 'overview', label: 'Overview', icon: BarChart3 },
@@ -1320,7 +1320,7 @@ export default function AdminPage() {
             {/* ================= TAB 2: MEMBERS ================= */}
             {activeTab === 'members' && (
               <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <div className="sticky top-14 z-30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm transition-all">
                   <div className="relative w-full max-w-md">
                     <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
                     <input
@@ -1425,7 +1425,7 @@ export default function AdminPage() {
             {/* ================= TAB 4: MEMBERSHIP APPLICATIONS ================= */}
             {activeTab === 'applications' && (
               <div className="space-y-4">
-                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div className="sticky top-14 z-30 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between transition-all">
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm">Membership Scrutiny Queue</h3>
                     <p className="text-xs text-slate-500">
@@ -1507,7 +1507,7 @@ export default function AdminPage() {
             {/* ================= TAB: EVENTS ================= */}
             {activeTab === 'events' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <div className="sticky top-14 z-30 flex items-center justify-between bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm transition-all">
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm">Flagship Events &amp; Symposia</h3>
                     <p className="text-xs text-slate-500">Upcoming conferences, workshops, and lectures</p>
@@ -1581,7 +1581,7 @@ export default function AdminPage() {
             {/* ================= TAB 7: SYMPOSIUM ================= */}
             {activeTab === 'symposium' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <div className="sticky top-14 z-30 flex items-center justify-between bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm transition-all">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setSympSubTab('delegates')}
@@ -1690,7 +1690,7 @@ export default function AdminPage() {
             {/* ================= TAB: NEWS ================= */}
             {activeTab === 'news' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <div className="sticky top-14 z-30 flex items-center justify-between bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm transition-all">
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm">Official Gazette &amp; Circulars</h3>
                     <p className="text-xs text-slate-500">Notices, calls for papers, and awards notifications</p>
@@ -1769,7 +1769,7 @@ export default function AdminPage() {
             {/* ================= TAB 10: GALLERY ================= */}
             {activeTab === 'gallery' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <div className="sticky top-14 z-30 flex items-center justify-between bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm transition-all">
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm">Archival Photo Gallery</h3>
                     <p className="text-xs text-slate-500">Photos of conferences, ceremonies and field excursions</p>
@@ -1823,7 +1823,7 @@ export default function AdminPage() {
             {/* ================= TAB: INQUIRIES ================= */}
             {activeTab === 'inquiries' && (
               <div className="space-y-4">
-                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div className="sticky top-14 z-30 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between transition-all">
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm">Official Inquiries &amp; Dispatches</h3>
                     <p className="text-xs text-slate-500">Messages sent via website /contact portal</p>
