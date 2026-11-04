@@ -141,16 +141,20 @@ export default function Footer() {
           <p className="text-center md:text-left">
             © 2025–2026 The Indian Institute of Metals — Bhubaneswar Chapter. All rights reserved.
           </p>
-          <div className="flex items-center gap-4 text-xs">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 text-xs">
             <Link href="/privacy" className="hover:text-surface-bright transition-colors">
               Privacy Policy
             </Link>
+            <span className="text-surface-variant/40">•</span>
             <Link href="/terms" className="hover:text-surface-bright transition-colors">
               Terms of Use
             </Link>
+            <span className="text-surface-variant/40">•</span>
             <Link href="/admin" className="text-tertiary-fixed hover:underline transition-colors font-medium">
               Admin Login
             </Link>
+            <div className="hidden sm:block h-3.5 w-[1px] bg-white/20 mx-1"></div>
+            <SocialLinksBar className="scale-90" />
           </div>
         </div>
       </div>
