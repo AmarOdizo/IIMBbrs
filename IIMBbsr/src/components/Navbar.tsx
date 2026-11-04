@@ -160,6 +160,16 @@ export default function Navbar() {
             <span>Join Chapter</span>
           </a>
 
+          <Link
+            href="/admin"
+            data-path="admin-login"
+            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg font-label-md text-xs sm:text-label-md font-semibold shrink-0 shadow-sm transition-all bg-surface-container-high hover:bg-primary text-on-surface hover:text-white border border-surface-variant/40 hover:border-primary"
+            title="Executive Admin Console Login"
+          >
+            <span className="material-symbols-outlined text-[17px]">admin_panel_settings</span>
+            <span>Admin Login</span>
+          </Link>
+
           {/* Hamburger Button (Mobile & Tablet: < 1024px) */}
           <button
             id="mobile-menu-toggle"
@@ -292,6 +302,14 @@ export default function Navbar() {
               <span className="material-symbols-outlined text-base">how_to_reg</span>
               <span>Join Chapter (iim-india.net)</span>
             </a>
+            <Link
+              href="/admin"
+              onClick={() => handleClose()}
+              className="w-full py-2.5 px-4 rounded-xl font-label-md text-sm font-semibold text-center bg-surface-container hover:bg-surface-container-high text-on-surface border border-surface-variant/40 transition-all flex items-center justify-center gap-2 shadow-sm"
+            >
+              <span className="material-symbols-outlined text-base">admin_panel_settings</span>
+              <span>Admin Login</span>
+            </Link>
             <div className="text-[11px] text-secondary text-center leading-relaxed">
               <span>CSIR-IMMT, Bhubaneswar • IIM HQ Kolkata</span>
             </div>

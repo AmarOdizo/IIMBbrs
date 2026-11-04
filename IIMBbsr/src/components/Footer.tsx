@@ -143,10 +143,7 @@ export default function Footer() {
             <Link href="/terms" className="hover:text-surface-bright transition-colors">
               Terms of Use
             </Link>
-            <span className="text-surface-variant/40">•</span>
-            <Link href="/admin" className="text-tertiary-fixed hover:underline transition-colors font-medium">
-              Admin Login
-            </Link>
+            
             <div className="hidden sm:block h-3.5 w-[1px] bg-white/20 mx-1"></div>
             <SocialLinksBar className="scale-90" />
           </div>
