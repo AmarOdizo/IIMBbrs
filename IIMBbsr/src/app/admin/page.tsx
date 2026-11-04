@@ -245,10 +245,9 @@ export default function AdminPage() {
       const tabsEl = document.getElementById('admin-tabs-bar');
       if (tabsEl) {
         const rect = tabsEl.getBoundingClientRect();
-        const headerH = window.innerWidth >= 640 ? 80 : 64;
-        if (rect.top < headerH) {
+        if (rect.top < 0) {
           window.scrollTo({
-            top: window.scrollY + rect.top - headerH,
+            top: window.scrollY + rect.top,
             behavior: 'smooth',
           });
         }
@@ -1103,7 +1102,7 @@ export default function AdminPage() {
       </div>
 
       {/* Main Header Navigation */}
-      <header className="sticky top-0 z-40 bg-slate-900 border-b border-slate-800 text-white shadow-md">
+      <header className="relative bg-slate-900 border-b border-slate-800 text-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
           {/* Brand Logo & Titles */}
           <div className="flex items-center gap-3 sm:gap-4">
@@ -1253,10 +1252,10 @@ export default function AdminPage() {
         </section>
       </div>
 
-      {/* Full-Width Sticky Sub-Navbar: Located right under Banner, Locks cleanly under Header on Scroll like a true Navbar */}
+      {/* Full-Width Sticky Sub-Navbar: Located right under Banner, Locks cleanly at TOP (top-0) under Browser Search on Scroll */}
       <div
         id="admin-tabs-bar"
-        className="sticky top-16 sm:top-20 z-30 w-full bg-white/95 backdrop-blur-md border-y border-slate-200/90 shadow-[0_2px_10px_rgba(0,0,0,0.04)] transition-all mt-6"
+        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all mt-6"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 py-2 overflow-x-auto scrollbar-none">
           <nav className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none">
@@ -1288,9 +1287,19 @@ export default function AdminPage() {
               );
             })}
           </nav>
-          <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80 shrink-0">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Council Live</span>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80 shrink-0">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Council Live</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 shrink-0 shadow-2xs cursor-pointer select-none"
+              title="Sign Out of Admin Console"
+            >
+              <LogOut className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">Sign Out</span>
+            </button>
           </div>
         </div>
       </div>
