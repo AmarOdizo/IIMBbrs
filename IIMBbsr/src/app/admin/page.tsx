@@ -242,7 +242,17 @@ export default function AdminPage() {
   const handleSwitchTab = (tabId: TabType) => {
     setActiveTab(tabId);
     if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const tabsEl = document.getElementById('admin-tabs-bar');
+      if (tabsEl) {
+        const rect = tabsEl.getBoundingClientRect();
+        const headerH = window.innerWidth >= 640 ? 80 : 64;
+        if (rect.top < headerH) {
+          window.scrollTo({
+            top: window.scrollY + rect.top - headerH,
+            behavior: 'smooth',
+          });
+        }
+      }
     }
   };
   const [loadingData, setLoadingData] = useState(false);
@@ -1157,52 +1167,14 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Integrated Sub-Navbar Tabs (Navbar Row: Fixed & Edge-to-Edge like a real Navbar) */}
-        <div className="border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 overflow-x-auto scrollbar-none">
-            <nav className="flex items-center gap-1 sm:gap-1.5 py-1.5 overflow-x-auto scrollbar-none">
-              {[
-                { id: 'overview', label: 'Overview', icon: BarChart3 },
-                { id: 'members', label: 'Members', icon: Users },
-                { id: 'applications', label: 'Applications', icon: FileCheck },
-                { id: 'events', label: 'Events', icon: Calendar },
-                { id: 'symposium', label: 'Symposium 2026', icon: Ticket },
-                { id: 'news', label: 'News & Circulars', icon: Newspaper },
-                { id: 'gallery', label: 'Gallery', icon: ImageIcon },
-                { id: 'inquiries', label: 'Inquiries', icon: Mail },
-              ].map((t) => {
-                const Icon = t.icon;
-                const active = activeTab === t.id;
-                return (
-                  <button
-                    key={t.id}
-                    onClick={() => handleSwitchTab(t.id as TabType)}
-                    className={`px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold transition shrink-0 flex items-center gap-2 whitespace-nowrap cursor-pointer select-none ${
-                      active
-                        ? 'bg-primary text-white shadow-sm'
-                        : 'text-slate-300 hover:text-white hover:bg-white/10'
-                    }`}
-                  >
-                    <Icon className="w-4 h-4 shrink-0" />
-                    <span>{t.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-            <div className="hidden lg:flex items-center gap-2 text-xs text-slate-400 font-medium shrink-0">
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span>Council Live</span>
-            </div>
-          </div>
-        </div>
       </header>
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
+      {/* Chapter Secretariat Banner Section (Above Tabs) */}
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
         {/* Feedback Alert Banner */}
         {feedback && (
           <div
-            className={`p-4 rounded-xl flex items-center gap-2.5 text-sm shadow-sm transition-all ${
+            className={`p-4 rounded-xl flex items-center gap-2.5 text-sm shadow-sm transition-all mb-6 ${
               feedback.type === 'success'
                 ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                 : 'bg-rose-50 text-rose-800 border border-rose-200'
@@ -1279,6 +1251,52 @@ export default function AdminPage() {
             </div>
           </div>
         </section>
+      </div>
+
+      {/* Full-Width Sticky Sub-Navbar: Located right under Banner, Locks cleanly under Header on Scroll like a true Navbar */}
+      <div
+        id="admin-tabs-bar"
+        className="sticky top-16 sm:top-20 z-30 w-full bg-white/95 backdrop-blur-md border-y border-slate-200/90 shadow-[0_2px_10px_rgba(0,0,0,0.04)] transition-all mt-6"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 py-2 overflow-x-auto scrollbar-none">
+          <nav className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none">
+            {[
+              { id: 'overview', label: 'Overview', icon: BarChart3 },
+              { id: 'members', label: 'Members', icon: Users },
+              { id: 'applications', label: 'Applications', icon: FileCheck },
+              { id: 'events', label: 'Events', icon: Calendar },
+              { id: 'symposium', label: 'Symposium 2026', icon: Ticket },
+              { id: 'news', label: 'News & Circulars', icon: Newspaper },
+              { id: 'gallery', label: 'Gallery', icon: ImageIcon },
+              { id: 'inquiries', label: 'Inquiries', icon: Mail },
+            ].map((t) => {
+              const Icon = t.icon;
+              const active = activeTab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => handleSwitchTab(t.id as TabType)}
+                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition shrink-0 flex items-center gap-2 whitespace-nowrap cursor-pointer select-none ${
+                    active
+                      ? 'bg-primary text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span>{t.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+          <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80 shrink-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Council Live</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Container */}
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
 
         {/* Loading Spinner */}
         {loadingData ? (
