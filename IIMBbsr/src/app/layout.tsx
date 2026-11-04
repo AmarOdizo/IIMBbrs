@@ -313,7 +313,56 @@ export default function RootLayout({
   };
 
   window.exportRoster = function() {
-    alert('Historical Roster (1998-2025) ready for export in CSV/PDF format. (Prototype demonstration).');
+    try {
+      var table = document.getElementById('chairmenTable');
+      var csvContent = '\uFEFF';
+      if (table) {
+        var rows = table.querySelectorAll('tr');
+        rows.forEach(function(row) {
+          var cols = row.querySelectorAll('th, td');
+          var rowData = [];
+          cols.forEach(function(col) {
+            var text = (col.textContent || '').trim();
+            text = text.replace(/"/g, '""');
+            rowData.push('"' + text + '"');
+          });
+          if (rowData.length > 0) {
+            csvContent += rowData.join(',') + '\r\n';
+          }
+        });
+      }
+      if (csvContent.length <= 2) {
+        csvContent = '\uFEFFTenure Period,Chairman Name,Parent Affiliation,Major Chapter Milestone / Landmark Event\r\n' +
+          '"2024–2025","Dr. Barada K. Mishra","CSIR-IMMT Bhubaneswar","Inauguration of Decarbonized Ironmaking Technology Forum; expansion of regional SME membership by 42%."\r\n' +
+          '"2022–2024","Prof. B. C. Ray","NIT Rourkela / Guest Chair","Co-hosting of International Conference on Composite Materials; establishment of IISER Berhampur student cell."\r\n' +
+          '"2020–2022","Er. Sudhansu S. Mohapatra","Tata Steel (Kalinganagar Works)","Transition to fully digitized technical colloquiums during pandemic; established COVID emergency student distress fund."\r\n' +
+          '"2017–2020","Dr. Vibhuti N. Misra","Director, RRL / IMMT (Ex)","Silver Jubilee Convention of IIM Bhubaneswar; release of commemorative monograph on Odisha Mineral Wealth."\r\n' +
+          '"2014–2017","Prof. Swapan K. Das","IIT Bhubaneswar","Formal signing of tripartite academic knowledge exchange with JFE Steel & RDCIS Ranchi."\r\n' +
+          '"2010–2014","Er. P. K. Rath","RINL / Regional Executive","Hosted 51st National Metallurgists\' Day (NMD-ATM 2013) bringing 1,200 international metallurgists to Bhubaneswar."\r\n' +
+          '"2005–2010","Dr. Saroj K. Singh","Regional Research Laboratory","Initiation of Chapter Endowed Gold Medals for top graduating metallurgy scholars from regional colleges."\r\n' +
+          '"1998–2005","Dr. H. S. Ray","Former Director, RRL Bhubaneswar","Founding charter reconstitution; acquisition of designated secretariat rooms at CSIR-IMMT complex."\r\n';
+      }
+      var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      var url = window.URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'IIM_Bhubaneswar_Former_Chairmen_Historical_Roster_1998-2025.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      var btn = document.getElementById('btn-export-roster');
+      if (btn) {
+        var origHtml = btn.innerHTML;
+        btn.innerHTML = '<span class="material-symbols-outlined text-[16px] text-emerald-600">check_circle</span><span class="text-emerald-700 font-semibold">Downloaded!</span>';
+        setTimeout(function() {
+          btn.innerHTML = origHtml;
+        }, 2500);
+      }
+    } catch (e) {
+      console.error('Error exporting roster:', e);
+    }
   };
 
   // 8. Not Found Search
