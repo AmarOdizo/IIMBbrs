@@ -31,25 +31,21 @@ const CADRE_TIERS = [
     tier: 'Student Member',
     badge: 'Undergraduate / PG',
     subBadge: 'Subsidized',
-    price: '₹800',
-    period: '/ tenure',
     desc: 'Enrolled B.Tech, M.Tech & Ph.D. scholars in metallurgy, materials, chemistry, and mechanical engineering.',
     isFeatured: false,
     benefits: [
       'Access to regional Student Chapter lectures (IIT, KIIT, Berhampur)',
-      'Eligible for ₹2.5L Research Seed Grants',
+      'Eligible for Research Seed Grants & subsidies',
       'Annual NMD travel subsidies & quiz competitions',
       'Industrial steel plant & smelter exposure visits',
     ],
     ctaText: 'Enroll Student Tier',
-    ctaLink: 'https://iim-india.net',
+    ctaLink: 'https://www.iim-india.net/',
   },
   {
     tier: 'Annual Member',
     badge: 'Early Professional',
     subBadge: 'Renewable',
-    price: '₹1,800',
-    period: '/ yr + ₹500 reg',
     desc: 'Junior plant metallurgists, testing laboratory officers, and technical engineers in mineral processing.',
     isFeatured: false,
     benefits: [
@@ -59,15 +55,13 @@ const CADRE_TIERS = [
       'Option to convert to Life Member with credit',
     ],
     ctaText: 'Apply Annual Tier',
-    ctaLink: 'https://iim-india.net',
+    ctaLink: 'https://www.iim-india.net/',
   },
   {
     tier: 'Life Member',
     badge: 'Senior Practicing',
     subBadge: 'Full Voting',
     ribbon: 'Most Esteemed Grade',
-    price: '₹12,500',
-    period: 'One-time',
     desc: 'Practicing engineers, senior research scientists, and academicians with minimum 5 years verified domain tenure.',
     isFeatured: true,
     benefits: [
@@ -78,14 +72,12 @@ const CADRE_TIERS = [
       'Nomination rights for prestigious Chapter Metallurgist Awards',
     ],
     ctaText: 'Apply for Life Membership',
-    ctaLink: 'https://iim-india.net',
+    ctaLink: 'https://www.iim-india.net/',
   },
   {
     tier: 'Corporate / Patron',
     badge: 'Industrial Leaders',
     subBadge: 'Institutional',
-    price: '₹50,000',
-    period: '/ 3 yrs',
     desc: 'Primary steel mills, smelters, equipment suppliers, beneficiation facilities (Tata Steel, NALCO, Utkal, JSL).',
     isFeatured: false,
     benefits: [
@@ -94,15 +86,13 @@ const CADRE_TIERS = [
       'Direct student talent recruitment access via campus hackathons',
       'Priority co-hosting rights for national specialized colloquia',
     ],
-    ctaText: 'Initiate Corporate Dossier',
-    ctaLink: '#application-form',
+    ctaText: 'Apply Corporate Patron',
+    ctaLink: 'https://www.iim-india.net/',
   },
   {
     tier: 'Benefactor Patron',
     badge: 'Philanthropic Trust',
     subBadge: 'Endowment',
-    price: '₹1,00,000+',
-    period: 'Endowment',
     desc: 'Visionary industrial titans, distinguished alumni foundations, and endowed memorial lecture patrons.',
     isFeatured: false,
     benefits: [
@@ -111,8 +101,8 @@ const CADRE_TIERS = [
       'Endowment naming rights for Young Metallurgist Gold Medal',
       'Lifetime VIP seating at all council colloquia & plenaries',
     ],
-    ctaText: 'Contact Secretariat Desk',
-    ctaLink: '#application-form',
+    ctaText: 'Apply Benefactor Patron',
+    ctaLink: 'https://www.iim-india.net/',
   },
 ];
 
@@ -361,7 +351,7 @@ export default function JoinChapterSection() {
           </div>
           <div className="flex items-center gap-2 text-secondary text-xs">
             <span className="inline-block w-2.5 h-2.5 rounded-full bg-primary" />
-            <span>All tariffs subject to standard GST as applicable nationally</span>
+            <span>National Membership Portal: iim-india.net</span>
           </div>
         </div>
 
@@ -391,10 +381,6 @@ export default function JoinChapterSection() {
 
                 <div>
                   <h4 className="font-headline-sm text-lg font-bold text-on-surface">{tier.tier}</h4>
-                  <div className="mt-2 flex items-baseline gap-1">
-                    <span className="font-headline-md text-2xl font-bold text-primary">{tier.price}</span>
-                    <span className="font-body-sm text-xs text-secondary">{tier.period}</span>
-                  </div>
                   <p className="font-body-sm text-xs text-secondary mt-2 leading-relaxed">{tier.desc}</p>
                 </div>
 
@@ -411,32 +397,19 @@ export default function JoinChapterSection() {
               </div>
 
               <div className="pt-6 mt-6 border-t border-slate-100">
-                {tier.ctaLink.startsWith('http') ? (
-                  <a
-                    href={tier.ctaLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`w-full block text-center py-2.5 px-3 rounded-lg font-label-md text-xs font-semibold transition-all ${
-                      tier.isFeatured
-                        ? 'bg-primary text-on-primary hover:bg-primary-container shadow-sm'
-                        : 'bg-surface-container text-on-surface hover:bg-surface-container-high'
-                    }`}
-                  >
-                    {tier.ctaText}
-                  </a>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={scrollToForm}
-                    className={`w-full block text-center py-2.5 px-3 rounded-lg font-label-md text-xs font-semibold transition-all ${
-                      tier.isFeatured
-                        ? 'bg-primary text-on-primary hover:bg-primary-container shadow-sm'
-                        : 'bg-surface-container text-on-surface hover:bg-surface-container-high'
-                    }`}
-                  >
-                    {tier.ctaText}
-                  </button>
-                )}
+                <a
+                  href="https://www.iim-india.net/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-full inline-flex items-center justify-center gap-1.5 text-center py-2.5 px-3 rounded-lg font-label-md text-xs font-semibold transition-all ${
+                    tier.isFeatured
+                      ? 'bg-primary text-on-primary hover:bg-primary-container shadow-sm'
+                      : 'bg-surface-container text-on-surface hover:bg-surface-container-high'
+                  }`}
+                >
+                  <span>{tier.ctaText}</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-70" />
+                </a>
               </div>
             </div>
           ))}
