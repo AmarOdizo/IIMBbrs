@@ -238,6 +238,23 @@ export default function AdminPage() {
     | 'inquiries';
 
   const [activeTab, setActiveTab] = useState<TabType>('overview');
+
+  const handleSwitchTab = (tabId: TabType) => {
+    setActiveTab(tabId);
+    if (typeof window !== 'undefined') {
+      const tabsEl = document.getElementById('admin-tabs-bar');
+      if (tabsEl) {
+        const rect = tabsEl.getBoundingClientRect();
+        const headerH = window.innerWidth >= 640 ? 80 : 64;
+        if (rect.top <= headerH + 10) {
+          window.scrollTo({
+            top: window.scrollY + rect.top - headerH - 8,
+            behavior: 'smooth',
+          });
+        }
+      }
+    }
+  };
   const [loadingData, setLoadingData] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
@@ -1087,7 +1104,7 @@ export default function AdminPage() {
 
       {/* Main Header Navigation */}
       <header className="sticky top-0 z-40 bg-slate-900 border-b border-slate-800 text-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
           {/* Brand Logo & Titles */}
           <div className="flex items-center gap-3 sm:gap-4">
             <Link
@@ -1234,8 +1251,12 @@ export default function AdminPage() {
           </div>
         </section>
 
-        {/* Console Navigation Tabs */}
-        <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
+        {/* Console Navigation Tabs (Sticky bar docked under header when scrolling past banner) */}
+        <div
+          id="admin-tabs-bar"
+          className="sticky top-16 sm:top-20 z-30 -my-2 py-2 bg-slate-50/95 backdrop-blur-md transition-all shadow-[0_4px_12px_rgba(0,0,0,0.03)]"
+        >
+          <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow overflow-x-auto">
           {[
             { id: 'overview', label: 'Overview', icon: BarChart3 },
             { id: 'members', label: 'Members', icon: Users },
@@ -1251,7 +1272,7 @@ export default function AdminPage() {
             return (
               <button
                 key={t.id}
-                onClick={() => setActiveTab(t.id as TabType)}
+                onClick={() => handleSwitchTab(t.id as TabType)}
                 className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition shrink-0 flex items-center gap-2 ${
                   active
                     ? 'bg-primary text-white shadow-sm'
@@ -1271,6 +1292,7 @@ export default function AdminPage() {
             <LogOut className="w-4 h-4 shrink-0" />
             <span>Sign Out</span>
           </button>
+          </div>
         </div>
 
         {/* Loading Spinner */}
