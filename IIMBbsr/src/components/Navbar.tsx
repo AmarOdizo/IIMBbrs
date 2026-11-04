@@ -111,7 +111,7 @@ export default function Navbar() {
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="h-16 lg:h-20 max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-3 sm:px-4 lg:px-5 xl:px-8 flex items-center justify-between gap-2 lg:gap-3 xl:gap-4">
+      <div className="h-16 lg:h-20 max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-3 sm:px-4 lg:px-5 xl:px-8 flex items-center justify-between gap-3 lg:gap-4 xl:gap-6 2xl:gap-8">
         <Link href="/" className="flex items-center shrink-0 py-1" title="IIM Bhubaneswar Chapter">
           <img
             alt="The Indian Institute of Metals - Bhubaneswar Chapter"
@@ -121,7 +121,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation Menu (Visible on lg: >= 1024px) */}
-        <nav className="hidden lg:flex items-center justify-center gap-0.5 xl:gap-1 2xl:gap-1.5 flex-1 min-w-0 font-label-md">
+        <nav className="hidden lg:flex items-center justify-center gap-1 lg:gap-1.5 xl:gap-2 2xl:gap-2.5 flex-1 min-w-0 font-label-md">
           {navLinks.map((item) => {
             const isActive =
               currentPath === 'home' || currentPath === ''
@@ -134,7 +134,7 @@ export default function Navbar() {
                 href={item.href}
                 data-path={item.path}
                 aria-current={isActive ? 'page' : undefined}
-                className={`px-1.5 xl:px-2 2xl:px-2.5 py-1 xl:py-1.5 rounded-lg transition-all whitespace-nowrap text-[11px] xl:text-xs 2xl:text-sm font-semibold tracking-tight ${
+                className={`px-2 lg:px-2.5 xl:px-3 py-1.5 rounded-lg transition-all whitespace-nowrap text-xs xl:text-[13px] 2xl:text-sm font-semibold tracking-tight ${
                   isActive
                     ? 'bg-primary-container text-white font-semibold'
                     : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
@@ -147,13 +147,13 @@ export default function Navbar() {
         </nav>
 
         {/* Desktop & Tablet Action CTA + Mobile Hamburger Toggle */}
-        <div className="flex items-center gap-1.5 xl:gap-2.5 shrink-0">
+        <div className="flex items-center gap-2 lg:gap-2.5 xl:gap-3 shrink-0">
           <a
             href="https://iim-india.net"
             target="_blank"
             rel="noopener noreferrer"
             data-path="join-chapter"
-            className="hidden sm:inline-flex items-center gap-1 px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-lg font-label-md text-xs sm:text-xs xl:text-xs 2xl:text-sm font-semibold shrink-0 shadow-sm transition-all bg-primary text-on-primary hover:bg-primary-container whitespace-nowrap"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 xl:px-3.5 py-2 rounded-lg font-label-md text-xs sm:text-xs xl:text-xs 2xl:text-sm font-semibold shrink-0 shadow-sm transition-all bg-primary text-on-primary hover:bg-primary-container whitespace-nowrap"
             title="Register with Indian Institute of Metals Kolkata Head Office"
           >
             <span className="material-symbols-outlined text-[17px]">how_to_reg</span>
@@ -163,7 +163,7 @@ export default function Navbar() {
           <Link
             href="/admin"
             data-path="admin-login"
-            className="hidden sm:inline-flex items-center gap-1 px-2 xl:px-3 py-1.5 xl:py-2 rounded-lg font-label-md text-xs sm:text-xs xl:text-xs 2xl:text-sm font-semibold shrink-0 shadow-sm transition-all bg-surface-container-high hover:bg-primary text-on-surface hover:text-white border border-surface-variant/40 hover:border-primary whitespace-nowrap"
+            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 xl:px-3 py-2 rounded-lg font-label-md text-xs sm:text-xs xl:text-xs 2xl:text-sm font-semibold shrink-0 shadow-sm transition-all bg-surface-container-high hover:bg-primary text-on-surface hover:text-white border border-surface-variant/40 hover:border-primary whitespace-nowrap"
             title="Executive Admin Console Login"
           >
             <span className="material-symbols-outlined text-[17px]">admin_panel_settings</span>
