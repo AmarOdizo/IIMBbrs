@@ -1,10 +1,11 @@
-'use client';
+// About Institution Page
 
 import React from 'react';
 import Footer from '@/components/Footer';
 import type { Metadata } from 'next';
 import JsonLd from '@/components/JsonLd';
 import { getBreadcrumbSchema } from '@/lib/seo';
+import AboutTimelineFilter from '@/components/AboutTimelineFilter';
 
 export const metadata: Metadata = {
   title: 'About Institution & Charter History',
