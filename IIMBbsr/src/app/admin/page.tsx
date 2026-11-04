@@ -242,17 +242,7 @@ export default function AdminPage() {
   const handleSwitchTab = (tabId: TabType) => {
     setActiveTab(tabId);
     if (typeof window !== 'undefined') {
-      const tabsEl = document.getElementById('admin-tabs-bar');
-      if (tabsEl) {
-        const rect = tabsEl.getBoundingClientRect();
-        const headerH = window.innerWidth >= 640 ? 80 : 64;
-        if (rect.top <= headerH + 10) {
-          window.scrollTo({
-            top: window.scrollY + rect.top - headerH - 8,
-            behavior: 'smooth',
-          });
-        }
-      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
   const [loadingData, setLoadingData] = useState(false);
@@ -1166,6 +1156,45 @@ export default function AdminPage() {
             </button>
           </div>
         </div>
+
+        {/* Integrated Sub-Navbar Tabs (Navbar Row: Fixed & Edge-to-Edge like a real Navbar) */}
+        <div className="border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 overflow-x-auto scrollbar-none">
+            <nav className="flex items-center gap-1 sm:gap-1.5 py-1.5 overflow-x-auto scrollbar-none">
+              {[
+                { id: 'overview', label: 'Overview', icon: BarChart3 },
+                { id: 'members', label: 'Members', icon: Users },
+                { id: 'applications', label: 'Applications', icon: FileCheck },
+                { id: 'events', label: 'Events', icon: Calendar },
+                { id: 'symposium', label: 'Symposium 2026', icon: Ticket },
+                { id: 'news', label: 'News & Circulars', icon: Newspaper },
+                { id: 'gallery', label: 'Gallery', icon: ImageIcon },
+                { id: 'inquiries', label: 'Inquiries', icon: Mail },
+              ].map((t) => {
+                const Icon = t.icon;
+                const active = activeTab === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => handleSwitchTab(t.id as TabType)}
+                    className={`px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold transition shrink-0 flex items-center gap-2 whitespace-nowrap cursor-pointer select-none ${
+                      active
+                        ? 'bg-primary text-white shadow-sm'
+                        : 'text-slate-300 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span>{t.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+            <div className="hidden lg:flex items-center gap-2 text-xs text-slate-400 font-medium shrink-0">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>Council Live</span>
+            </div>
+          </div>
+        </div>
       </header>
 
       {/* Main Container */}
@@ -1250,50 +1279,6 @@ export default function AdminPage() {
             </div>
           </div>
         </section>
-
-        {/* Console Navigation Tabs (Sticky bar docked under header when scrolling past banner) */}
-        <div
-          id="admin-tabs-bar"
-          className="sticky top-16 sm:top-20 z-30 -my-2 py-2 bg-slate-50/95 backdrop-blur-md transition-all shadow-[0_4px_12px_rgba(0,0,0,0.03)]"
-        >
-          <div className="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow overflow-x-auto">
-          {[
-            { id: 'overview', label: 'Overview', icon: BarChart3 },
-            { id: 'members', label: 'Members', icon: Users },
-            { id: 'applications', label: 'Applications', icon: FileCheck },
-            { id: 'events', label: 'Events', icon: Calendar },
-            { id: 'symposium', label: 'Symposium 2026', icon: Ticket },
-            { id: 'news', label: 'News & Circulars', icon: Newspaper },
-            { id: 'gallery', label: 'Gallery', icon: ImageIcon },
-            { id: 'inquiries', label: 'Inquiries', icon: Mail },
-          ].map((t) => {
-            const Icon = t.icon;
-            const active = activeTab === t.id;
-            return (
-              <button
-                key={t.id}
-                onClick={() => handleSwitchTab(t.id as TabType)}
-                className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition shrink-0 flex items-center gap-2 ${
-                  active
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`}
-              >
-                <Icon className="w-4 h-4 shrink-0" />
-                <span>{t.label}</span>
-              </button>
-            );
-          })}
-          <button
-            onClick={handleLogout}
-            className="ml-auto px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition shrink-0 flex items-center gap-1.5 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 shadow-sm cursor-pointer select-none"
-            title="Sign Out of Admin Console"
-          >
-            <LogOut className="w-4 h-4 shrink-0" />
-            <span>Sign Out</span>
-          </button>
-          </div>
-        </div>
 
         {/* Loading Spinner */}
         {loadingData ? (
