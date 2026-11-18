@@ -894,7 +894,7 @@ export default function AdminPage() {
 
         {/* Center Login Box */}
         <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 my-auto">
-          <div className="w-full max-w-md bg-white/[0.04] border border-white/10 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative overflow-hidden">
+          <div className="w-full max-w-md bg-white/[0.04] border border-white/10 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative overflow-hidden" suppressHydrationWarning>
             {/* Subtle brand glow accent */}
             <div className="absolute -top-24 -left-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
             <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -927,7 +927,7 @@ export default function AdminPage() {
               </div>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-4 relative z-10">
+            <form onSubmit={handleLogin} className="space-y-4 relative z-10" suppressHydrationWarning>
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1.5" htmlFor="loginEmail">
                   Admin Email Address
@@ -940,6 +940,7 @@ export default function AdminPage() {
                   onChange={(e) => setLoginEmail(e.target.value)}
                   placeholder="admin@iimbhubaneswar.in"
                   className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+                suppressHydrationWarning
                 />
               </div>
 
@@ -955,6 +956,7 @@ export default function AdminPage() {
                   onChange={(e) => setLoginPassword(e.target.value)}
                   placeholder="••••••••"
                   className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+                suppressHydrationWarning
                 />
               </div>
 
@@ -968,6 +970,7 @@ export default function AdminPage() {
               <button
                 id="login-submit-btn"
                 type="submit"
+                suppressHydrationWarning
                 onClick={handleLogin}
                 disabled={loginLoading}
                 className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-semibold text-sm shadow-lg transition flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer touch-manipulation select-none"
