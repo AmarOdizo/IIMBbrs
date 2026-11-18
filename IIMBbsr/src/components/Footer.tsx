@@ -120,15 +120,42 @@ export default function Footer() {
           </div>
           <div className="flex flex-col gap-2">
             <span className="font-label-md text-label-md text-tertiary-fixed uppercase tracking-wider mb-2">
-              Institutional Affiliation
+              OFFICE
             </span>
-            <p className="font-body-sm text-body-sm text-surface-variant/80 leading-relaxed">
-              Affiliated with The Indian Institute of Metals, 'Metal House', Kolkata.
-            </p>
-            <p className="font-body-sm text-body-sm text-surface-variant/80 leading-relaxed">
-              Regional Secretariat: CSIR-IMMT, Bhubaneswar, Odisha - 751013.
-            </p>
-            <span className="font-label-sm text-label-sm text-primary-fixed">iimbhubaneswar.in</span>
+            <div className="font-body-sm text-body-sm text-surface-variant/90 leading-relaxed flex flex-col gap-0.5">
+              <span className="font-semibold text-white">Dr. Ajit Panigrahi</span>
+              <span className="text-surface-variant/80 text-xs">
+                Hony. Secretary, The Indian Institute of Metals,
+              </span>
+              <span className="text-surface-variant/80 text-xs">
+                Bhubaneswar Chapter,
+              </span>
+              <span className="text-surface-variant/80 text-xs">
+                Old HEM Building,
+              </span>
+              <span className="text-surface-variant/80 text-xs">
+                CSIR - Institute of Minerals &amp; Materials Technology,
+              </span>
+              <span className="text-surface-variant/80 text-xs">
+                Bhubaneswar-751013, Odisha, INDIA
+              </span>
+            </div>
+            <div className="flex flex-col gap-1 pt-1.5 font-body-sm text-xs text-surface-variant/80">
+              <a
+                href="tel:+9106742379202"
+                className="hover:text-surface-bright transition-colors flex items-center gap-1.5"
+              >
+                <span className="text-tertiary-fixed font-semibold">Phone:</span>
+                <span>+91 - 0674-2379202</span>
+              </a>
+              <a
+                href="mailto:iimbhubaneswarchapter@gmail.com"
+                className="hover:text-surface-bright transition-colors flex items-center gap-1.5 break-all"
+              >
+                <span className="text-tertiary-fixed font-semibold">Email:</span>
+                <span className="text-primary-fixed hover:underline">iimbhubaneswarchapter@gmail.com</span>
+              </a>
+            </div>
           </div>
         </div>
         <div className="pt-space-md flex flex-col md:flex-row items-center justify-between gap-4 font-body-sm text-body-sm text-surface-variant/60">
