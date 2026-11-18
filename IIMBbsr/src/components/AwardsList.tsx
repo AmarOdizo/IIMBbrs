@@ -71,10 +71,11 @@ export const STATIC_AWARDS: AwardItem[] = [
     annualSchedule: 'May Annually',
     badge: 'Endowed Memorial Medal',
     description:
-      'The most revered academic address in Eastern India’s materials community. Instituted in memory of Padma Shri Prof. Prafulla Kumar Jena, legendary extractive metallurgist and former Director General of CSIR Regional Research Laboratory (IMMT). The oration explores sustainable smelting, circular hydrometallurgy, and mineral autonomy.',
+      'The most revered academic address in Eastern India’s materials community. Instituted in memory of Padma Shri Prof. Prafulla Kumar Jena, legendary extractive metallurgist, former BHU professor, Director General of CSIR Regional Research Laboratory (IMMT), and Founder Chairman of the IIM Bhubaneswar Chapter who served for 12 consecutive years from 1976. The oration explores sustainable smelting, circular hydrometallurgy, and mineral autonomy.',
     highlights: [
       'Commemorative Jena Memorial Medal & Scroll',
       'Keynote by Padma Awardee / National Metallurgists',
+      'Honoring 12-Year Founder Chairman Legacy (Prof. P. K. Jena)',
       'Monograph Published and Distributed Nationally',
     ],
     prizePool: 'Commemorative Medallion & Scroll',
@@ -108,6 +109,7 @@ export const STATIC_AWARDS: AwardItem[] = [
     description:
       'The sovereign deliberative organ of the IIM Bhubaneswar Chapter. The AGM gathers registered voting life members and institutional delegates to scrutinize audited accounts, review the Honorary Secretary’s report, elect the biennial executive council, and ratify programmatic mandates.',
     highlights: [
+      'IIM Bhubaneswar Chapter Annual Research Award (e.g. 2019 Recipient Dr. Sisir Mantry)',
       'Audited Balance Sheet Ratification',
       "Secretary's Annual Performance Review",
       'Biennial Executive Committee Elections',

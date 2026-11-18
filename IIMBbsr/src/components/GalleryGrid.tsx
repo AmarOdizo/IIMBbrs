@@ -154,6 +154,42 @@ const FALLBACK_GALLERY: GalleryItemData[] = [
     orderIndex: 9,
     isActive: true,
   },
+  {
+    _id: 'seed-gal-10',
+    title: 'National Science Day Gathering at CSIR-IMMT',
+    category: 'Lectures',
+    imageUrl:
+      'https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&q=80&w=1200',
+    description:
+      'Distinguished science address with DCP Sagarika Nath, IPS addressing the gathering of regional metallurgists, faculty, and scholars.',
+    eventDate: '2020-02-28',
+    orderIndex: 10,
+    isActive: true,
+  },
+  {
+    _id: 'seed-gal-11',
+    title: 'Annual General Body Meeting & Chapter Research Award Presentation',
+    category: 'Ceremonies',
+    imageUrl:
+      'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=1200',
+    description:
+      'Felicitation of Dr. Sisir Mantry as recipient of the prestigious IIM Bhubaneswar Chapter Award for excellence in minerals and materials research.',
+    eventDate: '2019-11-15',
+    orderIndex: 11,
+    isActive: true,
+  },
+  {
+    _id: 'seed-gal-12',
+    title: 'Inter-Collegiate Materials Science Quiz Competition (BPMMQ)',
+    category: 'Ceremonies',
+    imageUrl:
+      'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1200',
+    description:
+      'Audience and young student delegations participating in the regional Prof. Brahm Prakash Memorial Materials Quiz.',
+    eventDate: '2022-08-12',
+    orderIndex: 12,
+    isActive: true,
+  },
 ];
 
 const PRESS_CLIPPINGS = [

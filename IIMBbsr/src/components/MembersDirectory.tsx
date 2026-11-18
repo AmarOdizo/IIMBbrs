@@ -31,6 +31,8 @@ const CADRES = [
   'All Cadres',
   'Life Fellow',
   'Life Member',
+  'Patron Member',
+  'Sustaining Member',
   'Member',
   'Student Member',
   'Associate Member',

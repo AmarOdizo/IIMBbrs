@@ -38,10 +38,24 @@ export const siteConfig = {
   },
   stats: [
     { label: "Active Members", value: "750+" },
+    { label: "Charter Life Members", value: "238+" },
     { label: "Partner Institutions", value: "30+" },
     { label: "Student Chapters", value: "4" },
     { label: "National Symposia", value: "18" }
-  ]
+  ],
+  foundation: {
+    year: 1976,
+    charterYear: 1978,
+    founderChairman: "Prof. P. K. Jena (Director, RRL / CSIR-IMMT - 12 consecutive years)",
+    inauguralCohorts: "25-30 Scientists & Engineers inducted from RRL Bhubaneswar",
+    foundingCorporatePartners: [
+      "Industrial Development Corporation of Odisha (IDCOL)",
+      "Ferro Alloys Corporation (FACOR)",
+      "Indian Metals & Ferro Alloys (IMFA)",
+      "Industrial Promotion and Investment Corporation of Odisha (IPICOL)",
+      "National Aluminium Company (NALCO)"
+    ]
+  }
 };
 
 export interface Officer {
@@ -329,6 +343,27 @@ export const galleryItems = [
     category: "Lectures",
     imageUrl: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800",
     desc: "Mechanical property evaluation of prototype automotive steels."
+  },
+  {
+    id: 7,
+    title: "National Science Day Assembly at CSIR-IMMT",
+    category: "Lectures",
+    imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800",
+    desc: "Distinguished address by DCP Sagarika Nath, IPS addressing the gathering of metallurgists and researchers."
+  },
+  {
+    id: 8,
+    title: "Annual General Body Meeting & Chapter Research Award",
+    category: "Ceremonies",
+    imageUrl: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=800",
+    desc: "Conferment of the IIM Bhubaneswar Chapter Award to Dr. Sisir Mantry in recognition of outstanding materials science contributions."
+  },
+  {
+    id: 9,
+    title: "Prof. Brahm Prakash Memorial Materials Quiz (BPMMQ)",
+    category: "Ceremonies",
+    imageUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800",
+    desc: "Inter-collegiate metallurgical competition with enthusiastic student chapters participating from across Odisha."
   }
 ];
 
