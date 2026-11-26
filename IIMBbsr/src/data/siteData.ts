@@ -129,7 +129,7 @@ export const committeeMembers: Officer[] = [
     location: "CSIR-IMMT Bhubaneswar",
     bio: "",
     tags: [],
-    image: ""
+    image: "/assets/images/joint_secretary_dr_deepak_nayak.jpg"
   },
   {
     name: "Dr. Ajit Panigrahi",
