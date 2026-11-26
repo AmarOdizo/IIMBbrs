@@ -165,40 +165,22 @@ export default function ContactSection() {
         </div>
       </section>
 
-      {/* 4. Physical Location, Cartography & Transit Coordinates */}
-      <section className="max-w-7xl mx-auto w-full px-6 lg:px-12 py-10">
-        <div className="flex flex-col gap-2 mb-8">
-          <div className="flex items-center gap-2">
-            <span className="h-px w-6 bg-primary" />
-            <span className="font-label-md text-label-md text-primary tracking-widest uppercase font-semibold">
-              Secretariat Navigation
-            </span>
-          </div>
-          <h2 className="font-headline-md text-2xl sm:text-3xl font-bold text-on-surface">
-            Campus Location &amp; Transit Hub Access
+      {/* Location & Transit Access */}
+      <section className="max-w-7xl mx-auto w-full px-6 lg:px-12 py-8">
+        <div className="flex flex-col gap-1 mb-5">
+          <h2 className="font-headline-md text-2xl font-bold text-on-surface">
+            Location &amp; How to Reach
           </h2>
-          <p className="font-body-md text-body-md text-secondary max-w-2xl">
-            Housed within CSIR-IMMT’s premier 100-acre scientific sanctuary at Acharya Vihar, with immediate artery access to National Highway 16 and major air and rail links.
+          <p className="font-body-md text-xs sm:text-sm text-secondary">
+            CSIR - Institute of Minerals and Materials Technology (IMMT), Acharya Vihar, Bhubaneswar — 751013, Odisha
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
           {/* Interactive Map Canvas (8 cols) */}
           <div className="lg:col-span-8 bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-col border border-slate-200/60">
-            {/* Map Header Strip */}
-            <div className="p-3.5 bg-surface-container-low border-b border-slate-200/60 flex flex-wrap items-center justify-between gap-2 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="font-semibold text-on-surface">CSIR - IMMT Bhubaneswar Campus</span>
-                <span className="text-secondary hidden sm:inline">• Acharya Vihar, Bhubaneswar — 751013</span>
-              </div>
-              <span className="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-[11px] font-semibold">
-                Old HEM Building
-              </span>
-            </div>
-
             {/* Live Interactive Google Map Embed */}
-            <div className="relative w-full h-80 sm:h-96 bg-surface-container">
+            <div className="relative w-full h-64 sm:h-72 bg-surface-container">
               <iframe
                 title="CSIR-IMMT Bhubaneswar Campus Location"
                 src="https://maps.google.com/maps?q=CSIR+-+Institute+of+Minerals+and+Materials+Technology,+Acharya+Vihar,+Bhubaneswar,+Odisha+751013&t=&z=16&ie=UTF8&iwloc=&output=embed"
@@ -211,53 +193,48 @@ export default function ContactSection() {
               />
             </div>
 
-            <div className="p-4 bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2 text-secondary">
-                <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
-                <span>Visitor Entry via Gate No. 1 (Acharya Vihar Square), Security Check Required with Photo ID.</span>
-              </div>
+            <div className="p-3 bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+              <span className="text-secondary truncate">
+                Old HEM Building, CSIR-IMMT Campus
+              </span>
               <a
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-container font-semibold transition-colors shadow-xs shrink-0"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-container font-semibold transition-colors shadow-xs shrink-0"
                 href="https://www.google.com/maps/dir/?api=1&destination=CSIR+-+Institute+of+Minerals+and+Materials+Technology,+Acharya+Vihar,+Bhubaneswar,+Odisha+751013"
                 rel="noopener noreferrer"
                 target="_blank"
               >
                 <Navigation className="w-3.5 h-3.5" />
-                <span>Get Directions on Google Maps</span>
+                <span>Get Directions</span>
               </a>
             </div>
           </div>
 
           {/* Transit Hub Coordinates Card (4 cols) */}
-          <div className="lg:col-span-4 flex flex-col justify-between gap-3">
+          <div className="lg:col-span-4 flex flex-col justify-between gap-2.5">
             {/* Airport */}
             <a
               href="https://www.google.com/maps/dir/?api=1&origin=Biju+Patnaik+International+Airport,+Bhubaneswar&destination=CSIR+-+Institute+of+Minerals+and+Materials+Technology,+Bhubaneswar"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-surface-container-lowest rounded-xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3.5 border border-slate-200/60 group"
-              title="View route from Biju Patnaik Airport"
+              className="bg-surface-container-lowest rounded-xl p-3.5 shadow-sm hover:shadow-md transition-all flex items-center justify-between gap-3 border border-slate-200/60 group flex-1"
+              title="Directions from Airport"
             >
-              <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
-                <Plane className="w-5 h-5" />
-              </div>
-              <div className="flex flex-col flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-title-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors flex items-center gap-1">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                  <Plane className="w-4 h-4" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-title-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">
                     Biju Patnaik Airport
-                    <ExternalLink className="w-3 h-3 text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                   </span>
-                  <span className="font-mono text-xs px-2 py-0.5 rounded bg-surface-container font-bold text-primary">
-                    6.2 km
+                  <span className="text-xs text-secondary">
+                    15–20 mins via Airport Road
                   </span>
                 </div>
-                <span className="font-body-sm text-xs text-secondary mt-0.5">
-                  IATA: BBI · 15–20 mins via Airport Road
-                </span>
-                <span className="font-label-sm text-[11px] text-on-surface-variant mt-1">
-                  Pre-paid taxis and app cabs readily available. Click for route.
-                </span>
               </div>
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-surface-container font-bold text-primary shrink-0">
+                6.2 km
+              </span>
             </a>
 
             {/* Railway Station */}
@@ -265,29 +242,25 @@ export default function ContactSection() {
               href="https://www.google.com/maps/dir/?api=1&origin=Bhubaneswar+Railway+Station&destination=CSIR+-+Institute+of+Minerals+and+Materials+Technology,+Bhubaneswar"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-surface-container-lowest rounded-xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3.5 border border-slate-200/60 group"
-              title="View route from Bhubaneswar Railway Station"
+              className="bg-surface-container-lowest rounded-xl p-3.5 shadow-sm hover:shadow-md transition-all flex items-center justify-between gap-3 border border-slate-200/60 group flex-1"
+              title="Directions from Railway Station"
             >
-              <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
-                <Train className="w-5 h-5" />
-              </div>
-              <div className="flex flex-col flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-title-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors flex items-center gap-1">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                  <Train className="w-4 h-4" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-title-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">
                     Bhubaneswar Railway Station
-                    <ExternalLink className="w-3 h-3 text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                   </span>
-                  <span className="font-mono text-xs px-2 py-0.5 rounded bg-surface-container font-bold text-primary">
-                    4.8 km
+                  <span className="text-xs text-secondary">
+                    12–15 mins via Master Canteen
                   </span>
                 </div>
-                <span className="font-body-sm text-xs text-secondary mt-0.5">
-                  Station Code: BBS · 12–15 mins via Master Canteen
-                </span>
-                <span className="font-label-sm text-[11px] text-on-surface-variant mt-1">
-                  Expressway auto-rickshaws &amp; Mo Bus routes stop at Acharya Vihar.
-                </span>
               </div>
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-surface-container font-bold text-primary shrink-0">
+                4.8 km
+              </span>
             </a>
 
             {/* National Highway */}
@@ -295,41 +268,26 @@ export default function ContactSection() {
               href="https://www.google.com/maps/dir/?api=1&origin=Jaydev+Vihar,+Bhubaneswar&destination=CSIR+-+Institute+of+Minerals+and+Materials+Technology,+Bhubaneswar"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-surface-container-lowest rounded-xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3.5 border border-slate-200/60 group"
-              title="View route from NH-16 / Jaydev Vihar"
+              className="bg-surface-container-lowest rounded-xl p-3.5 shadow-sm hover:shadow-md transition-all flex items-center justify-between gap-3 border border-slate-200/60 group flex-1"
+              title="Directions from NH-16"
             >
-              <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
-                <Car className="w-5 h-5" />
-              </div>
-              <div className="flex flex-col flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-title-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors flex items-center gap-1">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                  <Car className="w-4 h-4" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-title-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">
                     National Highway 16
-                    <ExternalLink className="w-3 h-3 text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                   </span>
-                  <span className="font-mono text-xs px-2 py-0.5 rounded bg-surface-container font-bold text-primary">
-                    1.5 km
+                  <span className="text-xs text-secondary">
+                    NH-16 Corridor · Jaydev Vihar
                   </span>
                 </div>
-                <span className="font-body-sm text-xs text-secondary mt-0.5">
-                  NH-16 Corridor · Jaydev Vihar Flyover
-                </span>
-                <span className="font-label-sm text-[11px] text-on-surface-variant mt-1">
-                  Arterial link connecting Cuttack, Kalinganagar, &amp; Berhampur.
-                </span>
               </div>
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-surface-container font-bold text-primary shrink-0">
+                1.5 km
+              </span>
             </a>
-
-            {/* Campus Protocol Card */}
-            <div className="bg-surface-container-high rounded-xl p-4 shadow-sm border border-slate-200/50">
-              <div className="flex items-center gap-2 mb-1">
-                <ShieldCheck className="w-4 h-4 text-primary" />
-                <span className="font-title-md text-xs font-bold text-on-surface">Security &amp; Parking Protocol</span>
-              </div>
-              <p className="font-body-sm text-xs text-secondary leading-snug">
-                Delegates arriving by car may park at Designated Sector B parking adjacent to the Sen Auditorium. Prior clearance is recommended for exhibition vehicles.
-              </p>
-            </div>
           </div>
         </div>
       </section>
