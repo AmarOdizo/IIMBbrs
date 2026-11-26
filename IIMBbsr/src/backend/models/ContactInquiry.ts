@@ -28,8 +28,9 @@ const ContactInquirySchema: Schema<IContactInquiry> = new Schema(
     },
     category: {
       type: String,
-      enum: ['symposia', 'membership', 'industry', 'student', 'secretariat'],
-      required: [true, 'Inquiry category is required'],
+      enum: ['symposia', 'membership', 'industry', 'student', 'secretariat', 'general'],
+      default: 'secretariat',
+      required: false,
     },
     fullName: {
       type: String,

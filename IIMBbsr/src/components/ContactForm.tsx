@@ -159,43 +159,16 @@ export default function ContactForm() {
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
-      {/* Category Selector */}
-      <div className="flex flex-col gap-1.5">
-        <label
-          className="font-label-md text-label-md text-on-surface font-semibold flex items-center justify-between"
-          htmlFor="category"
-        >
-          <span>
-            Inquiry Category <span className="text-primary">*</span>
-          </span>
-          <span className="font-label-sm text-label-sm text-secondary">Route to portfolio desk</span>
-        </label>
-        <select
-          id="category"
-          value={formData.category}
-          onChange={handleInputChange}
-          required
-          disabled={loading}
-          className="w-full px-3.5 py-2.5 rounded bg-surface-container-low text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none transition-all border border-transparent focus:border-primary/30"
-        >
-          <option value="symposia">Technical Symposia &amp; Paper Submissions (AHSS 2026)</option>
-          <option value="membership">Membership Registration, Fellowships &amp; Chapter Transfer</option>
-          <option value="industry">Industry Sponsorship, Plant MoUs &amp; Conclave Exhibits</option>
-          <option value="student">Student Chapters, Grants &amp; Metallurgical Competitions</option>
-          <option value="secretariat">General Secretariat, Council Notices &amp; Institutional Governance</option>
-        </select>
-      </div>
-
       {/* Name & Email Dual Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="fullName">
-            Full Name with Title <span className="text-primary">*</span>
+            Full Name <span className="text-primary">*</span>
           </label>
           <input
             id="fullName"
             type="text"
-            placeholder="e.g. Dr. Priyadarshini Sen, FIM"
+            placeholder="Enter your full name"
             value={formData.fullName}
             onChange={handleInputChange}
             required
@@ -205,12 +178,12 @@ export default function ContactForm() {
         </div>
         <div className="flex flex-col gap-1.5">
           <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="email">
-            Professional / Institute Email <span className="text-primary">*</span>
+            Email Address <span className="text-primary">*</span>
           </label>
           <input
             id="email"
             type="email"
-            placeholder="p.sen@tatasteel.com / @iitbbs.ac.in"
+            placeholder="name@example.com"
             value={formData.email}
             onChange={handleInputChange}
             required
@@ -224,7 +197,7 @@ export default function ContactForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="phone">
-            Contact Telephone <span className="text-secondary font-normal">(Optional)</span>
+            Phone Number <span className="text-secondary font-normal">(Optional)</span>
           </label>
           <input
             id="phone"
@@ -238,12 +211,12 @@ export default function ContactForm() {
         </div>
         <div className="flex flex-col gap-1.5">
           <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="organization">
-            Affiliated Organisation / Institute <span className="text-primary">*</span>
+            Organization / Institution <span className="text-primary">*</span>
           </label>
           <input
             id="organization"
             type="text"
-            placeholder="e.g. CSIR-IMMT, Tata Steel, IIT BBS"
+            placeholder="Company, Institute, or College"
             value={formData.organization}
             onChange={handleInputChange}
             required
@@ -256,12 +229,12 @@ export default function ContactForm() {
       {/* Subject Reference */}
       <div className="flex flex-col gap-1.5">
         <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="subjectRef">
-          Subject / Institutional Reference <span className="text-primary">*</span>
+          Subject <span className="text-primary">*</span>
         </label>
         <input
           id="subjectRef"
           type="text"
-          placeholder="e.g. AHSS-2026/ABS/409 - Microstructure Evaluation Abstract"
+          placeholder="Subject of your message"
           value={formData.subjectRef}
           onChange={handleInputChange}
           required
@@ -274,7 +247,7 @@ export default function ContactForm() {
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between">
           <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="messageBody">
-            Official Communication Body <span className="text-primary">*</span>
+            Message <span className="text-primary">*</span>
           </label>
           <span className="font-label-sm text-label-sm text-secondary">
             {formData.messageBody.length} / 2500 characters
@@ -284,7 +257,7 @@ export default function ContactForm() {
           id="messageBody"
           rows={5}
           maxLength={2500}
-          placeholder="Please outline the purpose of your communication, relevant academic context, or commercial sponsorship inquiry..."
+          placeholder="Write your message here..."
           value={formData.messageBody}
           onChange={handleInputChange}
           required
@@ -359,12 +332,8 @@ export default function ContactForm() {
         </div>
       )}
 
-      {/* Anti-spam & Submit Area */}
-      <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-2 text-secondary text-xs">
-          <span className="material-symbols-outlined text-[18px] text-tertiary">verified_user</span>
-          <span>Protected by Chapter Secretariat Security &amp; Database Protocols</span>
-        </div>
+      {/* Submit Button */}
+      <div className="pt-2 flex flex-col sm:flex-row items-center justify-end gap-4">
         <button
           type="submit"
           disabled={loading}
@@ -373,11 +342,11 @@ export default function ContactForm() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Lodging Dispatch...</span>
+              <span>Sending...</span>
             </>
           ) : (
             <>
-              <span>Transmit Communication</span>
+              <span>Send Message</span>
               <Send className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </>
           )}

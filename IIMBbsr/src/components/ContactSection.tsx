@@ -146,39 +146,16 @@ export default function ContactSection() {
                 </div>
               </div>
             </div>
-
-            {/* Protocol Box */}
-            <div className="bg-surface-container-high rounded-xl p-6 shadow-sm border border-slate-200/50">
-              <div className="flex items-start gap-3">
-                <ShieldCheck className="w-6 h-6 text-primary shrink-0 mt-0.5" />
-                <div className="flex flex-col gap-1.5">
-                  <h4 className="font-title-md text-sm font-bold text-on-surface">
-                    Official Dispatch Protocols
-                  </h4>
-                  <p className="font-body-sm text-xs text-secondary leading-relaxed">
-                    Technical abstracts and inquiries submitted via this portal are timestamped and assigned an institutional tracking reference within 24 business hours.
-                  </p>
-                  <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-200/40 text-xs">
-                    <span className="font-label-sm text-primary uppercase font-bold">Institutional Seal</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
-                    <span className="font-label-sm text-secondary">IIM-HQ Kolkata Sync Enabled</span>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Right Column: Institutional Contact Form (7 cols) */}
-          <div id="contact-form" className="lg:col-span-7 bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-sm border border-slate-200/60 scroll-mt-24 sm:scroll-mt-32 ring-1 ring-primary/20">
+          {/* Right Column: Contact Form (7 cols) */}
+          <div id="contact-form" className="lg:col-span-7 bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-sm border border-slate-200/60 scroll-mt-24 sm:scroll-mt-32">
             <div className="mb-6 pb-4 border-b border-slate-100">
-              <span className="font-label-sm text-xs text-primary tracking-widest uppercase font-semibold">
-                Direct Transmission Portal
-              </span>
-              <h3 className="font-headline-sm text-xl font-bold text-on-surface mt-1">
-                Official Inquiry &amp; Dispatch Form
+              <h3 className="font-headline-sm text-xl font-bold text-on-surface">
+                Send a Message
               </h3>
               <p className="font-body-sm text-xs text-secondary mt-1">
-                Complete the formal dispatch metadata. All communications are forwarded instantly to the designated Council portfolio.
+                Fill in the details below to reach out to the Bhubaneswar Chapter secretariat.
               </p>
             </div>
 
