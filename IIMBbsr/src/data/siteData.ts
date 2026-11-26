@@ -9,7 +9,6 @@ export const navItems: NavItem[] = [
   { label: 'Committee', href: '/committee' },
   { label: 'Members', href: '/members' },
   { label: 'Events', href: '/events' },
-  { label: 'Symposium', href: '/symposium' },
   { label: 'Awards', href: '/awards' },
   { label: 'Student Chapters', href: '/student-chapters' },
   { label: 'Gallery', href: '/gallery' },

@@ -23,7 +23,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/privacy', priority: 0.5, changeFrequency: 'yearly' },
     { path: '/terms', priority: 0.5, changeFrequency: 'yearly' },
     { path: '/membership', priority: 0.6, changeFrequency: 'monthly' },
-    { path: '/symposium', priority: 0.8, changeFrequency: 'monthly' },
   ];
 
   return publicRoutes.map((route) => ({

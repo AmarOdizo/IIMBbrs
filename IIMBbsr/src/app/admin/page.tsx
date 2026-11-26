@@ -231,7 +231,6 @@ export default function AdminPage() {
     | 'members'
     | 'applications'
     | 'events'
-    | 'symposium'
     | 'news'
     | 'gallery'
     | 'inquiries';
@@ -244,7 +243,6 @@ export default function AdminPage() {
     { id: 'members', label: 'Members', icon: Users },
     { id: 'applications', label: 'Applications', icon: FileCheck },
     { id: 'events', label: 'Events', icon: Calendar },
-    { id: 'symposium', label: 'Symposium 2026', icon: Ticket },
     { id: 'news', label: 'News & Circulars', icon: Newspaper },
     { id: 'gallery', label: 'Gallery', icon: ImageIcon },
     { id: 'inquiries', label: 'Inquiries', icon: Mail },
@@ -266,9 +264,6 @@ export default function AdminPage() {
   const [membersList, setMembersList] = useState<MemberItem[]>([]);
   const [applicationsList, setApplicationsList] = useState<ApplicationItem[]>([]);
   const [eventsList, setEventsList] = useState<EventItem[]>([]);
-  const [registrationsList, setRegistrationsList] = useState<RegistrationItem[]>([]);
-  const [papersList, setPapersList] = useState<PaperItem[]>([]);
-  const [sympSubTab, setSympSubTab] = useState<'delegates' | 'papers'>('delegates');
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [galleryList, setGalleryList] = useState<GalleryItem[]>([]);
   const [inquiriesList, setInquiriesList] = useState<ContactInquiryItem[]>([]);
@@ -490,15 +485,6 @@ export default function AdminPage() {
           const res = await fetch('/api/events');
           const json = await res.json();
           if (json.success) setEventsList(json.data || []);
-        } else if (activeTab === 'symposium') {
-          const [regRes, paperRes] = await Promise.all([
-            fetch('/api/symposium/registrations', { headers: { Authorization: `Bearer ${token}` } }),
-            fetch('/api/symposium/papers', { headers: { Authorization: `Bearer ${token}` } }),
-          ]);
-          const regJson = await regRes.json();
-          const paperJson = await paperRes.json();
-          if (regJson.success) setRegistrationsList(regJson.data || []);
-          if (paperJson.success) setPapersList(paperJson.data || []);
         } else if (activeTab === 'news') {
           const res = await fetch('/api/news');
           const json = await res.json();
@@ -1038,24 +1024,13 @@ export default function AdminPage() {
         <div className="flex flex-col flex-1 min-h-0">
           {/* Sidebar Header / Brand */}
           <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-            <Link href="/" target="_blank" className="flex items-center gap-3 min-w-0 group" title="Open Public Website">
-              <div className="bg-white p-1.5 rounded-xl shadow-xs shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Image
-                  src="/assets/images/logo1.svg"
-                  alt="IIM Logo"
-                  width={34}
-                  height={34}
-                  className="h-7 w-auto object-contain"
-                />
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span className="font-bold text-sm text-white tracking-tight truncate leading-tight group-hover:text-primary transition-colors">
-                  IIM Bhubaneswar
-                </span>
-                <span className="text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
-                  Admin Console
-                </span>
-              </div>
+            <Link href="/" target="_blank" className="flex flex-col min-w-0 group" title="Open Public Website">
+              <span className="font-bold text-sm text-white tracking-tight truncate leading-tight group-hover:text-primary transition-colors">
+                IIM Bhubaneswar
+              </span>
+              <span className="text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
+                Admin Console
+              </span>
             </Link>
             {/* Mobile close button */}
             <button
@@ -1125,45 +1100,297 @@ export default function AdminPage() {
 
       {/* Main Content Area */}
       <div className="flex-1 md:pl-64 flex flex-col min-w-0 min-h-screen">
-        {/* Top Header Bar */}
-        <header className="h-16 bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 shadow-xs">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setMobileSidebarOpen(true)}
-              className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 md:hidden cursor-pointer"
-              aria-label="Open Sidebar"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-slate-400">Admin</span>
-              <span className="text-xs text-slate-300">/</span>
-              <h1 className="text-sm sm:text-base font-bold text-slate-900 capitalize">
-                {ADMIN_TABS.find((t) => t.id === activeTab)?.label || activeTab}
-              </h1>
+        {/* Sticky Top Field Bar: Permanently fixed right under Chrome search bar at top-0 */}
+        <header className="sticky top-0 z-30 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3 min-h-[4rem]">
+          {/* TAB 1: OVERVIEW */}
+          {activeTab === 'overview' && (
+            <div className="flex items-center justify-between gap-3 w-full">
+              <div className="flex items-center gap-3 min-w-0">
+                <button
+                  onClick={() => setMobileSidebarOpen(true)}
+                  className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 md:hidden cursor-pointer shrink-0"
+                  aria-label="Open Sidebar"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+                <div className="truncate">
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-tight truncate">
+                    Executive Operations &amp; Analytics
+                  </h3>
+                  <p className="text-xs text-slate-500 hidden sm:block leading-tight truncate">
+                    Real-time council metrics, membership records, and activity status
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>Live Secretariat Status</span>
+                </span>
+                <Link
+                  href="/"
+                  target="_blank"
+                  className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition"
+                >
+                  <span>Public Portal</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </Link>
+                <button
+                  id="admin-logout-btn"
+                  onClick={handleLogout}
+                  className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                  title="Sign Out of Admin Console"
+                >
+                  <LogOut className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/"
-              target="_blank"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition"
-            >
-              <span>View Public Portal</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </Link>
+          {/* TAB 2: MEMBERS */}
+          {activeTab === 'members' && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full">
+              <div className="flex items-center gap-3 w-full sm:max-w-md">
+                <button
+                  onClick={() => setMobileSidebarOpen(true)}
+                  className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 md:hidden cursor-pointer shrink-0"
+                  aria-label="Open Sidebar"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+                <div className="relative w-full">
+                  <Search className="w-4 h-4 absolute left-3.5 top-2.5 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder="Search member by name, roll no, or organization..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-100 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setShowImportModal(true)}
+                  className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                  title="Upload Excel or CSV roster"
+                >
+                  <FileSpreadsheet className="w-4 h-4" />
+                  <span className="hidden sm:inline">Import Excel / CSV</span>
+                  <span className="sm:hidden">Import</span>
+                </button>
+                <button
+                  onClick={() => handleOpenMemberModal()}
+                  className="px-3.5 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Enroll Member</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                  title="Sign Out of Admin Console"
+                >
+                  <LogOut className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </button>
+              </div>
+            </div>
+          )}
 
-            <button
-              id="admin-logout-btn"
-              onClick={handleLogout}
-              className="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
-              title="Sign Out of Admin Console"
-            >
-              <LogOut className="w-3.5 h-3.5 shrink-0" />
-              <span>Sign Out</span>
-            </button>
-          </div>
+          {/* TAB 3: APPLICATIONS */}
+          {activeTab === 'applications' && (
+            <div className="flex items-center justify-between gap-3 w-full">
+              <div className="flex items-center gap-3 min-w-0">
+                <button
+                  onClick={() => setMobileSidebarOpen(true)}
+                  className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 md:hidden cursor-pointer shrink-0"
+                  aria-label="Open Sidebar"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+                <div className="truncate">
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-tight truncate">
+                    Membership Scrutiny Queue
+                  </h3>
+                  <p className="text-xs text-slate-500 hidden sm:block leading-tight truncate">
+                    Applications submitted via /membership portal awaiting Executive review
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="px-3 py-1.5 bg-amber-50 text-amber-700 font-semibold text-xs rounded-xl border border-amber-200">
+                  {applicationsList.length} Pending
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                  title="Sign Out of Admin Console"
+                >
+                  <LogOut className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: EVENTS */}
+          {activeTab === 'events' && (
+            <div className="flex items-center justify-between gap-3 w-full">
+              <div className="flex items-center gap-3 min-w-0">
+                <button
+                  onClick={() => setMobileSidebarOpen(true)}
+                  className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 md:hidden cursor-pointer shrink-0"
+                  aria-label="Open Sidebar"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+                <div className="truncate">
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-tight truncate">
+                    Flagship Events &amp; Symposia
+                  </h3>
+                  <p className="text-xs text-slate-500 hidden sm:block leading-tight truncate">
+                    Upcoming conferences, workshops, and lectures
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() => handleOpenEventModal()}
+                  className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-xs cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Publish Event</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                  title="Sign Out of Admin Console"
+                >
+                  <LogOut className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 6: NEWS */}
+          {activeTab === 'news' && (
+            <div className="flex items-center justify-between gap-3 w-full">
+              <div className="flex items-center gap-3 min-w-0">
+                <button
+                  onClick={() => setMobileSidebarOpen(true)}
+                  className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 md:hidden cursor-pointer shrink-0"
+                  aria-label="Open Sidebar"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+                <div className="truncate">
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-tight truncate">
+                    Official Gazette &amp; Circulars
+                  </h3>
+                  <p className="text-xs text-slate-500 hidden sm:block leading-tight truncate">
+                    Notices, calls for papers, and awards notifications
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() => handleOpenNewsModal()}
+                  className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-xs cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Publish Circular</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                  title="Sign Out of Admin Console"
+                >
+                  <LogOut className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 7: GALLERY */}
+          {activeTab === 'gallery' && (
+            <div className="flex items-center justify-between gap-3 w-full">
+              <div className="flex items-center gap-3 min-w-0">
+                <button
+                  onClick={() => setMobileSidebarOpen(true)}
+                  className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 md:hidden cursor-pointer shrink-0"
+                  aria-label="Open Sidebar"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+                <div className="truncate">
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-tight truncate">
+                    Archival Photo Gallery
+                  </h3>
+                  <p className="text-xs text-slate-500 hidden sm:block leading-tight truncate">
+                    Photos of conferences, ceremonies and field excursions
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() => handleOpenGalleryModal()}
+                  className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-xs cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Upload Photograph</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                  title="Sign Out of Admin Console"
+                >
+                  <LogOut className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 8: INQUIRIES */}
+          {activeTab === 'inquiries' && (
+            <div className="flex items-center justify-between gap-3 w-full">
+              <div className="flex items-center gap-3 min-w-0">
+                <button
+                  onClick={() => setMobileSidebarOpen(true)}
+                  className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 md:hidden cursor-pointer shrink-0"
+                  aria-label="Open Sidebar"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+                <div className="truncate">
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-tight truncate">
+                    Official Inquiries &amp; Dispatches
+                  </h3>
+                  <p className="text-xs text-slate-500 hidden sm:block leading-tight truncate">
+                    Messages sent via website /contact portal
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="px-3 py-1.5 bg-slate-100 text-slate-700 font-semibold text-xs rounded-xl border border-slate-200">
+                  {inquiriesList.length} Messages
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                  title="Sign Out of Admin Console"
+                >
+                  <LogOut className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </button>
+              </div>
+            </div>
+          )}
         </header>
 
         {/* Page Content Body */}
@@ -1199,7 +1426,20 @@ export default function AdminPage() {
             {/* ================= TAB 1: OVERVIEW ================= */}
             {activeTab === 'overview' && (
               <div className="space-y-6">
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-sm sm:text-base">Executive Operations &amp; Analytics</h3>
+                    <p className="text-xs text-slate-500">Real-time council metrics, membership records, and activity status</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <span>Live Secretariat Status</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                     <span className="text-xs text-slate-500 font-medium">Total Members</span>
                     <span className="text-2xl font-bold text-slate-900 mt-1">{stats?.totalMembers || 0}</span>
@@ -1215,16 +1455,7 @@ export default function AdminPage() {
                     <span className="text-2xl font-bold text-amber-600 mt-1">{stats?.pendingApplications || 0}</span>
                     <span className="text-[11px] text-amber-500 mt-0.5">Scrutiny Queue</span>
                   </div>
-                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
-                    <span className="text-xs text-slate-500 font-medium">Symposium Delegates</span>
-                    <span className="text-2xl font-bold text-indigo-600 mt-1">{stats?.totalDelegates || 0}</span>
-                    <span className="text-[11px] text-indigo-500 mt-0.5">AHSS-2026 Paid</span>
-                  </div>
-                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
-                    <span className="text-xs text-slate-500 font-medium">Papers in Review</span>
-                    <span className="text-2xl font-bold text-purple-600 mt-1">{stats?.papersInReview || 0}</span>
-                    <span className="text-[11px] text-purple-500 mt-0.5">Abstract Submissions</span>
-                  </div>
+                  
                   <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                     <span className="text-xs text-slate-500 font-medium">Gazette Circulars</span>
                     <span className="text-2xl font-bold text-slate-900 mt-1">{stats?.totalCirculars || 0}</span>
@@ -1281,22 +1512,22 @@ export default function AdminPage() {
             {/* ================= TAB 2: MEMBERS ================= */}
             {activeTab === 'members' && (
               <div className="space-y-4">
-                <div className="sticky top-14 z-30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm transition-all">
-                  <div className="relative w-full max-w-md">
-                    <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                  <div className="relative w-full sm:max-w-md">
+                    <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
                     <input
                       type="text"
                       placeholder="Search member by name, roll no, or organization..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition"
                     />
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
                     <button
                       type="button"
                       onClick={() => setShowImportModal(true)}
-                      className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow-sm"
+                      className="px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow-xs cursor-pointer"
                       title="Upload Excel or CSV roster"
                     >
                       <FileSpreadsheet className="w-4 h-4" />
@@ -1304,7 +1535,7 @@ export default function AdminPage() {
                     </button>
                     <button
                       onClick={() => handleOpenMemberModal()}
-                      className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow-sm"
+                      className="px-4 py-2.5 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow-xs cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Enroll Member</span>
@@ -1385,14 +1616,14 @@ export default function AdminPage() {
             {/* ================= TAB 4: MEMBERSHIP APPLICATIONS ================= */}
             {activeTab === 'applications' && (
               <div className="space-y-4">
-                <div className="sticky top-14 z-30 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Membership Scrutiny Queue</h3>
+                    <h3 className="font-bold text-slate-900 text-sm sm:text-base">Membership Scrutiny Queue</h3>
                     <p className="text-xs text-slate-500">
                       Applications submitted via /membership application portal awaiting Executive review
                     </p>
                   </div>
-                  <span className="px-3 py-1 bg-amber-50 text-amber-700 font-semibold text-xs rounded-xl border border-amber-200">
+                  <span className="px-3.5 py-1.5 bg-amber-50 text-amber-700 font-semibold text-xs rounded-xl border border-amber-200 shrink-0 self-start sm:self-auto">
                     {applicationsList.length} Pending
                   </span>
                 </div>
@@ -1466,14 +1697,14 @@ export default function AdminPage() {
             {/* ================= TAB: EVENTS ================= */}
             {activeTab === 'events' && (
               <div className="space-y-4">
-                <div className="sticky top-14 z-30 flex items-center justify-between bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Flagship Events &amp; Symposia</h3>
+                    <h3 className="font-bold text-slate-900 text-sm sm:text-base">Flagship Events &amp; Symposia</h3>
                     <p className="text-xs text-slate-500">Upcoming conferences, workshops, and lectures</p>
                   </div>
                   <button
                     onClick={() => handleOpenEventModal()}
-                    className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-sm"
+                    className="px-4 py-2.5 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-xs cursor-pointer shrink-0 self-start sm:self-auto"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Publish Event</span>
@@ -1536,123 +1767,17 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= TAB 7: SYMPOSIUM ================= */}
-            {activeTab === 'symposium' && (
-              <div className="space-y-4">
-                <div className="sticky top-14 z-30 flex items-center justify-between bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm transition-all">
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setSympSubTab('delegates')}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${sympSubTab === 'delegates'
-                        ? 'bg-slate-900 text-white'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                        }`}
-                    >
-                      Registered Delegates ({registrationsList.length})
-                    </button>
-                    <button
-                      onClick={() => setSympSubTab('papers')}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${sympSubTab === 'papers'
-                        ? 'bg-slate-900 text-white'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                        }`}
-                    >
-                      Technical Papers ({papersList.length})
-                    </button>
-                  </div>
-                </div>
-
-                {sympSubTab === 'delegates' ? (
-                  <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-xs text-slate-600">
-                        <thead className="bg-slate-50 text-slate-500 border-b border-slate-200 uppercase tracking-wider text-[10px]">
-                          <tr>
-                            <th className="px-4 py-3 font-semibold">Badge ID</th>
-                            <th className="px-4 py-3 font-semibold">Delegate Name</th>
-                            <th className="px-4 py-3 font-semibold">Institution</th>
-                            <th className="px-4 py-3 font-semibold">Fee Tier</th>
-                            <th className="px-4 py-3 font-semibold">Amount</th>
-                            <th className="px-4 py-3 font-semibold">Payment Status</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100">
-                          {registrationsList.map((r) => (
-                            <tr key={r._id} className="hover:bg-slate-50 transition">
-                              <td className="px-4 py-3 font-mono font-bold text-slate-800">{r.badgeQrCode || 'PENDING'}</td>
-                              <td className="px-4 py-3 font-bold text-slate-900">{r.delegateName}</td>
-                              <td className="px-4 py-3 text-slate-700">{r.institution}</td>
-                              <td className="px-4 py-3">
-                                <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-medium">
-                                  {r.tier}
-                                </span>
-                              </td>
-                              <td className="px-4 py-3 font-bold text-slate-900">₹{r.feeAmount}</td>
-                              <td className="px-4 py-3">
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                  {r.paymentStatus}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-xs text-slate-600">
-                        <thead className="bg-slate-50 text-slate-500 border-b border-slate-200 uppercase tracking-wider text-[10px]">
-                          <tr>
-                            <th className="px-4 py-3 font-semibold">Paper Title</th>
-                            <th className="px-4 py-3 font-semibold">Track</th>
-                            <th className="px-4 py-3 font-semibold">Corresponding Author</th>
-                            <th className="px-4 py-3 font-semibold">Institution</th>
-                            <th className="px-4 py-3 font-semibold">Review Status</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100">
-                          {papersList.map((p) => (
-                            <tr key={p._id} className="hover:bg-slate-50 transition">
-                              <td className="px-4 py-3 font-bold text-slate-900 max-w-xs">{p.paperTitle}</td>
-                              <td className="px-4 py-3 text-slate-600">{p.track}</td>
-                              <td className="px-4 py-3 font-medium text-slate-800">
-                                {p.correspondingAuthor?.name}
-                                <div className="text-[10px] text-slate-400">{p.correspondingAuthor?.email}</div>
-                              </td>
-                              <td className="px-4 py-3 text-slate-600">{p.correspondingAuthor?.institution || 'N/A'}</td>
-                              <td className="px-4 py-3">
-                                <span
-                                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${p.reviewStatus === 'Accepted'
-                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                    : 'bg-amber-50 text-amber-700 border border-amber-200'
-                                    }`}
-                                >
-                                  {p.reviewStatus}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* ================= TAB: NEWS ================= */}
             {activeTab === 'news' && (
               <div className="space-y-4">
-                <div className="sticky top-14 z-30 flex items-center justify-between bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Official Gazette &amp; Circulars</h3>
+                    <h3 className="font-bold text-slate-900 text-sm sm:text-base">Official Gazette &amp; Circulars</h3>
                     <p className="text-xs text-slate-500">Notices, calls for papers, and awards notifications</p>
                   </div>
                   <button
                     onClick={() => handleOpenNewsModal()}
-                    className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-sm"
+                    className="px-4 py-2.5 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-xs cursor-pointer shrink-0 self-start sm:self-auto"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Publish Circular</span>
@@ -1723,14 +1848,14 @@ export default function AdminPage() {
             {/* ================= TAB 10: GALLERY ================= */}
             {activeTab === 'gallery' && (
               <div className="space-y-4">
-                <div className="sticky top-14 z-30 flex items-center justify-between bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Archival Photo Gallery</h3>
+                    <h3 className="font-bold text-slate-900 text-sm sm:text-base">Archival Photo Gallery</h3>
                     <p className="text-xs text-slate-500">Photos of conferences, ceremonies and field excursions</p>
                   </div>
                   <button
                     onClick={() => handleOpenGalleryModal()}
-                    className="px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-sm"
+                    className="px-4 py-2.5 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-xs cursor-pointer shrink-0 self-start sm:self-auto"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Upload Photograph</span>
@@ -1777,12 +1902,12 @@ export default function AdminPage() {
             {/* ================= TAB: INQUIRIES ================= */}
             {activeTab === 'inquiries' && (
               <div className="space-y-4">
-                <div className="sticky top-14 z-30 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Official Inquiries &amp; Dispatches</h3>
+                    <h3 className="font-bold text-slate-900 text-sm sm:text-base">Official Inquiries &amp; Dispatches</h3>
                     <p className="text-xs text-slate-500">Messages sent via website /contact portal</p>
                   </div>
-                  <span className="px-3 py-1 bg-slate-100 text-slate-600 font-semibold text-xs rounded-xl">
+                  <span className="px-3.5 py-1.5 bg-slate-100 text-slate-700 font-semibold text-xs rounded-xl border border-slate-200 shrink-0 self-start sm:self-auto">
                     {inquiriesList.length} Messages
                   </span>
                 </div>
