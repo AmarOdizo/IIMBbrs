@@ -30,6 +30,7 @@ import {
   Search,
   Building2,
   ShieldCheck,
+  Menu,
 } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 
@@ -236,20 +237,24 @@ export default function AdminPage() {
     | 'inquiries';
 
   const [activeTab, setActiveTab] = useState<TabType>('overview');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  const ADMIN_TABS: { id: TabType; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+    { id: 'overview', label: 'Overview', icon: BarChart3 },
+    { id: 'members', label: 'Members', icon: Users },
+    { id: 'applications', label: 'Applications', icon: FileCheck },
+    { id: 'events', label: 'Events', icon: Calendar },
+    { id: 'symposium', label: 'Symposium 2026', icon: Ticket },
+    { id: 'news', label: 'News & Circulars', icon: Newspaper },
+    { id: 'gallery', label: 'Gallery', icon: ImageIcon },
+    { id: 'inquiries', label: 'Inquiries', icon: Mail },
+  ];
 
   const handleSwitchTab = (tabId: TabType) => {
     setActiveTab(tabId);
+    setMobileSidebarOpen(false);
     if (typeof window !== 'undefined') {
-      const tabsEl = document.getElementById('admin-tabs-bar');
-      if (tabsEl) {
-        const rect = tabsEl.getBoundingClientRect();
-        if (rect.top < 0) {
-          window.scrollTo({
-            top: window.scrollY + rect.top,
-            behavior: 'smooth',
-          });
-        }
-      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
   const [loadingData, setLoadingData] = useState(false);
