@@ -154,18 +154,20 @@ export default function CommitteeList() {
               .join('')
               .toUpperCase();
 
-            // ================= OFFICERS WITH UPLOADED PHOTO (e.g. Chairman, Secretary) =================
+            // ================= OFFICERS WITH UPLOADED PHOTO (e.g. Chairman, Vice-Chairman, Secretary) =================
             if (hasImage) {
-              const isGold = officer.role === 'Chairman';
-              const badgeBg = isGold
+              const isApexGold = officer.role === 'Chairman' || officer.role.includes('Vice-Chairman');
+              const badgeBg = officer.role === 'Chairman'
                 ? 'bg-amber-500 text-white border-amber-300/40'
+                : officer.role.includes('Vice-Chairman')
+                ? 'bg-amber-600 text-white border-amber-300/40'
                 : 'bg-blue-600 text-white border-blue-400/40';
-              const cardRing = isGold
+              const cardRing = isApexGold
                 ? 'border-amber-300/90 ring-1 ring-amber-400/20'
                 : 'border-blue-300/90 ring-1 ring-blue-400/20';
-              const subColor = isGold ? 'text-amber-300' : 'text-blue-300';
-              const iconColor = isGold ? 'text-amber-400' : 'text-blue-400';
-              const termColor = isGold
+              const subColor = isApexGold ? 'text-amber-300' : 'text-blue-300';
+              const iconColor = isApexGold ? 'text-amber-400' : 'text-blue-400';
+              const termColor = isApexGold
                 ? 'text-amber-200 border-amber-400/30'
                 : 'text-blue-200 border-blue-400/30';
 

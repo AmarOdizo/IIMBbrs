@@ -93,7 +93,7 @@ export const committeeMembers: Officer[] = [
     location: "CSIR-IMMT Bhubaneswar",
     bio: "",
     tags: [],
-    image: ""
+    image: "/assets/images/vice_chairman_dr_bimal_prasad_singh.jpg"
   },
   {
     name: "Dr. Chaturmukha Pattnaik",
