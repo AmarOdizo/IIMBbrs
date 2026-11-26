@@ -1,417 +1,535 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import {
+  Trophy,
   Award,
   Calendar,
-  CheckCircle2,
-  Download,
+  Building2,
+  Search,
   ArrowRight,
-  BookOpen,
-  Sparkles,
-  Trophy,
-  Users,
-  ShieldCheck,
+  CheckCircle2,
   FileText,
-  Mail,
   Send,
+  Medal,
 } from 'lucide-react';
-
-export interface AwardItem {
-  id: string;
-  title: string;
-  category: string;
-  annualSchedule: string;
-  description: string;
-  highlights: string[];
-  bannerImage: string;
-  badge: string;
-  prizePool?: string;
-}
-
-export const STATIC_AWARDS: AwardItem[] = [
-  {
-    id: 'award-1',
-    title: 'Annual Foundation Day & Fellowship Conferment',
-    category: 'Annual Tradition',
-    annualSchedule: '24 February Annually',
-    badge: 'Apex Chapter Convocation',
-    description:
-      'Commemorating the charter establishment of the Bhubaneswar Chapter. This apex gathering brings together senior fellows, academic leaders from CSIR-IMMT, IIT Bhubaneswar, and senior technocrats from Tata Steel Kalinganagar, Nalco Damanjodi, and Jindal Stainless to deliberate on mineral stewardship and honour regional pioneers.',
-    highlights: [
-      'Life Citations & Honorary Fellowships',
-      'Milestone Charter Roadmap Release',
-      'Apex Keynote Address & Annual Monograph',
-    ],
-    bannerImage:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuC0mjDh06hbXmM_nUU2jyOwKjf8FtFotI4yWQnDAYtqi4EfUim91hJTpYqvl5xuzkyGB3jmLqvWGWlEzvlO1FJkJAt-OgNOAntRW8xcydSOZdQHumD8RG4Ug3DLsKSQS8K7Au-U7oALuFSMDkv_9enhjSlkqwDjmzYLL8UyqqE-WEF3uTj_XTBIZqEi0qTWImXyf2hOJ01iqQ8bOaBQdSQfhnbBwtGCMNcKUcwkhBCQgVxm3R04Ke4q',
-  },
-  {
-    id: 'award-2',
-    title: 'National Metallurgist Day (NMD) Regional Honors',
-    category: 'Honors & Recognition',
-    annualSchedule: '07 August Annually',
-    badge: 'National Medal Citation',
-    description:
-      'Celebrated across eastern mineral clusters in alignment with national IIM standards. The Bhubaneswar Chapter bestows regional honors to promising plant metallurgists, process innovators, and doctoral researchers driving efficiency in steelmaking, alumina refining, and rare earths extraction.',
-    highlights: [
-      'Young Metallurgist Excellence Award (<35 Years)',
-      'Plant Metallurgical Innovation Citation',
-      'Best Published Paper Award in Mineral Processing',
-    ],
-    prizePool: 'Gold Plaque & Research Grant',
-    bannerImage:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBQJA2iacY8ceATiuSx8mRaUmhW6pB8v2ttcnx3o5TPGGgBuMC2j02S4xWHpl7mlbWlRyfhJOl_uI8JpcdAb8gj5fW9fx2lT6t5yDyKmGJTi-6whpA6LE_yvklztDgTgnXhuAQ3MxTxPu3SfQkot2l-xro9qgKuC8Yxu3_-gyMKcZLNbORlcv7KrLHQrMRbL88CoWt5ujuSy-34Mp746JGxSczIU7hHrS5V1Dw8UElp6HfVMb4M5crj',
-  },
-  {
-    id: 'award-3',
-    title: 'Prof. P. K. Jena Memorial Lecture Series & Oration Award',
-    category: 'Endowed Memorial Oration',
-    annualSchedule: 'May Annually',
-    badge: 'Endowed Memorial Medal',
-    description:
-      'The most revered academic address in Eastern India’s materials community. Instituted in memory of Padma Shri Prof. Prafulla Kumar Jena, legendary extractive metallurgist, former BHU professor, Director General of CSIR Regional Research Laboratory (IMMT), and Founder Chairman of the IIM Bhubaneswar Chapter who served for 12 consecutive years from 1976. The oration explores sustainable smelting, circular hydrometallurgy, and mineral autonomy.',
-    highlights: [
-      'Commemorative Jena Memorial Medal & Scroll',
-      'Keynote by Padma Awardee / National Metallurgists',
-      'Honoring 12-Year Founder Chairman Legacy (Prof. P. K. Jena)',
-      'Monograph Published and Distributed Nationally',
-    ],
-    prizePool: 'Commemorative Medallion & Scroll',
-    bannerImage:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBeTyMWHozqO1tDTDj1jNRJeLrd5WDhqkSw5VOkNNltDNINe0m4_Hhuj82pbRUTizptwbj_bpZXmayya3eRzkcqGik5XIIigkrsME8Z8D9kJLLaauLboZBEuyk43NBUViPoJGUrlAic2u7WZPKSb4VtgOIj96ZST51vDYy5ylGvqwdMtRiGER6gSrqw5IB9dFssHnT-_5oEK8SzRsqj_N5InCW9Xy6gv3OvPVopMxjTaeGm4bC-0vE_',
-  },
-  {
-    id: 'award-4',
-    title: 'Odisha Metallurgical Conclave & Collegiate Tournaments',
-    category: 'Youth & Academic Outreach',
-    annualSchedule: 'July Annually',
-    badge: 'Collegiate Cash Laurels',
-    description:
-      'The flagship multi-day collegiate symposium uniting student chapters from IIT Bhubaneswar, NIT Rourkela, VSSUT Burla, and PMEC Berhampur. Features fierce intellectual contests, undergraduate research showcases, and talent recruitment lounges with leading core-sector employers.',
-    highlights: [
-      'Prof. Brahm Prakash Memorial Quiz (BPMQ) Qualifiers',
-      'Art of Metallography Exposition & Competition',
-      'Sustainable Prototype & Waste Valorization Demonstrations',
-      '₹1.5 Lakh Cash Prize Pool & Trophies',
-    ],
-    prizePool: '₹1.5 Lakh Cash Purse',
-    bannerImage:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDU5oX62ix7nJL4aoKm1nhvdAIdWQv6xnDXoSw3s1A1pKIuMwoxrOD_dEoZ38rCkqJ0tJ1qS8ntSrpEULfqT5p9hoj1C4_NzJHM4U7WDnn1pgyFfyuGpNUdP53Hc7unXrAm47qYQudd0V3qfxhV5g4Gxinbwq_FEoiCwz-LwLtHcR2rGGOWI082TF2HMGpn7b9j8dXNLAEEbnkVI37H4WaMdfHcylxDaLwFvvzCCjsyZ9Q4kNEZ3aEr',
-  },
-  {
-    id: 'award-5',
-    title: 'Annual General Body Meeting (AGM) & Council Ratification',
-    category: 'Constitutional Governance',
-    annualSchedule: 'Biennial & Annual',
-    badge: 'Constitutional Mandate',
-    description:
-      'The sovereign deliberative organ of the IIM Bhubaneswar Chapter. The AGM gathers registered voting life members and institutional delegates to scrutinize audited accounts, review the Honorary Secretary’s report, elect the biennial executive council, and ratify programmatic mandates.',
-    highlights: [
-      'IIM Bhubaneswar Chapter Annual Research Award (e.g. 2019 Recipient Dr. Sisir Mantry)',
-      'Audited Balance Sheet Ratification',
-      "Secretary's Annual Performance Review",
-      'Biennial Executive Committee Elections',
-      'Student Chapter Charter Extensions',
-    ],
-    bannerImage:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuB5B20NBXTZ_xnvycjhtokgyQzdFrUk5LdaaA5bHmt-gqxD-03My7dNA1vWRRHnmalAy9P8ciBlbmxlA3Jh_t4ZLPlmP0V1RPiYQP1OpNwXk98f8elEBXRUcb2-yuXiKAs-T0oNl_SrfOlYIaOabFflmA7VL05veLI3lgCoMhZ9NkF0YhM7woqt6ZYf_MZkrKeH5RA-PAHw62qEwHPeH_i0EXZBEt4GjsqaA1m7MD2t63Ztbmoq2I3C',
-  },
-];
-
-const CATEGORIES = [
-  { id: 'ALL', label: 'All Awards & Honors' },
-  { id: 'Annual Tradition', label: 'Foundation Day' },
-  { id: 'Honors & Recognition', label: 'Honors & NMD' },
-  { id: 'Endowed Memorial Oration', label: 'Memorial Orations' },
-  { id: 'Youth & Academic Outreach', label: 'Collegiate Awards' },
-  { id: 'Constitutional Governance', label: 'Governance & AGM' },
-];
+import {
+  AWARDEES_DATA,
+  CHAPTER_AWARD_CATEGORIES,
+  type AwardeeItem,
+} from '@/data/awardsData';
 
 export default function AwardsList() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedAward, setSelectedAward] = useState('ALL');
+  const [selectedYear, setSelectedYear] = useState('ALL');
 
-  const filteredAwards = STATIC_AWARDS.filter((item) => {
-    if (selectedCategory === 'ALL') return true;
-    return item.category === selectedCategory;
-  });
+  // Extract distinct years sorted descending
+  const availableYears = useMemo(() => {
+    const years = Array.from(new Set(AWARDEES_DATA.map((a) => a.year)));
+    return years.sort((a, b) => b - a);
+  }, []);
 
-  return (
-    <div className="w-full bg-surface min-h-screen">
-      {/* Top Accent Gradient Bar */}
-      <div className="w-full h-1.5 bg-gradient-to-r from-primary via-amber-500 to-tertiary"></div>
+  // Filtered awardees list
+  const filteredAwardees = useMemo(() => {
+    return AWARDEES_DATA.filter((item) => {
+      // Award filter
+      if (selectedAward !== 'ALL' && item.awardName !== selectedAward) {
+        return false;
+      }
+      // Year filter
+      if (selectedYear !== 'ALL' && item.year.toString() !== selectedYear) {
+        return false;
+      }
+      // Search filter (name or organisation)
+      if (searchQuery.trim() !== '') {
+        const q = searchQuery.toLowerCase().trim();
+        const matchName = item.recipientName.toLowerCase().includes(q);
+        const matchOrg = item.recipientOrganisation.toLowerCase().includes(q);
+        const matchAward = item.awardName.toLowerCase().includes(q);
+        const matchYear = item.year.toString().includes(q);
+        return matchName || matchOrg || matchAward || matchYear;
+      }
+      return true;
+    });
+  }, [searchQuery, selectedAward, selectedYear]);
 
-      {/* Hero Eyebrow & Title */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full pt-8 pb-6">
-        <nav className="flex items-center gap-2 font-label-md text-label-md text-secondary mb-4">
-          <Link href="/" className="hover:text-primary transition-colors flex items-center gap-1">
-            <span className="material-symbols-outlined text-[16px]">home</span>
-            <span>Home</span>
-          </Link>
-          <span className="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
-          <span className="text-primary font-semibold">Awards &amp; Honors</span>
-        </nav>
+    // Color helper for award badges
+    const getAwardBadge = (awardName: string) => {
+      if (awardName.includes('Tamotia')) {
+        return {
+          pill: 'bg-amber-50 text-amber-800 border-amber-200/80',
+          dot: 'bg-amber-500',
+          short: 'Tamotia Award',
+        };
+      }
+      if (awardName.includes('Das')) {
+        return {
+          pill: 'bg-purple-50 text-purple-800 border-purple-200/80',
+          dot: 'bg-purple-500',
+          short: 'R. P. Das Memorial',
+        };
+      }
+      return {
+        pill: 'bg-blue-50 text-blue-800 border-blue-200/80',
+        dot: 'bg-blue-600',
+        short: 'Chapter Award',
+      };
+    };
 
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-surface-variant/40">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full text-primary font-label-sm text-label-sm uppercase tracking-widest mb-3">
-              <Trophy className="w-3.5 h-3.5 text-amber-500" />
-              <span>ANNUAL INSTITUTIONAL BENCHMARKS &amp; HONORS</span>
+    const handleResetFilters = () => {
+      setSearchQuery('');
+      setSelectedAward('ALL');
+      setSelectedYear('ALL');
+    };
+
+    return (
+      <div className="w-full bg-surface min-h-screen">
+        {/* Top Accent Gradient Bar */}
+        <div className="w-full h-1.5 bg-gradient-to-r from-primary via-amber-500 to-tertiary"></div>
+
+        {/* Hero Eyebrow & Title */}
+        <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full pt-8 pb-6">
+          <nav className="flex items-center gap-2 font-label-md text-label-md text-secondary mb-4">
+            <Link href="/" className="hover:text-primary transition-colors flex items-center gap-1">
+              <span className="material-symbols-outlined text-[16px]">home</span>
+              <span>Home</span>
+            </Link>
+            <span className="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
+            <span className="text-primary font-semibold">Awards &amp; Honors</span>
+          </nav>
+
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-surface-variant/40">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full text-primary font-label-sm text-label-sm uppercase tracking-widest mb-3">
+                <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                <span>ANNUAL INSTITUTIONAL BENCHMARKS &amp; HONORS</span>
+              </div>
+              <h1 className="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-4">
+                Chapter Awards &amp; Roll of Honor
+              </h1>
+              <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                Official citations and roll of honor conferred by The Indian Institute of Metals, Bhubaneswar Chapter.
+                Recognizing seminal contributions in metallurgical engineering, materials processing, hydrometallurgy,
+                and visionary industrial leadership across Eastern India and globally.
+              </p>
             </div>
-            <h1 className="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-4">
-              Chapter Awards, Honors &amp; Traditions
-            </h1>
-            <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-              The IIM Bhubaneswar Chapter organizes seminal annual traditions advancing metallurgical research,
-              recognizing professional excellence, nurturing student talent, and bestowing prestigious regional
-              honors across Eastern India.
-            </p>
+
+            {/* Quick Counter Mosaic */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-surface-container-low p-4 rounded-2xl border border-slate-200/80 shadow-xs shrink-0">
+              <div className="flex flex-col border-r border-surface-variant/50 pr-4 last:border-0">
+                <span className="font-headline-sm text-headline-sm text-primary font-bold">
+                  {AWARDEES_DATA.length}
+                </span>
+                <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Laureates</span>
+              </div>
+              <div className="flex flex-col border-r border-surface-variant/50 pr-4 last:border-0">
+                <span className="font-headline-sm text-headline-sm text-on-surface font-bold">03</span>
+                <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Apex Awards</span>
+              </div>
+              <div className="flex flex-col border-r border-surface-variant/50 pr-4 last:border-0">
+                <span className="font-headline-sm text-headline-sm text-primary font-bold">2018–26</span>
+                <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Conferment</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-headline-sm text-headline-sm text-tertiary font-semibold">1978</span>
+                <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Charter</span>
+              </div>
+            </div>
           </div>
+        </section>
 
-          {/* Quick Counter Mosaic */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-surface-container-low p-4 rounded-2xl border border-slate-200/80 shadow-xs shrink-0">
-            <div className="flex flex-col border-r border-surface-variant/50 pr-4 last:border-0">
-              <span className="font-headline-sm text-headline-sm text-primary font-bold">05</span>
-              <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Apex Laurels</span>
-            </div>
-            <div className="flex flex-col border-r border-surface-variant/50 pr-4 last:border-0">
-              <span className="font-headline-sm text-headline-sm text-on-surface font-bold">1978</span>
-              <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Charter Year</span>
-            </div>
-            <div className="flex flex-col border-r border-surface-variant/50 pr-4 last:border-0">
-              <span className="font-headline-sm text-headline-sm text-primary font-bold">₹1.5L</span>
-              <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Prize Pool</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-headline-sm text-headline-sm text-tertiary font-semibold">30+</span>
-              <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Jena Orations</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Filter Tabs */}
-      <nav className="sticky top-20 sm:top-24 z-30 bg-surface/95 backdrop-blur-md border-b border-surface-variant/30 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between overflow-x-auto gap-2 no-scrollbar">
-          <div className="flex items-center gap-1.5 shrink-0">
-            {CATEGORIES.map((c) => (
-              <button
-                key={c.id}
-                onClick={() => setSelectedCategory(c.id)}
-                className={`px-3.5 py-1.5 rounded-xl font-label-md text-xs sm:text-sm font-semibold transition-all ${
-                  selectedCategory === c.id
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'bg-surface-container hover:bg-surface-container-high text-on-surface border border-slate-200/60'
-                }`}
-              >
-                {c.label}
-              </button>
-            ))}
-          </div>
-          <a
-            href="#nomination-workflow"
-            className="hidden md:inline-flex items-center gap-1.5 text-primary hover:text-primary-container font-label-md text-label-md whitespace-nowrap pl-4 font-semibold"
-          >
-            <span>Nomination Protocol</span>
-            <ArrowRight className="w-4 h-4" />
-          </a>
-        </div>
-      </nav>
-
-      {/* Static Awards List */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 w-full py-12 flex flex-col gap-16 lg:gap-24">
-        {filteredAwards.map((award, index) => {
-          const isEven = index % 2 === 0;
-
-          return (
-            <article
-              key={award.id}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs hover:shadow-lg transition-all duration-300"
-            >
-              {/* Content */}
-              <div className={`lg:col-span-7 flex flex-col items-start ${isEven ? 'order-2 lg:order-1' : 'order-2'}`}>
-                <div className="flex flex-wrap items-center gap-2 mb-4">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-label-sm text-xs font-bold uppercase tracking-wider">
-                    <Calendar className="w-3.5 h-3.5" />
-                    <span>{award.annualSchedule}</span>
+              {/* Overview Cards: The 3 Endowed Awards */}
+              <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full py-8">
+                <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                      Major Conferred Honors
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-500">
+                      Instituted awards recognizing research, academic excellence, and industrial leadership
+                    </p>
+                  </div>
+                  <span className="text-xs font-semibold px-3 py-1 bg-slate-100 rounded-full text-slate-600 self-start sm:self-auto border border-slate-200">
+                    Click any award below to filter recipients
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-xs font-semibold">
-                    {award.badge}
-                  </span>
-                  {award.prizePool && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
-                      {award.prizePool}
-                    </span>
-                  )}
                 </div>
 
-                <h2 className="font-headline-md text-2xl sm:text-3xl font-bold text-on-surface mb-3 tracking-tight">
-                  {award.title}
-                </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {CHAPTER_AWARD_CATEGORIES.map((cat) => {
+                      const count = AWARDEES_DATA.filter((a) => a.awardName === cat.name).length;
+                      const isSelected = selectedAward === cat.name;
 
-                <p className="font-body-md text-sm sm:text-base text-on-surface-variant mb-6 leading-relaxed">
-                  {award.description}
-                </p>
+                                  return (
+                                  <div
+                                    key={cat.id}
+                                    onClick={() => setSelectedAward(isSelected ? 'ALL' : cat.name)}
+                                    className={`p-6 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between group ${isSelected
+                                        ? 'border-primary bg-primary/[0.03] ring-2 ring-primary/20 shadow-md'
+                                        : 'bg-white border-slate-200/80 hover:border-slate-300 hover:shadow-md'
+                                      }`}
+                                  >
+                                    <div>
+                                      <div className="flex items-center justify-between gap-2 mb-3">
+                                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold border ${cat.badgeColor}`}>
+                                          {cat.shortName}
+                                        </span>
+                                        <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                                          {count} Recipients
+                                        </span>
+                                      </div>
 
-                {/* Highlights Grid */}
-                {award.highlights && award.highlights.length > 0 && (
-                  <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                    {award.highlights.map((h, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-2.5 p-3 rounded-xl bg-surface-container-low text-on-surface font-body-sm text-xs sm:text-sm border border-slate-200/40"
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-                        <span className="font-medium text-slate-800">{h}</span>
-                      </div>
-                    ))}
-                  </div>
+                                      <h3 className="font-bold text-lg text-slate-900 group-hover:text-primary transition-colors mb-1.5 leading-snug">
+                                        {cat.name}
+                                      </h3>
+                                      <p className="text-xs font-medium text-amber-700 mb-3">{cat.tagline}</p>
+                                      <p className="text-xs text-slate-600 leading-relaxed">{cat.description}</p>
+                                    </div>
+
+                                      <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+                                        <span className={`font-semibold ${isSelected ? 'text-primary' : 'text-slate-500'}`}>
+                                          {isSelected ? '✓ Filter Applied' : 'View Recipients'}
+                                        </span>
+                                        <ArrowRight
+                                          className={`w-3.5 h-3.5 transition-transform group-hover:translate-x-1 ${isSelected ? 'text-primary' : 'text-slate-400'
+                                            }`}
+                                        />
+                                      </div>
+                                  </div>
+                                  );
+          })}
+                                </div>
+      </section>
+
+                            {/* Roll of Honor Table Section */}
+                            <section id="roll-of-honor" className="max-w-7xl mx-auto px-6 lg:px-12 w-full py-8">
+                              <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8">
+                                {/* Section Header */}
+                                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+                                  <div>
+                                    <div className="flex items-center gap-2">
+                                      <Medal className="w-5 h-5 text-amber-500" />
+                                      <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                                        Official Roll of Honor
+                                      </h2>
+                                    </div>
+                                    <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                                      Chronological register of conferred laureates and institutional affiliations (2018–2026)
+                                    </p>
+                                  </div>
+
+                                  {/* Total count badge */}
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs font-medium text-slate-500">Showing</span>
+                                    <span className="px-3 py-1 bg-primary/10 text-primary font-bold text-xs rounded-xl">
+                                      {filteredAwardees.length} of {AWARDEES_DATA.length} Laureates
+                                    </span>
+                                  </div>
+                                </div>
+
+          {/* Filter & Search Bar */}
+          <div className="py-6 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            {/* Search Input */}
+            <div className="relative flex-1 min-w-[240px]">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search recipient name, organisation (e.g. CSIR-IMMT, NALCO, IIT)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 bg-slate-50/50"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-600 cursor-pointer"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+
+            {/* Filter Dropdowns / Controls */}
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              {/* Award filter */}
+              <select
+                aria-label="Filter by Award"
+                value={selectedAward}
+                onChange={(e) => setSelectedAward(e.target.value)}
+                className="px-3 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white focus:outline-none focus:border-primary cursor-pointer"
+              >
+                <option value="ALL">All Awards ({AWARDEES_DATA.length})</option>
+                <option value="IIM Bhubaneswar Chapter Award">IIM Bhubaneswar Chapter Award</option>
+                <option value="Dr. S. K. Tamotia Award">Dr. S. K. Tamotia Award</option>
+                <option value="Dr. R. P. Das Memorial Award">Dr. R. P. Das Memorial Award</option>
+              </select>
+
+              {/* Year filter */}
+              <select
+                aria-label="Filter by Year"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                className="px-3 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white focus:outline-none focus:border-primary cursor-pointer"
+              >
+                <option value="ALL">All Years</option>
+                {availableYears.map((yr) => (
+                  <option key={yr} value={yr.toString()}>
+                    Year {yr}
+                  </option>
+                ))}
+              </select>
+
+              {/* Reset button if filter is active */}
+              {(selectedAward !== 'ALL' || selectedYear !== 'ALL' || searchQuery !== '') && (
+                <button
+                  onClick={handleResetFilters}
+                  className="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Desktop Table View */ }
+                                      < div className = "hidden md:block overflow-x-auto border border-slate-200/80 rounded-2xl" >
+                                      <table className="w-full text-left text-xs border-collapse">
+                                        <thead>
+                                          <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+                                            <th className="py-3.5 px-4 w-14 text-center">#</th>
+                                            <th className="py-3.5 px-4 w-28">Year</th>
+                                            <th className="py-3.5 px-6">Award Name</th>
+                                            <th className="py-3.5 px-6">Recipient Name</th>
+                                            <th className="py-3.5 px-6">Recipient Organisation</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-100">
+                                          {filteredAwardees.length > 0 ? (
+                                            filteredAwardees.map((item, idx) => {
+                                              const badge = getAwardBadge(item.awardName);
+                                              return (
+                                                <tr
+                                                  key={item.id}
+                                                  className="hover:bg-slate-50/80 transition-colors group"
+                                                >
+                                                  {/* Sl No */}
+                                                  <td className="py-4 px-4 text-center font-mono font-medium text-slate-400">
+                                                    {idx + 1}
+                                                  </td>
+
+                                                  {/* Year */}
+                                                  <td className="py-4 px-4 whitespace-nowrap">
+                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 font-bold text-slate-800 text-xs border border-slate-200/60 font-mono">
+                                                      <Calendar className="w-3 h-3 text-slate-400" />
+                                                      <span>{item.year}</span>
+                                                    </span>
+                                                  </td>
+
+                                                  {/* Award Name */}
+                                                  <td className="py-4 px-6">
+                                                    <span
+                                                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${badge.pill}`}
+                                                    >
+                                                      <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`}></span>
+                                                      <span>{item.awardName}</span>
+                                                    </span>
+                                                  </td>
+
+                                                  {/* Recipient Name */}
+                                                  <td className="py-4 px-6">
+                                                    <div className="flex items-center gap-2.5">
+                                                      <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center text-xs shrink-0 border border-slate-200">
+                                                        {item.recipientName.replace(/^Dr\.\s*|^Prof\.\s*|^Shri\s*/i, '').charAt(0)}
+                                                      </div>
+                                                      <span className="font-bold text-slate-900 group-hover:text-primary transition-colors text-sm">
+                                                        {item.recipientName}
+                                                      </span>
+                                                    </div>
+                                                  </td>
+
+                                                  {/* Recipient Organisation */}
+                                                  <td className="py-4 px-6 text-slate-700 font-medium">
+                                                    <div className="flex items-center gap-2">
+                                                      <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                                      <span>{item.recipientOrganisation}</span>
+                                                    </div>
+                                                  </td>
+                                                </tr>
+                                              );
+                                            })
+                                          ) : (
+                                            <tr>
+                                              <td colSpan={5} className="py-12 text-center text-slate-500">
+                                                <div className="flex flex-col items-center justify-center gap-2">
+                                                  <Search className="w-6 h-6 text-slate-300" />
+                                                  <span className="font-semibold text-slate-700 text-sm">No award recipients match your search.</span>
+                                                  <p className="text-xs text-slate-400">Try adjusting your keyword or reset filters.</p>
+                                                  <button
+                                                    onClick={handleResetFilters}
+                                                    className="mt-2 px-4 py-1.5 bg-primary text-white rounded-lg text-xs font-semibold hover:bg-primary-container transition"
+                                                  >
+                                                    Clear All Filters
+                                                  </button>
+                                                </div>
+                                            </td>
+                  </tr>
                 )}
-
-                <div className="flex flex-wrap items-center gap-3">
-                  <Link
-                    href="/events"
-                    className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-xs sm:text-sm font-semibold shadow-sm transition flex items-center gap-2"
-                  >
-                    <span>View Calendar &amp; Dates</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-
-                  <a
-                    href="#nomination-workflow"
-                    className="px-5 py-2.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-xs sm:text-sm font-semibold transition flex items-center gap-2 border border-slate-200"
-                  >
-                    <FileText className="w-4 h-4 text-primary" />
-                    <span>Nomination Guidelines</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Banner Image */}
-              <div className={`lg:col-span-5 ${isEven ? 'order-1 lg:order-2' : 'order-1'}`}>
-                <div className="relative rounded-2xl overflow-hidden bg-surface-container shadow-md h-72 sm:h-80 lg:h-96 w-full group">
-                  <img
-                    src={award.bannerImage}
-                    alt={award.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/30 to-transparent flex flex-col justify-end p-6">
-                    <div className="text-surface font-label-sm text-xs font-bold uppercase tracking-widest text-amber-300">
-                      {award.annualSchedule}
-                    </div>
-                    <div className="text-surface font-title-md text-base sm:text-lg font-bold truncate text-white">
-                      {award.title}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-
-      {/* Nomination Workflow Section */}
-      <section id="nomination-workflow" className="w-full bg-surface-container py-16 px-6 lg:px-12 my-8 border-y border-surface-variant/40">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-              <span className="font-label-sm text-xs uppercase tracking-wider text-primary font-bold">
-                Standardized Protocol
-              </span>
-              <h2 className="font-headline-md text-2xl sm:text-3xl font-bold text-on-surface mt-1">
-                Honors Nomination &amp; Adjudication Process
-              </h2>
-            </div>
-            <p className="font-body-md text-sm text-secondary max-w-md mt-2 md:mt-0 leading-relaxed">
-              The Chapter maintains rigorous, peer-reviewed standards for every citation and medallion conferred
-              under IIM auspices.
-            </p>
+                                      </tbody>
+            </table>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                step: '01',
-                title: 'Dossier Submission',
-                desc: 'Proposer submits formal resume, bibliometrics, patent filings, or plant impact records before annual cutoff.',
-                window: 'Window: 60 Days Prior',
-              },
-              {
-                step: '02',
-                title: 'Council Scrutiny',
-                desc: 'Standing Chapter Honors Committee verifies statutory eligibility and conflict-of-interest disclosures.',
-                window: 'Duration: 14 Working Days',
-              },
-              {
-                step: '03',
-                title: 'External Peer Audit',
-                desc: 'Blind evaluation by independent national subject matter experts nominated from IIM Headquarters.',
-                window: 'Double-Blind Peer Review',
-              },
-              {
-                step: '04',
-                title: 'Gala Conferment',
-                desc: 'Medallion and formal parchment presented in plenary assembly before captains of Indian heavy industry.',
-                window: 'Presided by National Dignitaries',
-              },
-            ].map((st) => (
-              <div
-                key={st.step}
-                className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-base mb-4">
-                    {st.step}
-                  </div>
-                  <h3 className="font-title-md text-base font-bold text-on-surface mb-2">{st.title}</h3>
-                  <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed mb-4">
-                    {st.desc}
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-slate-100 font-label-sm text-xs text-primary font-bold">
-                  {st.window}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+                                  {/* Mobile Card View (Screens < 768px) */}
+          <div className="md:hidden flex flex-col gap-3">
+                                  {filteredAwardees.length > 0 ? (
+                                    filteredAwardees.map((item, idx) => {
+                                      const badge = getAwardBadge(item.awardName);
+                                      return (
+                  <div
+                    key={item.id}
+                    className="p-4 rounded-2xl border border-slate-200/90 bg-white hover:border-slate-300 transition-all flex flex-col gap-2.5"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-mono font-bold text-slate-400">#{idx + 1}</span>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-slate-100 font-bold text-slate-800 text-xs border border-slate-200 font-mono">
+                        <Calendar className="w-3 h-3 text-slate-500" />
+                        <span>{item.year}</span>
+                      </span>
+                    </div>
+
+                              <div>
+                                <span
+                                  className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border mb-2 ${badge.pill}`}
+                                >
+                                  <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`}></span>
+                                  <span>{item.awardName}</span>
+                                </span>
+                                <h4 className="font-bold text-slate-900 text-sm">{item.recipientName}</h4>
+                              </div>
+
+                                      <div className="flex items-center gap-2 text-xs text-slate-600 font-medium pt-2 border-t border-slate-100">
+                                        <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                        <span>{item.recipientOrganisation}</span>
+                                      </div>
+                                    </div>
+                                  );
+              })
+                                  ) : (
+                                  <div className="py-10 text-center text-slate-500 bg-slate-50 rounded-2xl">
+                                    <Search className="w-6 h-6 text-slate-300 mx-auto mb-2" />
+                                    <span className="font-semibold text-slate-700 text-sm block">No results found</span>
+                                    <button
+                                      onClick={handleResetFilters}
+                                      className="mt-3 px-4 py-1.5 bg-primary text-white rounded-lg text-xs font-semibold"
+                                    >
+                                      Reset Filters
+                                    </button>
+                                  </div>
+            )}
+                          </div>
+                        </div>
       </section>
 
-      {/* Institutional Alliances & Endowments Banner */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full py-16">
-        <div className="bg-inverse-surface text-inverse-on-surface rounded-3xl p-8 lg:p-12 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="max-w-xl">
-            <span className="font-label-sm text-xs uppercase tracking-widest text-amber-300 block mb-2 font-bold">
-              Institutional Alliances &amp; Endowments
-            </span>
-            <h2 className="font-headline-md text-2xl sm:text-3xl font-bold text-white mb-3">
-              Endow or Sponsor an Award with IIM Bhubaneswar
-            </h2>
-            <p className="font-body-md text-sm text-slate-300 leading-relaxed mb-6">
-              Leading industrial groups—including Tata Steel, NALCO, Jindal Stainless, and Rungta Mines—partner with
-              the Chapter to sponsor student medals, endow annual lecture series, and foster technical excellence.
-            </p>
-            <div className="flex items-center gap-3">
-              <Link
-                href="/contact"
-                className="px-6 py-3 rounded-xl bg-primary text-on-primary font-label-md text-xs sm:text-sm font-semibold hover:bg-primary-container transition-all shadow-sm flex items-center gap-2"
-              >
-                <span>Inquire for Award Endowments</span>
-                <Send className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
+                  {/* Nomination & Adjudication Protocol Section */ }
+                  <section id="nomination-workflow" className="w-full bg-surface-container py-16 px-6 lg:px-12 my-8 border-y border-surface-variant/40">
+                    <div className="max-w-7xl mx-auto">
+                      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                        <div>
+                          <span className="font-label-sm text-xs uppercase tracking-wider text-primary font-bold">
+                            Standardized Protocol
+                          </span>
+                          <h2 className="font-headline-md text-2xl sm:text-3xl font-bold text-on-surface mt-1">
+                            Honors Nomination &amp; Adjudication Process
+                          </h2>
+                        </div>
+                        <p className="font-body-md text-sm text-secondary max-w-md mt-2 md:mt-0 leading-relaxed">
+                          The Chapter maintains rigorous, peer-reviewed standards for every citation and medallion conferred
+                          under IIM auspices.
+                        </p>
+                      </div>
 
-          <div className="p-6 bg-white/5 border border-white/10 rounded-2xl flex flex-col gap-2 shrink-0 text-xs text-slate-300 max-w-sm">
-            <span className="font-bold text-white text-sm">Honors Secretariat Contact:</span>
-            <span>Dr. Tarun K. Biswal, Hony. Jt. Secretary</span>
-            <span>CSIR – IMMT, Acharya Vihar, Bhubaneswar - 751013</span>
-            <span className="text-amber-300 font-mono">iimbhubaneswarchapter@gmail.com</span>
-          </div>
-        </div>
-      </section>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {[
+                          {
+                            step: '01',
+                            title: 'Dossier Submission',
+                            desc: 'Proposer submits formal resume, bibliometrics, patent filings, or plant impact records before annual cutoff.',
+                            window: 'Window: 60 Days Prior',
+                          },
+                          {
+                            step: '02',
+                            title: 'Council Scrutiny',
+                            desc: 'Standing Chapter Honors Committee verifies statutory eligibility and conflict-of-interest disclosures.',
+                            window: 'Duration: 14 Working Days',
+                          },
+                          {
+                            step: '03',
+                            title: 'External Peer Audit',
+                            desc: 'Blind evaluation by independent national subject matter experts nominated from IIM Headquarters.',
+                            window: 'Double-Blind Peer Review',
+                          },
+                          {
+                            step: '04',
+                            title: 'Gala Conferment',
+                            desc: 'Medallion and formal parchment presented in plenary assembly before captains of Indian heavy industry.',
+                            window: 'Presided by National Dignitaries',
+                          },
+                        ].map((st) => (
+                          <div
+                            key={st.step}
+                            className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col justify-between"
+                          >
+                            <div>
+                              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-base mb-4">
+                                {st.step}
+                              </div>
+                              <h3 className="font-title-md text-base font-bold text-on-surface mb-2">{st.title}</h3>
+                              <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed mb-4">
+                                {st.desc}
+                              </p>
+                            </div>
+                            <div className="pt-3 border-t border-slate-100 font-label-sm text-xs text-primary font-bold">
+                              {st.window}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* Institutional Alliances & Endowments Banner */ }
+                  <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full py-16">
+                    <div className="bg-inverse-surface text-inverse-on-surface rounded-3xl p-8 lg:p-12 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                      <div className="max-w-xl">
+                        <span className="font-label-sm text-xs uppercase tracking-widest text-amber-300 block mb-2 font-bold">
+                          Institutional Alliances &amp; Endowments
+                        </span>
+                        <h2 className="font-headline-md text-2xl sm:text-3xl font-bold text-white mb-3">
+                          Endow or Sponsor an Award with IIM Bhubaneswar
+                        </h2>
+                        <p className="font-body-md text-sm text-slate-300 leading-relaxed mb-6">
+                          Leading industrial groups—including Tata Steel, NALCO, Jindal Stainless, and Rungta Mines—partner with
+                          the Chapter to sponsor student medals, endow annual lecture series, and foster technical excellence.
+                        </p>
+                        <div className="flex items-center gap-3">
+                          <Link
+                            href="/contact"
+                            className="px-6 py-3 rounded-xl bg-primary text-on-primary font-label-md text-xs sm:text-sm font-semibold hover:bg-primary-container transition-all shadow-sm flex items-center gap-2"
+                          >
+                            <span>Inquire for Award Endowments</span>
+                            <Send className="w-4 h-4" />
+                          </Link>
+                        </div>
+                      </div>
+
+                      <div className="p-6 bg-white/5 border border-white/10 rounded-2xl flex flex-col gap-2 shrink-0 text-xs text-slate-300 max-w-sm">
+                        <span className="font-bold text-white text-sm">Honors Secretariat Contact:</span>
+                        <span>Dr. Tarun K. Biswal, Hony. Jt. Secretary</span>
+                        <span>CSIR – IMMT, Acharya Vihar, Bhubaneswar - 751013</span>
+                        <span className="text-amber-300 font-mono">iimbhubaneswarchapter@gmail.com</span>
+                      </div>
+                    </div>
+                  </section>
     </div>
-  );
+              );
 }
-
