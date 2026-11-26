@@ -123,7 +123,7 @@ export default function Footer() {
               OFFICE
             </span>
             <div className="font-body-sm text-body-sm text-surface-variant/90 leading-relaxed flex flex-col gap-0.5">
-              <span className="font-semibold text-white">Dr. Ajit Panigrahi</span>
+              <span className="font-semibold text-white">Dr. Pravas Ranjan Behera</span>
               <span className="text-surface-variant/80 text-xs">
                 Hony. Secretary, The Indian Institute of Metals,
               </span>
@@ -142,12 +142,16 @@ export default function Footer() {
             </div>
             <div className="flex flex-col gap-1 pt-1.5 font-body-sm text-xs text-surface-variant/80">
               <a
-                href="tel:+9106742379202"
+                href="tel:+918847834015"
                 className="hover:text-surface-bright transition-colors flex items-center gap-1.5"
               >
                 <span className="text-tertiary-fixed font-semibold">Phone:</span>
-                <span>+91 - 0674-2379202</span>
+                <span>+91 - 8847834015</span>
               </a>
+              <div className="flex items-center gap-1.5">
+                <span className="text-tertiary-fixed font-semibold">Fax:</span>
+                <span>+91 - 8847834015</span>
+              </div>
               <a
                 href="mailto:iimbhubaneswarchapter@gmail.com"
                 className="hover:text-surface-bright transition-colors flex items-center gap-1.5 break-all"
