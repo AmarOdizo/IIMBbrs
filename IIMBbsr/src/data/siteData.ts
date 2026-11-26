@@ -78,10 +78,10 @@ export const committeeMembers: Officer[] = [
     title: "Scientist-G",
     institution: "CSIR-IMMT Bhubaneswar",
     email: "bctripathy@immt.res.in",
-    location: "CSIR – IMMT, Acharya Vihar, Bhubaneswar",
-    bio: "Elected Chapter Chairman steering the Executive Committee, apex strategic roadmaps, and industry-research consortia across Eastern India for the 2026–27 mandate.",
-    tags: ["Extractive Metallurgy", "Hydro & Electrometallurgy", "Chapter Leadership"],
-    image: ""
+    location: "CSIR-IMMT Bhubaneswar",
+    bio: "",
+    tags: [],
+    image: "/assets/images/chairman_dr_b_c_tripathy.png"
   },
   {
     name: "Dr. Bimal Prasad Singh",
@@ -91,8 +91,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Distinguished metallurgist and Ex Scientist-G providing senior executive guidance on mineral beneficiation and council operations.",
-    tags: ["Colloids & Materials", "Mineral Processing", "Council Governance"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -102,9 +102,9 @@ export const committeeMembers: Officer[] = [
     title: "Executive Vice-Chairman",
     institution: "IIM Bhubaneswar Chapter",
     email: "",
-    location: "Bhubaneswar, Odisha",
-    bio: "Executive Vice-Chairman guiding institutional collaborations, collegiate chapter mentoring, and chapter expansion initiatives.",
-    tags: ["Institutional Governance", "Industrial Liaison"],
+    location: "Bhubaneswar",
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -114,9 +114,9 @@ export const committeeMembers: Officer[] = [
     title: "Scientist-F",
     institution: "CSIR-IMMT Bhubaneswar",
     email: "secretary@iimbhubaneswar.in",
-    location: "CSIR – IMMT, Acharya Vihar, Bhubaneswar",
-    bio: "Honorary Secretary in charge of statutory Chapter administration, executive council records, AGM organization, and national IIM Headquarters coordination.",
-    tags: ["Plasma Processing", "Thermal Spray Coatings", "Surface Engineering"],
+    location: "CSIR-IMMT Bhubaneswar",
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -127,8 +127,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Joint Secretary supporting secretarial records, technical sessions, and mineral processing research colloquia.",
-    tags: ["Mineral Beneficiation", "Iron Ore Processing"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -139,8 +139,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Joint Secretary coordinating advanced materials research symposia, youth awards, and chapter communications.",
-    tags: ["Severe Plastic Deformation", "Advanced Alloys", "Technical Symposia"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -151,8 +151,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Joint Secretary assisting in membership drives, digital registries, and young researcher programs.",
-    tags: ["Hydrometallurgy", "Strategic Metals", "Membership Drives"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -163,8 +163,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "treasurer@iimbhubaneswar.in",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Honorary Treasurer administering statutory financial ledgers, audited accounts, banking operations, and chapter activity allocations.",
-    tags: ["Diamond Films", "Materials Science", "Statutory Treasury"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -175,8 +175,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Assisting the treasury desk in financial reconciliations, member subscriptions, and conference accounts.",
-    tags: ["Process Metallurgy", "Treasury Operations"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -187,20 +187,20 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Executive Council Member contributing to advanced magnetic materials and electronic ceramics research initiatives.",
-    tags: ["Magnetic Materials", "Functional Ceramics"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
     name: "Shri S N Das",
     role: "EC Member",
     category: "Executive Member",
-    title: "Executive Representative",
+    title: "Executive",
     institution: "NALCO",
     email: "",
-    location: "NALCO Corporate Office / Smelter",
-    bio: "Executive Council Member representing primary aluminium manufacturing, industrial standards, and corporate partnerships.",
-    tags: ["Aluminium Smelting", "Industrial Operations"],
+    location: "NALCO",
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -211,8 +211,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Senior council member providing counsel on mineral characterization, hydrometallurgical recovery, and chapter conventions.",
-    tags: ["Mineralogy", "Extractive Metallurgy"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -223,8 +223,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Executive Council Member driving mineral engineering innovations and regional heavy-industry outreach.",
-    tags: ["Mineral Processing", "Industrial Metallurgy"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -235,8 +235,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Executive Council Member specializing in chemical metallurgy and material kinetics.",
-    tags: ["Chemical Metallurgy", "Process Engineering"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -247,8 +247,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Executive Council Member actively engaged in strategic mineral beneficiation and design engineering.",
-    tags: ["Design & Fabrication", "Mineral Technology"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -259,8 +259,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Distinguished veteran metallurgist mentoring young metallurgists and overseeing technical proceedings.",
-    tags: ["Mineral Processing", "Resource Valorization"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -270,9 +270,9 @@ export const committeeMembers: Officer[] = [
     title: "Professor",
     institution: "IIT Bhubaneswar",
     email: "",
-    location: "School of MMS, IIT Bhubaneswar",
-    bio: "Academic council representative connecting student affiliates and promoting collegiate metallurgical research.",
-    tags: ["Extractive Metallurgy", "Academic Outreach"],
+    location: "IIT Bhubaneswar",
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -283,8 +283,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Executive Council Member spearheading biomaterials, corrosion science, and sustainable materials research.",
-    tags: ["Corrosion Science", "Surface Metallurgy"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -295,20 +295,20 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Executive Council Member steering advanced materials characterization, synchrotron analysis, and thin films.",
-    tags: ["Synchrotron Studies", "Thin Films"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
     name: "Dr. J. N. Rath",
     role: "EC Member",
     category: "Executive Member",
-    title: "Executive Council Member",
+    title: "Council Member",
     institution: "IIM Bhubaneswar Chapter",
     email: "",
-    location: "Bhubaneswar, Odisha",
-    bio: "Council Member contributing to regional chapter activities, AGM arrangements, and professional development.",
-    tags: ["Council Governance", "Professional Outreach"],
+    location: "Bhubaneswar",
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -319,20 +319,20 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Executive Council Member championing sustainable hydrometallurgy, waste remediation, and industrial recycling.",
-    tags: ["Hydrometallurgy", "Waste Valorization"],
+    bio: "",
+    tags: [],
     image: ""
   },
   {
     name: "Dr. P. R. Choudhury",
     role: "EC Member",
     category: "Executive Member",
-    title: "Executive Representative",
+    title: "Executive",
     institution: "NALCO",
     email: "",
-    location: "NALCO Smelter & Power Complex",
-    bio: "Executive Council Member bridging corporate aluminium manufacturing and chapter technical initiatives.",
-    tags: ["Aluminium Refining", "Industrial Technology"],
+    location: "NALCO",
+    bio: "",
+    tags: [],
     image: ""
   },
   {
@@ -343,8 +343,8 @@ export const committeeMembers: Officer[] = [
     institution: "CSIR-IMMT Bhubaneswar",
     email: "",
     location: "CSIR-IMMT Bhubaneswar",
-    bio: "Executive Council Member contributing to mineral beneficiation, flotation physics, and particulate materials.",
-    tags: ["Mineral Flotation", "Particulate Processing"],
+    bio: "",
+    tags: [],
     image: ""
   }
 ];
