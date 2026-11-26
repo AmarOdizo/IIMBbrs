@@ -208,7 +208,7 @@ export default function AdminPage() {
     try {
       if (t) localStorage.setItem('iimbbsr_admin_token', t);
       else localStorage.removeItem('iimbbsr_admin_token');
-    } catch {}
+    } catch { }
   };
 
   const setAdminUser = (u: AdminUser | null) => {
@@ -216,7 +216,7 @@ export default function AdminPage() {
     try {
       if (u) localStorage.setItem('iimbbsr_admin_user', JSON.stringify(u));
       else localStorage.removeItem('iimbbsr_admin_user');
-    } catch {}
+    } catch { }
   };
 
   // Login form state
@@ -945,7 +945,7 @@ export default function AdminPage() {
                   onChange={(e) => setLoginEmail(e.target.value)}
                   placeholder="admin@iimbhubaneswar.in"
                   className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
-                suppressHydrationWarning
+                  suppressHydrationWarning
                 />
               </div>
 
@@ -961,7 +961,7 @@ export default function AdminPage() {
                   onChange={(e) => setLoginPassword(e.target.value)}
                   placeholder="••••••••"
                   className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
-                suppressHydrationWarning
+                  suppressHydrationWarning
                 />
               </div>
 
@@ -1019,221 +1019,174 @@ export default function AdminPage() {
 
   // --- AUTHENTICATED CONSOLE ---
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
-      {/* Top Affiliate Micro-bar */}
-      <div className="bg-slate-950 border-b border-slate-800 text-slate-300 text-[10px] sm:text-xs tracking-wider uppercase font-medium">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 truncate">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
-            <span className="font-semibold text-slate-200 truncate">THE INDIAN INSTITUTE OF METALS • BHUBANESWAR CHAPTER</span>
-            <span className="hidden md:inline text-slate-600">|</span>
-            <span className="hidden md:inline text-slate-400">CSIR-IMMT CAMPUS, ACHARYA VIHAR</span>
-          </div>
-          <div className="hidden sm:flex items-center gap-3 text-slate-400 text-[10px] shrink-0">
-            <span>AFFILIATED TO IIM HEAD OFFICE, KOLKATA (IIM-INDIA.NET)</span>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-100 text-slate-900 flex">
+      {/* Mobile Sidebar Backdrop */}
+      {mobileSidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs md:hidden"
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
 
-      {/* Main Header Navigation */}
-      <header className="relative bg-slate-900 border-b border-slate-800 text-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
-          {/* Brand Logo & Titles */}
-          <div className="flex items-center gap-3 sm:gap-4">
-            <Link
-              href="/"
-              title="Open Public Site"
-              target="_blank"
-              className="bg-white p-1.5 sm:p-2 rounded-xl shadow-sm border border-slate-200/20 hover:scale-105 transition-transform shrink-0 flex items-center justify-center"
-            >
-              <Image
-                src="/assets/images/logo1.svg"
-                alt="IIM Bhubaneswar Chapter Official Logo"
-                width={140}
-                height={48}
-                className="h-9 sm:h-11 w-auto object-contain"
-                style={{ width: 'auto', height: 'auto' }}
-                priority
-              />
-            </Link>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-bold text-sm sm:text-base tracking-tight text-white leading-tight">
-                  The Indian Institute of Metals
+      {/* Sidebar: Fixed on Desktop, Drawer on Mobile */}
+      <aside
+        id="admin-tabs-bar"
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 text-white flex flex-col justify-between transition-transform duration-300 ease-in-out md:translate-x-0 ${
+          mobileSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+        }`}
+      >
+        <div className="flex flex-col flex-1 min-h-0">
+          {/* Sidebar Header / Brand */}
+          <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+            <Link href="/" target="_blank" className="flex items-center gap-3 min-w-0 group" title="Open Public Website">
+              <div className="bg-white p-1.5 rounded-xl shadow-xs shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Image
+                  src="/assets/images/logo1.svg"
+                  alt="IIM Logo"
+                  width={34}
+                  height={34}
+                  className="h-7 w-auto object-contain"
+                />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="font-bold text-sm text-white tracking-tight truncate leading-tight group-hover:text-primary transition-colors">
+                  IIM Bhubaneswar
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-semibold tracking-wider uppercase hidden sm:inline">
+                <span className="text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
                   Admin Console
                 </span>
               </div>
-              <p className="text-[11px] sm:text-xs text-slate-400 leading-tight">
-                Bhubaneswar Chapter Secretariat • Council Operations
-              </p>
-            </div>
-          </div>
-
-          {/* Right Action Area */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <Link
-              href="/"
-              target="_blank"
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-semibold border border-white/10 transition"
-              title="Preview public chapter portal"
-            >
-              <span>View Public Portal</span>
-              <ExternalLink className="w-3.5 h-3.5" />
             </Link>
-
-            <div className="hidden sm:flex flex-col text-right px-2.5 py-1 bg-white/5 rounded-xl border border-white/5">
-              <span className="text-xs font-semibold text-white leading-tight">{adminUser?.name || 'Administrator'}</span>
-              <span className="text-[10px] text-amber-400 leading-tight">{adminUser?.designation || adminUser?.role || 'Super Admin'}</span>
-            </div>
-
+            {/* Mobile close button */}
             <button
-              id="admin-logout-btn"
-              onClick={handleLogout}
-              className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 active:from-rose-800 active:to-rose-900 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 cursor-pointer touch-manipulation select-none"
-              title="Sign Out / Logout of Admin Console"
+              onClick={() => setMobileSidebarOpen(false)}
+              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 md:hidden cursor-pointer"
+              aria-label="Close Sidebar"
             >
-              <LogOut className="w-4 h-4 shrink-0" />
-              <span>Sign Out</span>
+              <X className="w-5 h-5" />
             </button>
           </div>
-        </div>
 
-      </header>
-
-      {/* Chapter Secretariat Banner Section (Above Tabs) */}
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
-        {/* Feedback Alert Banner */}
-        {feedback && (
-          <div
-            className={`p-4 rounded-xl flex items-center gap-2.5 text-sm shadow-sm transition-all mb-6 ${
-              feedback.type === 'success'
-                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                : 'bg-rose-50 text-rose-800 border border-rose-200'
-            }`}
-          >
-            {feedback.type === 'success' ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-            ) : (
-              <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
-            )}
-            <span>{feedback.message}</span>
-          </div>
-        )}
-
-        {/* ================= PRIMARY CHAPTER SECRETARIAT BANNER (EXECUTIVE APEX CONSOLE) ================= */}
-        <section aria-label="Official Chapter Banner" className="relative rounded-3xl bg-gradient-to-r from-[#08111e] via-[#0e1c33] to-[#08111e] border border-amber-500/30 shadow-[0_12px_40px_rgba(2,6,23,0.35)] overflow-hidden">
-          {/* Top hairline gold metallic accent */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400/80 to-transparent"></div>
-          {/* Subtle ambient light blooms */}
-          <div className="absolute -top-16 -left-16 w-52 h-52 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-          <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
-
-          <div className="relative z-10 p-5 sm:p-7 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            {/* Left: Official Emblem & High-Authority Titles */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-              <div className="bg-white p-3 sm:p-3.5 rounded-2xl shadow-xl border-2 border-amber-400/30 ring-1 ring-black/10 shrink-0 flex items-center justify-center hover:scale-[1.02] transition-transform">
-                <Image
-                  src="/assets/images/logo1.svg"
-                  alt="The Indian Institute of Metals Crest"
-                  width={160}
-                  height={56}
-                  className="h-11 sm:h-14 w-auto object-contain"
-                  style={{ width: 'auto', height: 'auto' }}
-                  priority
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                {/* Government / Secretariat Meta Bar */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Official Secretariat Console</span>
-                  </span>
-                  <span className="text-white/20">•</span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] sm:text-[11px] font-semibold flex items-center gap-1.5 shadow-xs">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Council Active Session 2026</span>
-                  </span>
-                </div>
-
-                {/* Primary Institutional Title */}
-                <h1 className="text-xl sm:text-2xl lg:text-[26px] font-bold tracking-tight text-white leading-tight">
-                  The Indian Institute of Metals • Bhubaneswar Chapter
-                </h1>
-
-                {/* Subtitle / Charter Description */}
-                <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                  Secretariat terminal for Member Records, Applications, Symposia (AHSS 2026), Events, Circulars &amp; Inquiries.
-                </p>
-              </div>
+          {/* Navigation Links */}
+          <nav className="p-3 space-y-1 overflow-y-auto flex-1">
+            <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase text-slate-500">
+              Management Modules
             </div>
-
-            {/* Right: Dignified Secretariat Badges */}
-            <div className="flex flex-wrap lg:flex-col items-start lg:items-end gap-2 shrink-0">
-              <div className="px-3.5 py-1.5 rounded-xl bg-white/[0.06] backdrop-blur-md border border-white/10 flex items-center gap-2 text-xs text-slate-200 shadow-sm">
-                <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span className="font-medium">CSIR-IMMT Campus, BBS</span>
-              </div>
-              <div className="px-3.5 py-1.5 rounded-xl bg-white/[0.06] backdrop-blur-md border border-white/10 flex items-center gap-2 text-xs text-slate-300 shadow-sm">
-                <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span>Affiliated to IIM HQ, Kolkata</span>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      {/* Full-Width Sticky Sub-Navbar: Located right under Banner, Locks cleanly at TOP (top-0) under Browser Search on Scroll */}
-      <div
-        id="admin-tabs-bar"
-        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all mt-6 h-14 flex items-center"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-3 overflow-x-auto scrollbar-none">
-          <nav className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none">
-            {[
-              { id: 'overview', label: 'Overview', icon: BarChart3 },
-              { id: 'members', label: 'Members', icon: Users },
-              { id: 'applications', label: 'Applications', icon: FileCheck },
-              { id: 'events', label: 'Events', icon: Calendar },
-              { id: 'symposium', label: 'Symposium 2026', icon: Ticket },
-              { id: 'news', label: 'News & Circulars', icon: Newspaper },
-              { id: 'gallery', label: 'Gallery', icon: ImageIcon },
-              { id: 'inquiries', label: 'Inquiries', icon: Mail },
-            ].map((t) => {
+            {ADMIN_TABS.map((t) => {
               const Icon = t.icon;
               const active = activeTab === t.id;
               return (
                 <button
                   key={t.id}
                   onClick={() => handleSwitchTab(t.id as TabType)}
-                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition shrink-0 flex items-center gap-2 whitespace-nowrap cursor-pointer select-none ${
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition cursor-pointer select-none text-left ${
                     active
-                      ? 'bg-primary text-white shadow-sm'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                      ? 'bg-primary text-white shadow-md'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800/70'
                   }`}
                 >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  <span>{t.label}</span>
+                  <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-white' : 'text-slate-400'}`} />
+                  <span className="truncate">{t.label}</span>
                 </button>
               );
             })}
           </nav>
-          <button
-            onClick={handleLogout}
-            className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 shrink-0 shadow-2xs cursor-pointer select-none"
-            title="Sign Out of Admin Console"
-          >
-            <LogOut className="w-3.5 h-3.5 shrink-0" />
-            <span className="hidden sm:inline">Sign Out</span>
-          </button>
         </div>
-      </div>
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+        {/* Sidebar Footer */}
+        <div className="p-3 border-t border-slate-800 bg-slate-950/60 space-y-2">
+          <Link
+            href="/"
+            target="_blank"
+            className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition"
+          >
+            <span className="flex items-center gap-2">
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Public Website</span>
+            </span>
+            <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-400">↗</span>
+          </Link>
+
+          <div className="px-3 py-2 rounded-xl bg-slate-800/40 border border-slate-700/50 flex items-center justify-between">
+            <div className="flex flex-col min-w-0 pr-2">
+              <span className="text-xs font-semibold text-white truncate">{adminUser?.name || 'Administrator'}</span>
+              <span className="text-[10px] text-amber-400 truncate">{adminUser?.role || 'Super Admin'}</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="p-1.5 rounded-lg bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white transition cursor-pointer"
+              title="Sign Out"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-1 md:pl-64 flex flex-col min-w-0 min-h-screen">
+        {/* Top Header Bar */}
+        <header className="h-16 bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 shadow-xs">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileSidebarOpen(true)}
+              className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 md:hidden cursor-pointer"
+              aria-label="Open Sidebar"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-slate-400">Admin</span>
+              <span className="text-xs text-slate-300">/</span>
+              <h1 className="text-sm sm:text-base font-bold text-slate-900 capitalize">
+                {ADMIN_TABS.find((t) => t.id === activeTab)?.label || activeTab}
+              </h1>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/"
+              target="_blank"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition"
+            >
+              <span>View Public Portal</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </Link>
+
+            <button
+              id="admin-logout-btn"
+              onClick={handleLogout}
+              className="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+              title="Sign Out of Admin Console"
+            >
+              <LogOut className="w-3.5 h-3.5 shrink-0" />
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </header>
+
+        {/* Page Content Body */}
+        <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+          {/* Feedback Alert Banner */}
+          {feedback && (
+            <div
+              className={`p-4 rounded-xl flex items-center gap-2.5 text-sm shadow-sm transition-all ${
+                feedback.type === 'success'
+                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                  : 'bg-rose-50 text-rose-800 border border-rose-200'
+              }`}
+            >
+              {feedback.type === 'success' ? (
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+              ) : (
+                <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+              )}
+              <span>{feedback.message}</span>
+            </div>
+          )}
+
+          <main className="flex-1 w-full flex flex-col gap-6">
 
         {/* Loading Spinner */}
         {loadingData ? (
@@ -1394,11 +1347,10 @@ export default function AdminPage() {
                               <td className="px-4 py-3 text-slate-500">{m.city}</td>
                               <td className="px-4 py-3">
                                 <span
-                                  className={`px-2 py-0.5 font-semibold text-[10px] rounded-full ${
-                                    m.status === 'Active'
-                                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                      : 'bg-slate-100 text-slate-500'
-                                  }`}
+                                  className={`px-2 py-0.5 font-semibold text-[10px] rounded-full ${m.status === 'Active'
+                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                    : 'bg-slate-100 text-slate-500'
+                                    }`}
                                 >
                                   {m.status}
                                 </span>
@@ -1479,13 +1431,12 @@ export default function AdminPage() {
                             </td>
                             <td className="px-4 py-3">
                               <span
-                                className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                                  app.verificationStatus === 'Approved'
-                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                    : app.verificationStatus === 'Ready for Seal'
+                                className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${app.verificationStatus === 'Approved'
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  : app.verificationStatus === 'Ready for Seal'
                                     ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
                                     : 'bg-amber-50 text-amber-700 border border-amber-200'
-                                }`}
+                                  }`}
                               >
                                 {app.verificationStatus}
                               </span>
@@ -1541,11 +1492,10 @@ export default function AdminPage() {
                             {e.eventType}
                           </span>
                           <span
-                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                              e.status === 'Upcoming'
-                                ? 'bg-emerald-50 text-emerald-700'
-                                : 'bg-slate-100 text-slate-600'
-                            }`}
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${e.status === 'Upcoming'
+                              ? 'bg-emerald-50 text-emerald-700'
+                              : 'bg-slate-100 text-slate-600'
+                              }`}
                           >
                             {e.status}
                           </span>
@@ -1593,21 +1543,19 @@ export default function AdminPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setSympSubTab('delegates')}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
-                        sympSubTab === 'delegates'
-                          ? 'bg-slate-900 text-white'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      }`}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${sympSubTab === 'delegates'
+                        ? 'bg-slate-900 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
                     >
                       Registered Delegates ({registrationsList.length})
                     </button>
                     <button
                       onClick={() => setSympSubTab('papers')}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
-                        sympSubTab === 'papers'
-                          ? 'bg-slate-900 text-white'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      }`}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${sympSubTab === 'papers'
+                        ? 'bg-slate-900 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
                     >
                       Technical Papers ({papersList.length})
                     </button>
@@ -1676,11 +1624,10 @@ export default function AdminPage() {
                               <td className="px-4 py-3 text-slate-600">{p.correspondingAuthor?.institution || 'N/A'}</td>
                               <td className="px-4 py-3">
                                 <span
-                                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                                    p.reviewStatus === 'Accepted'
-                                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                      : 'bg-amber-50 text-amber-700 border border-amber-200'
-                                  }`}
+                                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${p.reviewStatus === 'Accepted'
+                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                    : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                    }`}
                                 >
                                   {p.reviewStatus}
                                 </span>
@@ -1738,11 +1685,10 @@ export default function AdminPage() {
                             <td className="px-4 py-3 text-slate-500 line-clamp-2 max-w-sm">{n.summary}</td>
                             <td className="px-4 py-3">
                               <span
-                                className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                                  n.isPublished !== false
-                                    ? 'bg-emerald-50 text-emerald-700'
-                                    : 'bg-slate-100 text-slate-500'
-                                }`}
+                                className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${n.isPublished !== false
+                                  ? 'bg-emerald-50 text-emerald-700'
+                                  : 'bg-slate-100 text-slate-500'
+                                  }`}
                               >
                                 {n.isPublished !== false ? 'Published' : 'Draft'}
                               </span>
@@ -1866,11 +1812,10 @@ export default function AdminPage() {
                             <td className="px-4 py-3 text-slate-600 line-clamp-2 max-w-xs">{inq.messageBody}</td>
                             <td className="px-4 py-3">
                               <span
-                                className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                                  inq.status === 'Resolved'
-                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                    : 'bg-amber-50 text-amber-700 border border-amber-200'
-                                }`}
+                                className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${inq.status === 'Resolved'
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                  }`}
                               >
                                 {inq.status}
                               </span>
@@ -1897,43 +1842,45 @@ export default function AdminPage() {
           </>
         )}
       </main>
-
-      {/* Institutional Admin Footer */}
-      <footer className="mt-auto border-t border-slate-200 bg-white py-4 px-4 sm:px-6 lg:px-8 text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5 text-center sm:text-left">
-            <div className="bg-slate-100 p-1 rounded-md border border-slate-200">
-              <Image
-                src="/assets/images/logo1.svg"
-                alt="IIM Logo"
-                width={28}
-                height={28}
-                className="h-5 w-auto object-contain"
-              />
-            </div>
-            <span>
-              © 2025–2026 <strong>The Indian Institute of Metals (IIM) — Bhubaneswar Chapter</strong>. Regional Secretariat: CSIR-IMMT, Bhubaneswar.
-            </span>
-          </div>
-          <div className="flex items-center gap-4 text-[11px] text-slate-400">
-            <span>Affiliated to IIM Head Office, Kolkata</span>
-            <span>•</span>
-            <Link href="/" target="_blank" className="text-primary hover:underline font-semibold flex items-center gap-1">
-              <span>View Public Portal</span>
-              <ExternalLink className="w-3 h-3" />
-            </Link>
-            <span>•</span>
-            <button
-              onClick={handleLogout}
-              className="text-rose-600 hover:text-rose-700 font-bold hover:underline flex items-center gap-1 cursor-pointer"
-              title="Sign Out Session"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span>Sign Out</span>
-            </button>
-          </div>
         </div>
-      </footer>
+
+        {/* Institutional Admin Footer */}
+        <footer className="mt-auto border-t border-slate-200 bg-white py-4 px-4 sm:px-6 lg:px-8 text-xs text-slate-500">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 text-center sm:text-left">
+              <div className="bg-slate-100 p-1 rounded-md border border-slate-200">
+                <Image
+                  src="/assets/images/logo1.svg"
+                  alt="IIM Logo"
+                  width={28}
+                  height={28}
+                  className="h-5 w-auto object-contain"
+                />
+              </div>
+              <span>
+                © 2025–2026 <strong>The Indian Institute of Metals (IIM) — Bhubaneswar Chapter</strong>. Regional Secretariat: CSIR-IMMT, Bhubaneswar.
+              </span>
+            </div>
+            <div className="flex items-center gap-4 text-[11px] text-slate-400">
+              <span>Affiliated to IIM Head Office, Kolkata</span>
+              <span>•</span>
+              <Link href="/" target="_blank" className="text-primary hover:underline font-semibold flex items-center gap-1">
+                <span>View Public Portal</span>
+                <ExternalLink className="w-3 h-3" />
+              </Link>
+              <span>•</span>
+              <button
+                onClick={handleLogout}
+                className="text-rose-600 hover:text-rose-700 font-bold hover:underline flex items-center gap-1 cursor-pointer"
+                title="Sign Out Session"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </footer>
+      </div>
 
       {/* ================= MODAL: MEMBER ================= */}
       {showImportModal && (
@@ -2023,11 +1970,10 @@ export default function AdminPage() {
 
             {importStatus && (
               <div
-                className={`p-3 rounded-xl text-xs font-medium ${
-                  importStatus.startsWith('Success')
-                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                    : 'bg-red-50 text-red-800 border border-red-200'
-                }`}
+                className={`p-3 rounded-xl text-xs font-medium ${importStatus.startsWith('Success')
+                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                  : 'bg-red-50 text-red-800 border border-red-200'
+                  }`}
               >
                 {importStatus}
               </div>
