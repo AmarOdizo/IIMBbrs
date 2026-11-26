@@ -158,201 +158,190 @@ export default function ContactForm() {
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      {/* Name & Email Dual Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1.5">
-          <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="fullName">
-            Full Name <span className="text-primary">*</span>
-          </label>
-          <input
-            id="fullName"
-            type="text"
-            placeholder="Enter your full name"
-            value={formData.fullName}
-            onChange={handleInputChange}
-            required
-            disabled={loading}
-            className="w-full px-3.5 py-2.5 rounded bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all border border-transparent focus:border-primary/30"
-          />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="email">
-            Email Address <span className="text-primary">*</span>
-          </label>
-          <input
-            id="email"
-            type="email"
-            placeholder="name@example.com"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            disabled={loading}
-            className="w-full px-3.5 py-2.5 rounded bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all border border-transparent focus:border-primary/30"
-          />
-        </div>
-      </div>
+      <form className="space-y-3" onSubmit={handleSubmit}>
+        {/* Name & Email Dual Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-on-surface" htmlFor="fullName">
+                    Full Name <span className="text-primary">*</span>
+                  </label>
+                  <input
+                    id="fullName"
+                    type="text"
+                    placeholder="Enter your full name"
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                    required
+                    disabled={loading}
+                    className="w-full px-3 py-2 rounded-lg bg-surface-container-low text-on-surface text-sm placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all border border-slate-200/60 focus:border-primary/50"
+                  />
+                </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-semibold text-on-surface" htmlFor="email">
+                        Email Address <span className="text-primary">*</span>
+                      </label>
+                      <input
+                        id="email"
+                        type="email"
+                        placeholder="name@example.com"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        disabled={loading}
+                        className="w-full px-3 py-2 rounded-lg bg-surface-container-low text-on-surface text-sm placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all border border-slate-200/60 focus:border-primary/50"
+                      />
+                    </div>
+                </div>
 
-      {/* Phone & Organization Dual Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1.5">
-          <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="phone">
-            Phone Number <span className="text-secondary font-normal">(Optional)</span>
-          </label>
-          <input
-            id="phone"
-            type="tel"
-            placeholder="+91 98765 43210"
-            value={formData.phone}
-            onChange={handleInputChange}
-            disabled={loading}
-            className="w-full px-3.5 py-2.5 rounded bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all border border-transparent focus:border-primary/30"
-          />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="organization">
-            Organization / Institution <span className="text-primary">*</span>
-          </label>
-          <input
-            id="organization"
-            type="text"
-            placeholder="Company, Institute, or College"
-            value={formData.organization}
-            onChange={handleInputChange}
-            required
-            disabled={loading}
-            className="w-full px-3.5 py-2.5 rounded bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all border border-transparent focus:border-primary/30"
-          />
-        </div>
-      </div>
+                {/* Phone & Organization Dual Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="flex flex-col gap-1">
+                          <label className="text-xs font-semibold text-on-surface" htmlFor="phone">
+                            Phone Number <span className="text-secondary font-normal">(Optional)</span>
+                          </label>
+                          <input
+                            id="phone"
+                            type="tel"
+                            placeholder="+91 98765 43210"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            disabled={loading}
+                            className="w-full px-3 py-2 rounded-lg bg-surface-container-low text-on-surface text-sm placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all border border-slate-200/60 focus:border-primary/50"
+                          />
+                        </div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-xs font-semibold text-on-surface" htmlFor="organization">
+                                Organization / Institution <span className="text-primary">*</span>
+                              </label>
+                              <input
+                                id="organization"
+                                type="text"
+                                placeholder="Company or Institute name"
+                                value={formData.organization}
+                                onChange={handleInputChange}
+                                required
+                                disabled={loading}
+                                className="w-full px-3 py-2 rounded-lg bg-surface-container-low text-on-surface text-sm placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all border border-slate-200/60 focus:border-primary/50"
+                              />
+                            </div>
+                        </div>
 
-      {/* Subject Reference */}
-      <div className="flex flex-col gap-1.5">
-        <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="subjectRef">
-          Subject <span className="text-primary">*</span>
-        </label>
-        <input
-          id="subjectRef"
-          type="text"
-          placeholder="Subject of your message"
-          value={formData.subjectRef}
-          onChange={handleInputChange}
-          required
-          disabled={loading}
-          className="w-full px-3.5 py-2.5 rounded bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all border border-transparent focus:border-primary/30"
-        />
-      </div>
+                            {/* Subject */}
+                            <div className="flex flex-col gap-1">
+                              <label className="text-xs font-semibold text-on-surface" htmlFor="subjectRef">
+                                Subject <span className="text-primary">*</span>
+                              </label>
+                              <input
+                                id="subjectRef"
+                                type="text"
+                                placeholder="Subject of your message"
+                                value={formData.subjectRef}
+                                onChange={handleInputChange}
+                                required
+                                disabled={loading}
+                                className="w-full px-3 py-2 rounded-lg bg-surface-container-low text-on-surface text-sm placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all border border-slate-200/60 focus:border-primary/50"
+                              />
+                            </div>
 
-      {/* Message Body */}
-      <div className="flex flex-col gap-1.5">
-        <div className="flex items-center justify-between">
-          <label className="font-label-md text-label-md text-on-surface font-semibold" htmlFor="messageBody">
-            Message <span className="text-primary">*</span>
-          </label>
-          <span className="font-label-sm text-label-sm text-secondary">
-            {formData.messageBody.length} / 2500 characters
-          </span>
-        </div>
-        <textarea
-          id="messageBody"
-          rows={5}
-          maxLength={2500}
-          placeholder="Write your message here..."
-          value={formData.messageBody}
-          onChange={handleInputChange}
-          required
-          disabled={loading}
-          className="w-full px-3.5 py-2.5 rounded bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all resize-y border border-transparent focus:border-primary/30"
-        />
-      </div>
+                            {/* Message Body */}
+                              <div className="flex flex-col gap-1">
+                                <div className="flex items-center justify-between">
+                                    <label className="text-xs font-semibold text-on-surface" htmlFor="messageBody">
+                                      Message <span className="text-primary">*</span>
+                                    </label>
+                                      <span className="text-[11px] text-secondary">
+                                        {formData.messageBody.length} / 2500
+                                      </span>
+                                    </div>
+                                    <textarea
+                                      id="messageBody"
+                                      rows={3}
+                                      maxLength={2500}
+                                      placeholder="Write your message here..."
+                                      value={formData.messageBody}
+                                      onChange={handleInputChange}
+                                      required
+                                      disabled={loading}
+                                      className="w-full px-3 py-2 rounded-lg bg-surface-container-low text-on-surface text-sm placeholder:text-secondary/50 focus:bg-surface-container-lowest focus:outline-none transition-all resize-y border border-slate-200/60 focus:border-primary/50"
+                                    />
+                                </div>
 
-      {/* Technical Attachment Upload Widget (ImageKit Supported) */}
-      <div className="p-4 rounded-lg bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-3 border border-slate-200/50">
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center text-primary shrink-0 shadow-sm">
-            <Paperclip className="w-5 h-5" />
-          </div>
-          <div className="truncate">
-            <span className="font-title-md text-title-md text-on-surface text-sm block">
-              Attach Document / Abstract
-            </span>
-            <span className="font-body-sm text-body-sm text-secondary block truncate">
-              {attachment ? (
-                <span className="text-emerald-700 font-semibold flex items-center gap-1.5">
-                  {attachment.name} ({(attachment.size / 1024).toFixed(1)} KB)
-                  <button
-                    type="button"
-                    onClick={removeAttachment}
-                    className="p-0.5 rounded hover:bg-slate-200 text-rose-500"
-                    title="Remove attachment"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </span>
-              ) : (
-                'PDF, DOCX, ZIP, JPG, PNG (Max 10MB)'
-              )}
-            </span>
-          </div>
-        </div>
+                                    {/* Attachment info (if file attached) */}
+                                    {attachment && (
+                                      <div className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between">
+                                        <span className="flex items-center gap-1.5 truncate">
+                                          <Paperclip className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                          <span className="font-semibold truncate">{attachment.name}</span>
+                                          <span className="text-emerald-600 shrink-0">({(attachment.size / 1024).toFixed(1)} KB)</span>
+                                        </span>
+                                        <button
+                                          type="button"
+                                          onClick={removeAttachment}
+                                          className="text-rose-600 hover:text-rose-800 p-0.5 ml-2"
+                                          title="Remove attachment"
+                                        >
+                                          <X className="w-3.5 h-3.5" />
+                                        </button>
+                                      </div>
+                                    )}
 
-        <label className="cursor-pointer px-3.5 py-1.5 rounded bg-surface-container-lowest text-primary hover:bg-surface-container font-label-md text-label-md font-semibold transition-colors shrink-0 shadow-sm">
-          <span>{attachment ? 'Replace File' : 'Browse Files'}</span>
-          <input
-            type="file"
-            onChange={handleFileChange}
-            disabled={loading}
-            className="hidden"
-            accept=".pdf,.doc,.docx,.zip,.png,.jpg,.jpeg,.webp"
-          />
-        </label>
-      </div>
-
-      {/* Error alert */}
-      {error && (
-        <div className="p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
-          <p className="text-sm">{error}</p>
-        </div>
+                                  {/* Error alert */}
+                                  {error && (
+                                      <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 flex items-start gap-2.5 text-xs">
+                                        <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                                        <p>{error}</p>
+                                      </div>
       )}
 
-      {/* Success alert */}
-      {success && (
-        <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-start gap-3">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-          <div className="flex flex-col gap-1">
-            <span className="font-semibold text-sm">Official Dispatch Transmitted Successfully!</span>
-            <p className="text-sm">
-              Your inquiry has been stored in the database. Docket Reference ID:{' '}
-              <span className="font-mono font-bold text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded">
-                {success.docketId}
-              </span>
-            </p>
-          </div>
-        </div>
+                                      {/* Success alert */}
+                                      {success && (
+                                                <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-start gap-2.5 text-xs">
+                                                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                                                  <div className="flex flex-col gap-0.5">
+                                                    <span className="font-semibold">Message Sent Successfully!</span>
+                                                    <p>
+                                                      Docket Reference:{' '}
+                                                      <span className="font-mono font-bold text-emerald-800 bg-emerald-100 px-1 py-0.5 rounded">
+                                                        {success.docketId}
+                                                      </span>
+                                                    </p>
+                                                  </div>
+                                                </div>
       )}
 
-      {/* Submit Button */}
-      <div className="pt-2 flex flex-col sm:flex-row items-center justify-end gap-4">
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md font-semibold transition-all shadow-md group disabled:opacity-50"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Sending...</span>
-            </>
-          ) : (
-            <>
-              <span>Send Message</span>
-              <Send className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </>
-          )}
-        </button>
-      </div>
-    </form>
-  );
+                                                  {/* Compact Action Bar: Attach Button on left, Submit Button on right */}
+                                                  <div className="pt-1 flex flex-col sm:flex-row items-center justify-between gap-3">
+                                                    <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 hover:border-primary/40 bg-surface-container-low hover:bg-surface-container text-on-surface text-xs font-semibold transition-colors shrink-0 w-full sm:w-auto justify-center">
+                                                      <Paperclip className="w-3.5 h-3.5 text-primary" />
+                                                      <span>{attachment ? 'Change Attachment' : 'Attach File (Optional)'}</span>
+                                                      <input
+                                                        type="file"
+                                                        onChange={handleFileChange}
+                                                        disabled={loading}
+                                                        className="hidden"
+                                                        accept=".pdf,.doc,.docx,.zip,.png,.jpg,.jpeg,.webp"
+                                                      />
+                                                    </label>
+
+                                                    <button
+                                                      type="submit"
+                                                      disabled={loading}
+                                                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-white hover:bg-primary-container font-semibold text-sm transition-all shadow-sm group disabled:opacity-50"
+                                                    >
+                                                      {loading ? (
+                                                        <>
+                                                          <Loader2 className="w-4 h-4 animate-spin" />
+                                                          <span>Sending...</span>
+                                                        </>
+                                                      ) : (
+                                                        <>
+                                                          <span>Send Message</span>
+                                                          <Send className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                                                        </>
+                                                      )}
+                                                    </button>
+                                                  </div>
+                                                </form>
+                                                );
 }
 
