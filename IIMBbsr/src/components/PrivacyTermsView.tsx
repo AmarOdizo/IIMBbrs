@@ -446,22 +446,15 @@ export default function PrivacyTermsView({ initialTab = 'privacy' }: PrivacyTerm
                   </p>
                   <div className="pt-2 space-y-2 text-xs">
                     <a
-                      href={activeTab === 'privacy' ? 'mailto:privacy@iimbhubaneswar.in' : 'mailto:legal@iimbhubaneswar.in'}
+                      href="mailto:iimbhubaneswarchapter@gmail.com"
                       className="flex items-center gap-2 text-on-surface hover:text-primary transition-colors"
                     >
                       <Mail className="w-4 h-4 text-primary shrink-0" />
-                      <span>{activeTab === 'privacy' ? 'privacy@iimbhubaneswar.in' : 'legal@iimbhubaneswar.in'}</span>
-                    </a>
-                    <a
-                      href="mailto:secretariat@iimbhubaneswar.in"
-                      className="flex items-center gap-2 text-on-surface hover:text-primary transition-colors"
-                    >
-                      <Mail className="w-4 h-4 text-primary shrink-0" />
-                      <span>secretariat@iimbhubaneswar.in</span>
+                      <span>iimbhubaneswarchapter@gmail.com</span>
                     </a>
                     <div className="flex items-start gap-2 text-on-surface pt-1">
                       <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                      <span>Materials Division Complex, CSIR-IMMT Campus, Acharya Vihar, Bhubaneswar, Odisha — 751013</span>
+                      <span>Old HEM Building, CSIR - Institute of Minerals &amp; Materials Technology, Bhubaneswar-751013, Odisha, INDIA</span>
                     </div>
                   </div>
                 </div>
@@ -810,7 +803,7 @@ export default function PrivacyTermsView({ initialTab = 'privacy' }: PrivacyTerm
                         </span>
                       </div>
                       <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-                        Formal petitions regarding member data discrepancies, unauthorized communication, or peer review confidentiality inquiries may be lodged via email to <a href="mailto:privacy@iimbhubaneswar.in" className="text-primary hover:underline font-semibold">privacy@iimbhubaneswar.in</a>.
+                        Formal petitions regarding member data discrepancies, unauthorized communication, or peer review confidentiality inquiries may be lodged via email to <a href="mailto:iimbhubaneswarchapter@gmail.com" className="text-primary hover:underline font-semibold">iimbhubaneswarchapter@gmail.com</a>.
                       </p>
                       <div className="text-xs text-secondary pt-2 border-t border-surface-variant/10">
                         Formal complaints acknowledged within <strong>48 hours</strong>; audited report delivered within <strong>15 statutory working days</strong>.
@@ -945,7 +938,7 @@ export default function PrivacyTermsView({ initialTab = 'privacy' }: PrivacyTerm
                     </div>
                     <div className="space-y-4 text-sm sm:text-base text-on-surface-variant leading-relaxed">
                       <p>
-                        5.1. Registration cancellations must be communicated in writing to <em>finance@iimbhubaneswar.in</em>. Refunds will be settled under the strict timeline calibrated below:
+                        5.1. Registration cancellations must be communicated in writing to <em>iimbhubaneswarchapter@gmail.com</em>. Refunds will be settled under the strict timeline calibrated below:
                       </p>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div className="bg-surface-container-low p-4 rounded-xl flex flex-col justify-between">

@@ -22,7 +22,7 @@ const FAQS = [
   {
     question: 'How do I dispatch physical specimen samples or bound monographs?',
     answer:
-      'All physical specimens intended for metallographic review or exhibition must be marked with sender details and dispatched via registered Speed Post to: "Attention: Hony. Secretary (Dr. Ajit Panigrahi), IIM Bhubaneswar Chapter, Old HEM Building, CSIR - Institute of Minerals & Materials Technology, Bhubaneswar — 751013, Odisha, INDIA." Please pre-notify us via email (iimbhubaneswarchapter@gmail.com) with the parcel tracking docket.',
+      'All physical specimens intended for metallographic review or exhibition must be marked with sender details and dispatched via registered Speed Post to: "Attention: Hony. Secretary (Dr. Ajit Panigrahi), IIM Bhubaneswar Chapter, Old HEM Building, CSIR - Institute of Minerals & Materials Technology, Bhubaneswar — 751013, Odisha, INDIA." Please pre-notify us via email (iimbhubaneswarchapter@gmail.com) with the postal tracking number.',
   },
   {
     question: 'What is the standard turnaround time for membership endorsements?',
@@ -37,7 +37,7 @@ const FAQS = [
   {
     question: 'How can industrial entities sponsor regional students & internships?',
     answer:
-      'Industrial partners can establish an endowed fellowship or provide travel sponsorship for student delegations attending National Metallurgists’ Day (NMD-ATM) by submitting an MoU proposal to liaison@iimbhubaneswar.in. Corporate sponsorships are recognized in chapter circulars and conference proceedings.',
+      'Industrial partners can establish an endowed fellowship or provide travel sponsorship for student delegations attending National Metallurgists’ Day (NMD-ATM) by submitting an inquiry to iimbhubaneswarchapter@gmail.com. Corporate sponsorships are recognized in chapter circulars and conference proceedings.',
   },
 ];
 

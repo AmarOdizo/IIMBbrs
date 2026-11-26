@@ -50,7 +50,7 @@ function MembersPageContent() {
             <div>
               <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm uppercase tracking-widest mb-3">
                 <Sparkles className="w-3.5 h-3.5 text-primary" />
-                <span>Chapter Fraternal Portal</span>
+                <span>Chapter Membership Portal</span>
               </div>
               <h1 className="font-headline-lg text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface tracking-tight">
                 {activeTab === 'join'
@@ -59,7 +59,7 @@ function MembersPageContent() {
               </h1>
               <p className="font-body-md text-sm sm:text-base text-on-surface-variant mt-2 max-w-2xl leading-relaxed">
                 {activeTab === 'join'
-                  ? 'Explore our 5 membership cadre tiers, review the 4-step induction roadmap, or submit your regional chapter transfer and enrolment application.'
+                  ? 'Explore our 5 membership categories, review the enrollment roadmap, or submit your regional chapter transfer and application.'
                   : 'Explore verified Life Members, Fellows, Student Scholars, and Corporate Partners of The Indian Institute of Metals • Bhubaneswar Chapter.'}
               </p>
             </div>

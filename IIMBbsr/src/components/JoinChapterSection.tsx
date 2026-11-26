@@ -257,7 +257,7 @@ export default function JoinChapterSection() {
               <BadgeCheck className="w-5 h-5" />
             </div>
             <div className="flex flex-col">
-              <span className="font-title-md text-sm font-bold text-on-surface">5 Cadre Tiers</span>
+              <span className="font-title-md text-sm font-bold text-on-surface">5 Membership Grades</span>
               <span className="font-body-sm text-xs text-secondary">Student to Corporate Patron</span>
             </div>
           </div>
@@ -348,10 +348,10 @@ export default function JoinChapterSection() {
               Classifications &amp; Entitlements
             </span>
             <h3 className="font-headline-lg text-2xl sm:text-3xl font-bold text-on-surface mt-1">
-              Choose Your Cadre of Affiliation
+              Choose Your Membership Category
             </h3>
             <p className="font-body-md text-sm text-secondary mt-1 max-w-2xl">
-              From undergraduate student metallurgists to primary mineral conglomerates, select the grade calibrated to your professional station.
+              From undergraduate student metallurgists to senior industrial leaders, select the membership grade suitable for your professional stage.
             </p>
           </div>
           <div className="flex items-center gap-2 text-secondary text-xs">
@@ -494,7 +494,7 @@ export default function JoinChapterSection() {
             Voices of the Chapter
           </span>
           <h3 className="font-headline-lg text-2xl sm:text-3xl font-bold text-on-surface mt-1">
-            Reflections from Our Regional Cadre
+            Member Perspectives &amp; Experiences
           </h3>
           <p className="font-body-md text-sm text-secondary mt-1 max-w-2xl">
             Hear from principal investigators, steel manufacturing specialists, and student fellows who anchor their professional development in IIM Bhubaneswar.
@@ -590,8 +590,8 @@ export default function JoinChapterSection() {
                   <Mail className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-on-surface block text-sm">Official Secretariat Correspondence</strong>
-                    <a className="text-primary hover:underline font-mono" href="mailto:membership@iimbhubaneswar.in">
-                      membership@iimbhubaneswar.in
+                    <a className="text-primary hover:underline font-mono" href="mailto:iimbhubaneswarchapter@gmail.com">
+                      iimbhubaneswarchapter@gmail.com
                     </a>
                   </div>
                 </div>
@@ -600,7 +600,7 @@ export default function JoinChapterSection() {
                   <Phone className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-on-surface block text-sm">Secretariat Liaison Phone</strong>
-                    <span className="text-secondary font-mono">+91 (0674) 237-1240 / 237-1400 (Ext. 402)</span>
+                    <span className="text-secondary font-mono">+91 - 8847834015</span>
                   </div>
                 </div>
               </div>

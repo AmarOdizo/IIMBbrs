@@ -110,7 +110,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
             )}
             <span className="inline-flex items-center gap-1 text-primary font-label-sm text-label-sm font-semibold uppercase tracking-wider bg-primary-fixed/40 px-2.5 py-1 rounded">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              Gazetted Notice
+              Official Notice
             </span>
           </div>
 
@@ -121,7 +121,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           <div className="flex flex-wrap items-center gap-6 py-3 px-4 bg-surface-container-low rounded-xl text-xs text-secondary border border-slate-200/50">
             <div className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4 text-primary" />
-              <span>Gazetted: {formattedDate}</span>
+              <span>Published: {formattedDate}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <User className="w-4 h-4 text-primary" />
@@ -177,7 +177,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-container text-on-primary font-label-md text-sm rounded-xl font-semibold transition-all shadow-sm shrink-0"
             >
               <Download className="w-4 h-4" />
-              <span>Download PDF Docket</span>
+              <span>Download PDF Document</span>
             </a>
           </div>
         )}
@@ -185,7 +185,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         {/* Council Endorsement Footer */}
         <div className="bg-surface-container-low p-6 rounded-xl border border-slate-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-secondary">
           <div className="flex flex-col">
-            <span className="font-bold text-on-surface text-sm">Secretariat Seal Applied</span>
+            <span className="font-bold text-on-surface text-sm">Official Chapter Circular</span>
             <span>Recorded in Chapter Archives · The Indian Institute of Metals, Bhubaneswar</span>
           </div>
 

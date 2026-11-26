@@ -352,11 +352,11 @@ export default function NewsList() {
               <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded bg-secondary-container/40 text-on-secondary-fixed mb-4">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                 <span className="font-label-sm text-label-sm uppercase tracking-widest font-semibold">
-                  OFFICIAL DISPATCH &amp; GAZETTE · EST. 1978
+                  OFFICIAL ANNOUNCEMENTS · EST. 1978
                 </span>
               </div>
               <h1 className="font-display-lg text-headline-lg sm:text-display-lg text-on-surface tracking-tight mb-4 leading-tight">
-                Chapter News, Technical Circulars &amp; Gazetted Notices
+                Chapter News, Technical Circulars &amp; Notices
               </h1>
               <p className="font-body-lg text-body-lg text-secondary max-w-3xl leading-relaxed">
                 Authoritative bulletins on metallurgical research frontiers, council resolutions, call-for-papers, award notifications, and policy memorandums across Odisha&apos;s industrial materials ecosystem.
@@ -385,7 +385,7 @@ export default function NewsList() {
                   <span className="font-title-lg text-title-lg text-primary font-semibold">Vol. 48</span>
                 </div>
                 <div className="bg-surface-container-lowest p-3 rounded-lg shadow-xs">
-                  <span className="font-label-sm text-label-sm uppercase text-secondary block mb-0.5">Last Gazetted</span>
+                  <span className="font-label-sm text-label-sm uppercase text-secondary block mb-0.5">Last Updated</span>
                   <span className="font-label-md text-label-md text-on-surface font-semibold pt-1 block truncate">
                     {lastGazettedDate}
                   </span>
@@ -491,7 +491,7 @@ export default function NewsList() {
                 <div>
                   <div className="flex flex-wrap items-center gap-2 mb-4">
                     <span className="px-2.5 py-1 rounded bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-wider font-semibold">
-                      GAZETTED · {leadStory.circularNo || '48/04'}
+                      CIRCULAR · {leadStory.circularNo || '48/04'}
                     </span>
                     {leadStory.publishedAt && (
                       <span className="px-2.5 py-1 rounded bg-secondary/30 text-surface-variant font-label-sm text-label-sm uppercase tracking-wider font-mono">
@@ -597,22 +597,22 @@ export default function NewsList() {
             <div className="flex items-center justify-between pb-2 border-b border-slate-200">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-                <h3 className="text-lg font-bold text-slate-900">Recent Gazetted Circulars &amp; Dispatches</h3>
+                <h3 className="text-lg font-bold text-slate-900">Recent Circulars &amp; Announcements</h3>
               </div>
               <span className="text-xs font-mono text-slate-600 bg-slate-100 px-3 py-1 rounded-md font-semibold">
-                {filteredNews.length} {filteredNews.length === 1 ? 'Dispatch' : 'Dispatches'} Live
+                {filteredNews.length} {filteredNews.length === 1 ? 'Notice' : 'Notices'} Live
               </span>
             </div>
 
             {loading ? (
               <div className="py-20 flex flex-col items-center justify-center gap-3 text-slate-500">
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                <p className="font-body-sm text-body-sm">Fetching gazette notifications from MongoDB...</p>
+                <p className="font-body-sm text-body-sm">Loading announcements...</p>
               </div>
             ) : filteredNews.length === 0 ? (
               <div className="py-16 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 p-8 flex flex-col items-center justify-center">
                 <FileText className="w-10 h-10 text-primary/40 mb-3" />
-                <h4 className="text-base font-bold text-slate-800">No Dispatches Found</h4>
+                <h4 className="text-base font-bold text-slate-800">No Notices Found</h4>
                 <p className="text-xs text-slate-500 mt-1 max-w-sm">
                   {searchQuery
                     ? `No circulars matched "${searchQuery}". Try different search terms.`
@@ -684,11 +684,11 @@ export default function NewsList() {
                           {item.attachmentPdfUrl && (
                             <span className="inline-flex items-center gap-1 text-slate-600 hover:text-primary">
                               <Download className="w-3.5 h-3.5" />
-                              <span>Docket</span>
+                              <span>Document</span>
                             </span>
                           )}
                           <span className="text-primary font-semibold inline-flex items-center gap-1 group-hover:underline">
-                            <span>Read Gazette</span>
+                            <span>Read Notice</span>
                             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                           </span>
                         </div>
@@ -707,7 +707,7 @@ export default function NewsList() {
               <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary text-[20px]">folder_special</span>
-                  <h3 className="font-title-md text-title-md font-bold text-on-surface">Gazetted Repository</h3>
+                  <h3 className="font-title-md text-title-md font-bold text-on-surface">Document Repository</h3>
                 </div>
                 <span className="font-label-sm text-label-sm text-secondary font-mono">Q1 2026</span>
               </div>
@@ -739,21 +739,21 @@ export default function NewsList() {
               </div>
             </div>
 
-            {/* 2. Gazette Subscription & Dispatch Alert Widget */}
+            {/* 2. Newsletter Subscription */}
             <div className="bg-surface-container-low rounded-xl p-6 shadow-sm border border-slate-200/60">
               <div className="flex items-center gap-2 mb-2">
                 <span className="material-symbols-outlined text-primary text-[20px]">mark_email_read</span>
-                <h3 className="font-title-md text-title-md font-bold text-on-surface">Gazette Subscription</h3>
+                <h3 className="font-title-md text-title-md font-bold text-on-surface">Newsletter Updates</h3>
               </div>
               <p className="font-body-sm text-body-sm text-secondary mb-4 leading-normal">
-                Receive notifications for gazetted circulars, award nomination deadlines, and symposium agendas directly to your inbox.
+                Receive notifications for circulars, award nomination deadlines, and symposium announcements directly to your inbox.
               </p>
               <form onSubmit={handleSubscribe} className="flex flex-col gap-2.5">
                 <input
                   type="email"
                   value={subscriptionEmail}
                   onChange={(e) => setSubscriptionEmail(e.target.value)}
-                  placeholder="metallurgist@institute.ac.in"
+                  placeholder="your.email@example.com"
                   required
                   className="w-full px-3.5 py-2.5 bg-surface-container-lowest text-on-surface placeholder:text-secondary/70 font-body-sm text-body-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/40 shadow-xs border border-slate-200"
                 />
@@ -761,7 +761,7 @@ export default function NewsList() {
                   type="submit"
                   className="w-full py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-semibold transition-all shadow-sm flex items-center justify-center gap-1.5"
                 >
-                  <span>Subscribe to Official Dispatch</span>
+                  <span>Subscribe to Announcements</span>
                   <Send className="w-4 h-4" />
                 </button>
               </form>
@@ -769,7 +769,7 @@ export default function NewsList() {
               {subscribed && (
                 <div className="mt-3 p-2.5 rounded bg-emerald-50 text-emerald-800 font-label-sm text-label-sm flex items-center gap-1.5 border border-emerald-200">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Subscribed to Chapter Gazette Vol. 48. Thank you!</span>
+                  <span>Subscribed to Chapter Announcements. Thank you!</span>
                 </div>
               )}
               <span className="font-label-sm text-label-sm text-secondary/80 mt-3 block text-center">
@@ -802,10 +802,10 @@ export default function NewsList() {
                   <Mail className="w-4 h-4 text-primary shrink-0" />
                   <div>
                     <span className="font-label-sm text-label-sm uppercase text-secondary block font-semibold">
-                      Direct Editorial Inbox
+                      Chapter Secretariat Email
                     </span>
-                    <a className="text-primary hover:underline font-mono" href="mailto:press@iimbhubaneswar.in">
-                      press@iimbhubaneswar.in
+                    <a className="text-primary hover:underline font-mono" href="mailto:iimbhubaneswarchapter@gmail.com">
+                      iimbhubaneswarchapter@gmail.com
                     </a>
                   </div>
                 </div>
@@ -813,18 +813,18 @@ export default function NewsList() {
                   <Phone className="w-4 h-4 text-primary shrink-0" />
                   <div>
                     <span className="font-label-sm text-label-sm uppercase text-secondary block font-semibold">
-                      Media Hotline
+                      Office Phone
                     </span>
-                    <span className="text-on-surface font-mono">+91 (0674) 237-4920</span>
+                    <span className="text-on-surface font-mono">+91 - 8847834015</span>
                   </div>
                 </div>
               </div>
               <div className="mt-5 pt-3 border-t border-slate-100">
                 <a
                   className="w-full py-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md text-center block transition-colors font-medium border border-slate-200"
-                  href="mailto:press@iimbhubaneswar.in?subject=Request%20Media%20Kit%202026"
+                  href="/contact"
                 >
-                  Request Media Kit (2026 Edition)
+                  Contact Secretariat
                 </a>
               </div>
             </div>

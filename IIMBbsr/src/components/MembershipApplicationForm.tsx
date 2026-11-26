@@ -220,7 +220,7 @@ export default function MembershipApplicationForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-700">
-            Cadre Sought <span className="text-primary">*</span>
+            Membership Category <span className="text-primary">*</span>
           </label>
           <select
             name="cadreSought"
@@ -331,13 +331,13 @@ export default function MembershipApplicationForm() {
         <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-start gap-2.5">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
           <div className="flex flex-col gap-0.5">
-            <span className="font-bold text-sm">Application Lodged with Secretariat!</span>
+            <span className="font-bold text-sm">Application Submitted Successfully!</span>
             <p>
-              Your reference docket number is{' '}
+              Your application reference number is{' '}
               <span className="font-mono font-bold text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded">
                 {success.docketNo}
               </span>
-              . Concurrence will be reviewed by the Executive Committee.
+              . It will be reviewed by the Chapter Executive Committee.
             </p>
           </div>
         </div>

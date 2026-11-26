@@ -50,7 +50,7 @@ export const STATIC_STUDENT_CHAPTERS: StaticStudentChapter[] = [
       'Technical Quizzes & National Seminars',
     ],
     recentAchievement:
-      'Winners of Eastern Regional Materials Conclave (MatX) 2025; 14 peer-reviewed publications authored by student cadre.',
+      'Winners of Eastern Regional Materials Conclave (MatX) 2025; 14 peer-reviewed publications authored by student members.',
     email: 'iim.sc@iitbbs.ac.in',
     bannerImage:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuDAyZ6b1SVPtJP7nMHrvAIAPgm3Ebgg2c9p6KCUUgDGjG4sAReR0RkbVfIWXR2FyCVWl3OOdaS3nmHsX7FcIVR-7yXI6qbIASRL0ex4gIlGz2L0hYwy8WurpOUKc6Y8GkWGUXoW-v-LUzdgQWHdvuQ8cHolQ1UdNOU5ZF_o_I8teraw1Tcs2CFDcMOEhMvCvY-s2tnN8Dfx0QlYdNXwGYdll4LAiDNQDwW2MUVHGmCTZnoNEbAengeh',
@@ -336,7 +336,7 @@ export default function StudentChaptersList() {
                         <span className="font-semibold text-slate-800 line-clamp-1">{ch.facultyAdvisor}</span>
                       </div>
                       <div>
-                        <span className="text-slate-400 block mb-0.5 font-medium">Student Cadre</span>
+                        <span className="text-slate-400 block mb-0.5 font-medium">Enrolled Members</span>
                         <span className="font-bold text-primary flex items-center gap-1 font-mono">
                           <Users className="w-3.5 h-3.5" /> {ch.activeMembersCount}
                         </span>

@@ -407,7 +407,7 @@ export default function AwardsList() {
             <span className="font-bold text-white text-sm">Honors Secretariat Contact:</span>
             <span>Dr. Tarun K. Biswal, Hony. Jt. Secretary</span>
             <span>CSIR – IMMT, Acharya Vihar, Bhubaneswar - 751013</span>
-            <span className="text-amber-300 font-mono">secretary@iimbhubaneswar.in</span>
+            <span className="text-amber-300 font-mono">iimbhubaneswarchapter@gmail.com</span>
           </div>
         </div>
       </section>

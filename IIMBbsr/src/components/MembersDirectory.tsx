@@ -27,8 +27,8 @@ export interface MemberData {
   isActive?: boolean;
 }
 
-const CADRES = [
-  'All Cadres',
+const CATEGORIES = [
+  'All Categories',
   'Life Fellow',
   'Life Member',
   'Patron Member',
@@ -41,7 +41,7 @@ const CADRES = [
 export default function MembersDirectory() {
   const [members, setMembers] = useState<MemberData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCadre, setSelectedCadre] = useState('All Cadres');
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -50,8 +50,8 @@ export default function MembersDirectory() {
       try {
         let url = '/api/members';
         const params = new URLSearchParams();
-        if (selectedCadre !== 'All Cadres') {
-          params.append('category', selectedCadre);
+        if (selectedCategory !== 'All Categories') {
+          params.append('category', selectedCategory);
         }
         if (searchQuery.trim()) {
           params.append('search', searchQuery.trim());
@@ -72,7 +72,7 @@ export default function MembersDirectory() {
     }
 
     fetchMembers();
-  }, [selectedCadre, searchQuery]);
+  }, [selectedCategory, searchQuery]);
 
   return (
     <div className="w-full flex flex-col gap-6">
@@ -97,19 +97,19 @@ export default function MembersDirectory() {
           )}
         </div>
 
-        {/* Cadre Filter Pills */}
+        {/* Category Filter Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-nowrap">
-          {CADRES.map((cadre) => (
+          {CATEGORIES.map((cat) => (
             <button
-              key={cadre}
-              onClick={() => setSelectedCadre(cadre)}
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
-                selectedCadre === cadre
+                selectedCategory === cat
                   ? 'bg-primary text-white shadow-xs'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
               }`}
             >
-              {cadre}
+              {cat}
             </button>
           ))}
         </div>

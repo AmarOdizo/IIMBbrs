@@ -3,14 +3,14 @@ import JsonLd from '@/components/JsonLd';
 import { SITE_URL, siteMetadata, getBreadcrumbSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Chapter Gazette & Announcement Detail',
-  description: 'Official gazetted circular, technical paper calls, AGM election notice, or secretariat report details from IIM Bhubaneswar Chapter.',
+  title: 'Chapter Circular & Announcement Detail',
+  description: 'Official circular, technical paper calls, AGM election notice, or secretariat report details from IIM Bhubaneswar Chapter.',
   alternates: {
     canonical: '/news-detail',
   },
   openGraph: {
-    title: 'Chapter Gazette & Announcement Detail | IIM Bhubaneswar Chapter',
-    description: 'Official gazetted circular, technical paper calls, AGM election notice, or secretariat report details from IIM Bhubaneswar Chapter.',
+    title: 'Chapter Circular & Announcement Detail | IIM Bhubaneswar Chapter',
+    description: 'Official circular, technical paper calls, AGM election notice, or secretariat report details from IIM Bhubaneswar Chapter.',
     url: `${SITE_URL}/news-detail`,
     siteName: siteMetadata.name,
     locale: siteMetadata.locale,
@@ -20,14 +20,14 @@ export const metadata: Metadata = {
         url: siteMetadata.ogImage,
         width: 1200,
         height: 630,
-        alt: 'Chapter Gazette & Announcement Detail',
+        alt: 'Chapter Circular & Announcement Detail',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chapter Gazette & Announcement Detail | IIM Bhubaneswar Chapter',
-    description: 'Official gazetted circular, technical paper calls, AGM election notice, or secretariat report details from IIM Bhubaneswar Chapter.',
+    title: 'Chapter Circular & Announcement Detail | IIM Bhubaneswar Chapter',
+    description: 'Official circular, technical paper calls, AGM election notice, or secretariat report details from IIM Bhubaneswar Chapter.',
     images: [siteMetadata.ogImage],
   },
 };

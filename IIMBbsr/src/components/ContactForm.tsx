@@ -300,7 +300,7 @@ export default function ContactForm() {
                                                   <div className="flex flex-col gap-0.5">
                                                     <span className="font-semibold">Message Sent Successfully!</span>
                                                     <p>
-                                                      Docket Reference:{' '}
+                                                      Reference Number:{' '}
                                                       <span className="font-mono font-bold text-emerald-800 bg-emerald-100 px-1 py-0.5 rounded">
                                                         {success.docketId}
                                                       </span>

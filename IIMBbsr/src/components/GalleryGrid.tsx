@@ -764,14 +764,14 @@ export default function GalleryGrid() {
                   <CheckCircle2 className="w-4 h-4 text-primary" /> Include Date &amp; Venue Metadata
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Mail className="w-4 h-4 text-primary" /> media@iimbhubaneswar.in
+                  <Mail className="w-4 h-4 text-primary" /> iimbhubaneswarchapter@gmail.com
                 </span>
               </div>
             </div>
 
             <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-stretch gap-3">
               <a
-                href="mailto:media@iimbhubaneswar.in?subject=Chapter%20Event%20Photo%20Submission"
+                href="mailto:iimbhubaneswarchapter@gmail.com?subject=Chapter%20Event%20Photo%20Submission"
                 className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md tracking-wider uppercase font-semibold transition-all shadow-md text-center"
               >
                 <Upload className="w-4 h-4" />

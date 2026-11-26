@@ -3,7 +3,7 @@ import NewsList from '@/components/NewsList';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'Chapter News, Technical Circulars & Gazetted Notices | IIM Bhubaneswar',
+  title: 'Chapter News & Technical Circulars | IIM Bhubaneswar',
   description:
     'Authoritative bulletins on metallurgical research frontiers, council resolutions, call-for-papers, award notifications, and policy memorandums across Odisha.',
 };
