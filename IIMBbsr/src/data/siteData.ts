@@ -117,7 +117,7 @@ export const committeeMembers: Officer[] = [
     location: "CSIR-IMMT Bhubaneswar",
     bio: "",
     tags: [],
-    image: ""
+    image: "/assets/images/secretary_dr_sisir_mantry.png"
   },
   {
     name: "Dr. Deepak Nayak",

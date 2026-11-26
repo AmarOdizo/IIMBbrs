@@ -154,12 +154,25 @@ export default function CommitteeList() {
               .join('')
               .toUpperCase();
 
-            // ================= CHAIRMAN CARD (FEATURING UPLOADED PHOTO) =================
-            if (isChairman && hasImage) {
+            // ================= OFFICERS WITH UPLOADED PHOTO (e.g. Chairman, Secretary) =================
+            if (hasImage) {
+              const isGold = officer.role === 'Chairman';
+              const badgeBg = isGold
+                ? 'bg-amber-500 text-white border-amber-300/40'
+                : 'bg-blue-600 text-white border-blue-400/40';
+              const cardRing = isGold
+                ? 'border-amber-300/90 ring-1 ring-amber-400/20'
+                : 'border-blue-300/90 ring-1 ring-blue-400/20';
+              const subColor = isGold ? 'text-amber-300' : 'text-blue-300';
+              const iconColor = isGold ? 'text-amber-400' : 'text-blue-400';
+              const termColor = isGold
+                ? 'text-amber-200 border-amber-400/30'
+                : 'text-blue-200 border-blue-400/30';
+
               return (
                 <div
                   key={`${officer.name}-${index}`}
-                  className="relative rounded-2xl overflow-hidden bg-slate-900 border border-amber-300/90 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 min-h-[300px] sm:min-h-[320px]"
+                  className={`relative rounded-2xl overflow-hidden bg-slate-900 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 min-h-[300px] sm:min-h-[320px] border ${cardRing}`}
                 >
                   {/* Background Portrait Photo */}
                   <Image
@@ -167,7 +180,7 @@ export default function CommitteeList() {
                     alt={officer.name}
                     fill
                     unoptimized
-                    priority
+                    priority={isChairman}
                     className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 400px"
                   />
@@ -176,12 +189,16 @@ export default function CommitteeList() {
 
                   {/* Top Badges */}
                   <div className="relative z-10 p-4 flex items-center justify-between gap-2">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500 text-white shadow-md border border-amber-300/40">
-                      <Star className="w-3.5 h-3.5 fill-white text-white" />
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-md border ${badgeBg}`}
+                    >
+                      {isChairman && <Star className="w-3.5 h-3.5 fill-white text-white" />}
                       <span>{officer.role}</span>
                     </span>
 
-                    <span className="text-[11px] font-bold text-amber-200 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-amber-400/30 font-mono">
+                    <span
+                      className={`text-[11px] font-bold bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border font-mono ${termColor}`}
+                    >
                       2026–27
                     </span>
                   </div>
@@ -191,11 +208,11 @@ export default function CommitteeList() {
                     <h3 className="text-xl sm:text-2xl font-bold text-white drop-shadow-md leading-tight">
                       {officer.name}
                     </h3>
-                    <p className="text-xs font-semibold text-amber-300 drop-shadow-sm mt-0.5">
+                    <p className={`text-xs font-semibold drop-shadow-sm mt-0.5 ${subColor}`}>
                       {officer.title}
                     </p>
                     <div className="flex items-center gap-1.5 text-xs text-slate-200 mt-2 bg-slate-900/70 backdrop-blur-md px-2.5 py-1.5 rounded-lg border border-white/10 w-fit">
-                      <Building className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <Building className={`w-3.5 h-3.5 shrink-0 ${iconColor}`} />
                       <span>{officer.institution}</span>
                     </div>
                   </div>
