@@ -138,7 +138,7 @@ export default function ImageUpload({
           {loading ? (
             <>
               <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
-              <p className="text-sm font-medium text-indigo-600">ImageKit par upload ho raha hai...</p>
+              <p className="text-sm font-medium text-indigo-600">Uploading to ImageKit...</p>
             </>
           ) : (
             <>
@@ -149,7 +149,7 @@ export default function ImageUpload({
                 <span className="font-semibold text-indigo-600 hover:text-indigo-500">
                   Click to upload
                 </span>{' '}
-                ya drag and drop karein
+                or drag and drop
               </div>
               <p className="text-xs text-slate-500">PNG, JPG, WEBP, GIF (Max 10MB)</p>
             </>
