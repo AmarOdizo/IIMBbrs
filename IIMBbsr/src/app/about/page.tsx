@@ -1,34 +1,450 @@
-// About Institution Page
+'use client';
 
-import React from 'react';
-import Footer from '@/components/Footer';
+import React, { useState } from 'react';
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
+import Footer from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
 import { getBreadcrumbSchema } from '@/lib/seo';
-import AboutTimelineFilter from '@/components/AboutTimelineFilter';
+import {
+  Layers,
+  Wrench,
+  Cpu,
+  FlaskConical,
+  ShieldCheck,
+  Recycle,
+  Building2,
+  GraduationCap,
+  Landmark,
+  Factory,
+  ArrowRight,
+  CheckCircle2,
+  Calendar,
+  Sparkles,
+  MapPin,
+  Mail,
+  Phone,
+} from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'About Institution & Charter History',
-  description:
-    'Chartered in 1978 under The Indian Institute of Metals at CSIR-IMMT, Bhubaneswar Chapter advances high-rigor materials science, mineral beneficiation, and green steel decarbonisation across Odisha.',
-  alternates: {
-    canonical: '/about',
+const FOCUS_AREAS = [
+  {
+    icon: Layers,
+    title: 'Iron & Steel Metallurgy',
+    desc: 'Blast furnace optimization, Direct Reduced Iron (DRI), and low-carbon hydrogen steelmaking.',
   },
-  openGraph: {
-    title: 'About Institution & Charter History | IIM Bhubaneswar Chapter',
+  {
+    icon: Building2,
+    title: 'Aluminium & Bauxite',
+    desc: 'Bayer process refining, energy-efficient electrolysis smelting, and high-purity aluminium alloys.',
+  },
+  {
+    icon: Cpu,
+    title: 'Strategic & Beach Minerals',
+    desc: 'Beneficiation of titanium sands, ilmenite, rare-earth elements, and coastal placer minerals.',
+  },
+  {
+    icon: FlaskConical,
+    title: 'Hydrometallurgy & Bio-leaching',
+    desc: 'Eco-friendly metal extraction, bacterial oxidation, and solvent extraction recovery systems.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Corrosion & Materials Science',
+    desc: 'Industrial marine corrosion deterrence, protective coatings, and high-temperature alloy integrity.',
+  },
+  {
+    icon: Recycle,
+    title: 'Waste Valorisation & Red Mud',
+    desc: 'Zero-waste mineral utilization, blast furnace slag repurposing, and tailings management.',
+  },
+];
+
+const TIMELINE_EVENTS = [
+  {
+    year: '1976–1978',
+    era: 'foundational',
+    title: 'Inception & Formal Charter of the Bhubaneswar Chapter',
     description:
-      'Chartered in 1978 under The Indian Institute of Metals, bridging metallurgical engineering, mineral research, and heavy industry across Eastern India.',
-    url: 'https://iimbhubaneswar.in/about',
+      'Initiated in 1976 under the vision of eminent metallurgist Prof. P. K. Jena (Director, RRL Bhubaneswar, now CSIR-IMMT) alongside 25 research scientists. Granted formal institutional charter #OR-04 by the IIM National Council, Kolkata in 1978.',
+    tag: 'Charter Grant #OR-04',
   },
-};
+  {
+    year: '1989',
+    era: 'foundational',
+    title: 'National Symposium on Low-Grade Chromite Ores',
+    description:
+      'Convened the first flagship national technical conference addressing the beneficiation of Sukinda chromite belt ores, contributing recommendations widely adopted by public sector smelters.',
+    tag: 'Sukinda Chromite Initiative',
+  },
+  {
+    year: '2004',
+    era: 'modern',
+    title: 'Institution of the Annual Memorial Lecture Series',
+    description:
+      'Established the prestigious annual oration series to honor founding metallurgists of India, creating an enduring Eastern India forum for physical metallurgy and blast furnace innovation.',
+    tag: 'Memorial Lecture Tradition',
+  },
+  {
+    year: '2013–2016',
+    era: 'modern',
+    title: 'Chartering of University Student Chapters',
+    description:
+      'Expanded collegiate outreach by chartering affiliated student chapters at IIT Bhubaneswar, NIT Rourkela, KIIT University, and VSSUT Burla to mentor youth in metallurgical disciplines.',
+    tag: 'Collegiate Affiliate Expansion',
+  },
+  {
+    year: '2024–2026',
+    era: 'modern',
+    title: 'Green Metallurgy & Decarbonisation Initiatives',
+    description:
+      'Convened multi-institutional symposiums on Advanced High-Strength Steels (AHSS), hydrogen DRI kinetics, and circular economy practices across the Kalinganagar-Angul industrial belt.',
+    tag: 'Sustainable Steel Initiative',
+  },
+];
 
-const htmlContent = "<header class=\"fixed top-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.06)] border-b border-surface-variant/20\">\n    <!-- Top Chapter Affiliate Bar -->\n    <div class=\"bg-on-background text-surface-variant font-label-sm text-[10px] sm:text-label-sm tracking-wider uppercase border-b border-surface-variant/10\">\n      <div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between gap-2\">\n        <span class=\"truncate\">THE INDIAN INSTITUTE OF METALS • BHUBANESWAR CHAPTER</span>\n        <span class=\"text-surface-variant/80 hidden md:inline shrink-0\">AFFILIATED TO IIM HEAD OFFICE, KOLKATA (IIM-INDIA.NET)</span>\n      </div>\n    </div>\n\n    <!-- Main Navigation Bar -->\n    <div class=\"h-16 sm:h-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 lg:gap-4\">\n      <a href=\"/\" class=\"flex items-center shrink-0 py-1\" title=\"IIM Bhubaneswar Chapter\">\n        <img alt=\"The Indian Institute of Metals - Bhubaneswar Chapter\"\n          class=\"h-9 sm:h-11 md:h-12 w-auto object-contain\" src=\"/assets/images/logo1.svg\" />\n      </a>\n\n      <!-- Desktop Navigation Menu (Visible on lg: >= 1024px) -->\n      <nav class=\"hidden lg:flex items-center gap-1 font-label-md text-label-md\">\n        <a class=\"px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors shrink-0\"\n          data-path=\"home\" href=\"/\">Home</a>\n        <a aria-current=\"page\"\n          class=\"px-2.5 py-1.5 transition-colors bg-primary-container text-on-primary-container font-semibold rounded-lg shrink-0\"\n          data-path=\"about\" href=\"/about\">About</a>\n        <a class=\"px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors shrink-0\"\n          data-path=\"committee\" href=\"/committee\">Committee</a>\n        <a class=\"px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors shrink-0\"\n          data-path=\"members\" href=\"/members\">Members</a>\n        <a class=\"px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors shrink-0\"\n          data-path=\"events\" href=\"/events\">Events</a>\n        <a class=\"px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors shrink-0\"\n          data-path=\"awards\" href=\"/awards\">Awards</a>\n        <a class=\"px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors shrink-0\"\n          data-path=\"student-chapters\" href=\"/student-chapters\">Student Chapters</a>\n        <a class=\"px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors shrink-0\"\n          data-path=\"gallery\" href=\"/gallery\">Gallery</a>\n        <a class=\"px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors shrink-0\"\n          data-path=\"news\" href=\"/news\">News</a>\n        <a class=\"px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors shrink-0\"\n          data-path=\"contact\" href=\"/contact\">Contact</a>\n      </nav>\n\n      <!-- Desktop & Tablet Action CTA + Mobile Hamburger Toggle -->\n      <div class=\"flex items-center gap-2 sm:gap-3 shrink-0\">\n        <a class=\"hidden sm:inline-flex items-center px-3 sm:px-4 py-2 rounded-lg font-label-md text-xs sm:text-label-md font-semibold shrink-0 shadow-sm transition-all bg-primary text-on-primary hover:bg-primary-container\"\n          data-path=\"join-chapter\" href=\"/membership\">\n          <span>Join Chapter</span>\n        </a>\n\n        <!-- Hamburger Button (Mobile & Tablet: < 1024px) -->\n        <button id=\"mobile-menu-toggle\" type=\"button\"\n          class=\"lg:hidden p-2 rounded-lg text-on-surface hover:bg-surface-container-high transition-colors focus:outline-none focus:ring-2 focus:ring-primary/40\"\n          aria-label=\"Toggle navigation menu\" aria-expanded=\"false\">\n          <span class=\"material-symbols-outlined text-2xl block\" id=\"menu-icon-open\">menu</span>\n          <span class=\"material-symbols-outlined text-2xl hidden\" id=\"menu-icon-close\">close</span>\n        </button>\n      </div>\n    </div>\n\n    <!-- Mobile Navigation Drawer & Backdrop -->\n    <div id=\"mobile-menu-drawer\"\n      class=\"fixed inset-0 z-50 transition-opacity duration-300 pointer-events-none opacity-0 invisible\"\n      aria-hidden=\"true\">\n      <div id=\"mobile-menu-backdrop\" class=\"absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity\"></div>\n      <div id=\"mobile-menu-panel\"\n        class=\"absolute top-0 right-0 bottom-0 w-[85%] max-w-[340px] bg-surface shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out border-l border-surface-variant/20 z-10\">\n        <div class=\"p-4 border-b border-surface-variant/20 flex items-center justify-between bg-surface-container-low\">\n          <div class=\"flex items-center gap-2.5\">\n            <img src=\"/assets/images/logo1.svg\" alt=\"IIM Logo\" class=\"h-8 w-auto object-contain\" />\n            <div class=\"flex flex-col\">\n              <span class=\"font-title-md text-xs font-bold text-on-surface leading-tight\">IIM Bhubaneswar</span>\n              <span class=\"font-label-sm text-[10px] text-secondary uppercase tracking-wider\">Chapter Portal</span>\n            </div>\n          </div>\n          <button id=\"mobile-menu-close\" type=\"button\"\n            class=\"p-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors\" aria-label=\"Close menu\">\n            <span class=\"material-symbols-outlined text-xl\">close</span>\n          </button>\n        </div>\n\n        <div class=\"flex-1 overflow-y-auto py-3 px-3 space-y-1\">\n          <a class=\"drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-sm transition-colors\"\n            data-path=\"home\" href=\"/\">\n            <span class=\"material-symbols-outlined text-xl text-primary\">home</span>\n            <span>Home</span>\n          </a>\n          <a class=\"drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-sm transition-colors\"\n            data-path=\"about\" href=\"/about\">\n            <span class=\"material-symbols-outlined text-xl text-primary\">info</span>\n            <span>About</span>\n          </a>\n          <a class=\"drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-sm transition-colors\"\n            data-path=\"committee\" href=\"/committee\">\n            <span class=\"material-symbols-outlined text-xl text-primary\">groups</span>\n            <span>Committee</span>\n          </a>\n          <a class=\"drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-sm transition-colors\"\n            data-path=\"members\" href=\"/members\">\n            <span class=\"material-symbols-outlined text-xl text-primary\">badge</span>\n            <span>Members</span>\n          </a>\n          <a class=\"drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-sm transition-colors\"\n            data-path=\"events\" href=\"/events\">\n            <span class=\"material-symbols-outlined text-xl text-primary\">event</span>\n            <span>Events</span>\n          </a>\n          <a class=\"drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-sm transition-colors\"\n            data-path=\"awards\" href=\"/awards\">\n            <span class=\"material-symbols-outlined text-xl text-primary\">workspace_premium</span>\n            <span>Awards</span>\n          </a>\n          <a class=\"drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-sm transition-colors\"\n            data-path=\"student-chapters\" href=\"/student-chapters\">\n            <span class=\"material-symbols-outlined text-xl text-primary\">school</span>\n            <span>Student Chapters</span>\n          </a>\n          <a class=\"drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-sm transition-colors\"\n            data-path=\"gallery\" href=\"/gallery\">\n            <span class=\"material-symbols-outlined text-xl text-primary\">photo_library</span>\n            <span>Gallery</span>\n          </a>\n          <a class=\"drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-sm transition-colors\"\n            data-path=\"news\" href=\"/news\">\n            <span class=\"material-symbols-outlined text-xl text-primary\">newspaper</span>\n            <span>News &amp; Circulars</span>\n          </a>\n          <a class=\"drawer-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-sm transition-colors\"\n            data-path=\"contact\" href=\"/contact\">\n            <span class=\"material-symbols-outlined text-xl text-primary\">mail</span>\n            <span>Contact</span>\n          </a>\n        </div>\n\n        <div class=\"p-4 border-t border-surface-variant/20 bg-surface-container-lowest space-y-3\">\n          <a class=\"w-full py-2.5 px-4 rounded-xl font-label-md text-sm font-semibold text-center bg-primary text-on-primary hover:bg-primary-container transition-all flex items-center justify-center gap-2 shadow-sm\"\n            href=\"/membership\">\n            <span class=\"material-symbols-outlined text-base\">how_to_reg</span>\n            <span>Join Chapter (2026)</span>\n          </a>\n          <div class=\"text-[11px] text-secondary text-center leading-relaxed\">\n            <span>CSIR-IMMT, Bhubaneswar • IIM HQ Kolkata</span>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  <main class=\"w-full pt-24 sm:pt-28 lg:pt-28 bg-surface min-h-screen\">\n    <div class=\"flex flex-col w-full\">\n<!-- Masthead & Breadcrumb Sub-Header -->\n<section class=\"relative w-full bg-surface-container-low overflow-hidden py-12 lg:py-16\">\n<div class=\"absolute -right-24 -top-24 w-96 h-96 rounded-full bg-primary/5 blur-3xl pointer-events-none\"></div>\n<div class=\"absolute left-1/3 bottom-0 w-80 h-80 rounded-full bg-tertiary-fixed/20 blur-2xl pointer-events-none\"></div>\n<div class=\"max-w-7xl mx-auto px-6 lg:px-12 relative z-10\">\n<!-- Breadcrumb Bar -->\n<nav class=\"flex items-center gap-2 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-6\">\n<a class=\"hover:text-primary transition-colors flex items-center gap-1\" data-path=\"home\" href=\"/\">\n<span class=\"material-symbols-outlined text-[16px]\">home</span>\n<span>Home</span>\n</a>\n<span class=\"text-outline-variant\">/</span>\n<span class=\"text-primary font-semibold\">About Institution</span>\n</nav>\n<div class=\"grid grid-cols-1 lg:grid-cols-12 gap-8 items-end\">\n<div class=\"lg:col-span-8 flex flex-col gap-4\">\n<div class=\"inline-flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full w-fit\">\n<span class=\"w-2 h-2 rounded-full bg-primary\"></span>\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant font-semibold\">Chartered 1978 • Bhubaneswar Chapter</span>\n</div>\n<h1 class=\"font-headline-lg text-headline-lg text-on-surface tracking-tight max-w-3xl\">\n            Dedicated to the Science, Technology, and Art of Metals\n          </h1>\n<p class=\"font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed\">\n            A premier regional chapter of The Indian Institute of Metals, fostering academic discovery, mineral beneficiation, and sustainable metallurgical industries across the mineral cradle of Odisha.\n          </p>\n</div>\n<!-- Technical Telemetry Pill / Stats -->\n<div class=\"lg:col-span-4 flex flex-col gap-3\">\n<div class=\"bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col justify-between\">\n<div class=\"flex items-center justify-between text-on-surface-variant mb-2\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-wider\">Parent Body Charter</span>\n<span class=\"font-label-sm text-label-sm font-semibold text-primary\">EST. 1946</span>\n</div>\n<div class=\"font-title-lg text-title-lg text-on-surface font-semibold\">\n              The Indian Institute of Metals\n            </div>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-1\">\n              Affiliated directly to National Headquarters: 'Metal House', Kolkata, India.\n            </p>\n<div class=\"mt-4 pt-3 flex items-center justify-between text-on-surface-variant/80 font-label-sm text-label-sm\">\n<span class=\"flex items-center gap-1\">\n<span class=\"material-symbols-outlined text-[16px] text-tertiary\">verified</span>\n                Recognised Professional Body\n              </span>\n<span class=\"text-primary font-medium\">Bhubaneswar Chapter</span>\n</div>\n</div>\n</div>\n</div>\n</div>\n</section>\n<!-- Section 1: Institutional Background & Legacy with Metallurgy Visual Mosaic -->\n<section class=\"max-w-7xl mx-auto px-6 lg:px-12 py-16 lg:py-24 w-full\">\n<div class=\"grid grid-cols-1 lg:grid-cols-12 gap-12 items-center\">\n<!-- Left Narrative -->\n<div class=\"lg:col-span-7 flex flex-col gap-6\">\n<div class=\"flex items-center gap-3\">\n<span class=\"font-label-md text-label-md uppercase tracking-widest text-primary font-bold\">Chapter Genesis &amp; Focus</span>\n<span class=\"h-[1px] w-12 bg-primary/40\"></span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-surface font-semibold\">\n          Forged at the Epicentre of India’s Mineral Renaissance\n        </h2>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed\">\n          Founded in 1976 and chartered under the aegis of <strong>The Indian Institute of Metals (IIM, established 1946 in Kolkata)</strong>, the Bhubaneswar Chapter was established through the pioneering vision of eminent metallurgist <strong>Prof. P. K. Jena</strong> (former BHU professor and Director of RRL Bhubaneswar, who served as Founder Chairman for 12 consecutive years). Established at RRL (now CSIR-IMMT) with an inaugural cohort of 25–30 research scientists, the chapter forged foundational alliances with Odisha's industrial leaders including <strong>IDCOL, FACOR, IMFA, IPICOL, and NALCO</strong> to bridge high-rigor materials science with the monumental mineral wealth of Odisha. Odisha represents India’s primary mineral heartland, anchoring over half of the country’s bauxite, chromite, and iron reserves.\n        </p>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed\">\n          For nearly five decades, our fellows, scientists, and industrial members have steered major technological breakthroughs: moving from raw mineral extraction to ultra-pure titanium recovery, advanced alloy manufacturing, hydrometallurgical processing, and contemporary direct reduced iron (DRI) decarbonisation.\n        </p>\n<!-- Focus Areas Grid -->\n<div class=\"grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2\">\n<div class=\"bg-surface-container p-3 rounded-lg flex flex-col gap-1\">\n<span class=\"material-symbols-outlined text-primary text-[20px]\">layers</span>\n<span class=\"font-title-md text-sm font-semibold text-on-surface\">Iron &amp; Steel</span>\n<span class=\"font-body-sm text-body-sm text-on-surface-variant\">Blast furnaces, DRI &amp; green hydrogen reduction.</span>\n</div>\n<div class=\"bg-surface-container p-3 rounded-lg flex flex-col gap-1\">\n<span class=\"material-symbols-outlined text-primary text-[20px]\">hardware</span>\n<span class=\"font-title-md text-sm font-semibold text-on-surface\">Aluminium &amp; Bauxite</span>\n<span class=\"font-body-sm text-body-sm text-on-surface-variant\">Bayer process refining &amp; low-energy smelting.</span>\n</div>\n<div class=\"bg-surface-container p-3 rounded-lg flex flex-col gap-1\">\n<span class=\"material-symbols-outlined text-primary text-[20px]\">precision_manufacturing</span>\n<span class=\"font-title-md text-sm font-semibold text-on-surface\">Strategic Elements</span>\n<span class=\"font-body-sm text-body-sm text-on-surface-variant\">Titanium sand beneficiation, REEs &amp; beach minerals.</span>\n</div>\n<div class=\"bg-surface-container p-3 rounded-lg flex flex-col gap-1\">\n<span class=\"material-symbols-outlined text-primary text-[20px]\">biotech</span>\n<span class=\"font-title-md text-sm font-semibold text-on-surface\">Physical Metallurgy</span>\n<span class=\"font-body-sm text-body-sm text-on-surface-variant\">Phase transitions, electron microscopy &amp; XRD.</span>\n</div>\n<div class=\"bg-surface-container p-3 rounded-lg flex flex-col gap-1\">\n<span class=\"material-symbols-outlined text-primary text-[20px]\">shield</span>\n<span class=\"font-title-md text-sm font-semibold text-on-surface\">Corrosion Science</span>\n<span class=\"font-body-sm text-body-sm text-on-surface-variant\">Marine rust deterrence &amp; high-temperature alloys.</span>\n</div>\n<div class=\"bg-surface-container p-3 rounded-lg flex flex-col gap-1\">\n<span class=\"material-symbols-outlined text-primary text-[20px]\">recycling</span>\n<span class=\"font-title-md text-sm font-semibold text-on-surface\">Slag &amp; Tailings</span>\n<span class=\"font-body-sm text-body-sm text-on-surface-variant\">Zero-waste mineral valorisation &amp; red mud remediation.</span>\n</div>\n</div>\n</div>\n<!-- Right Side Visual Collage -->\n<div class=\"lg:col-span-5 relative flex flex-col gap-4\">\n<div class=\"relative overflow-hidden rounded-xl shadow-md\">\n<img alt=\"Modern metallurgy research laboratory in India with researchers inspecting molten metallic samples and electron microscope monitors, glowing warm amber and copper reflections, precise scientific equipment, scholarly clean atmosphere\" class=\"w-full h-80 object-cover rounded-xl\" data-alt=\"Modern metallurgy research laboratory in India with researchers inspecting molten metallic samples and electron microscope monitors, glowing warm amber and copper reflections, precise scientific equipment, scholarly clean atmosphere\" src=\"https://lh3.googleusercontent.com/aida-public/AB6AXuAJPRI-S4th9NDam5oDd6JjL2P_3biITqoSrgrZDE3Goq6qCWjtIjc3FPZ2UBKuaBXShrtTMWt9mOFQruJpEcOLVR3ygJOAmgnre7wmQJGH4QZjiRQ9O6mZ-FB6OO-q2GamV83smbtjDIJx68R4RmtBAZXh7QHWDEsCXrSsaPH-H0TCvq41jaWLc2dYJyXf9U_vLqea8chSEW9eHaH1yvCqE2it4cxtHWmKibicYZHhH-aJNeXu0JUO\"/>\n<div class=\"absolute bottom-0 inset-x-0 bg-gradient-to-t from-on-background/90 via-on-background/40 to-transparent p-5 text-surface-bright flex flex-col\">\n<span class=\"font-label-sm text-label-sm text-tertiary-fixed tracking-wider uppercase\">Regional Core Focus</span>\n<span class=\"font-title-md text-title-md text-white font-semibold\">Materials Characterisation &amp; Process Metallurgy</span>\n</div>\n</div>\n<!-- Overlapping Inset Fact Card -->\n<div class=\"-mt-8 ml-2 sm:ml-6 mr-2 bg-inverse-surface text-inverse-on-surface p-4 sm:p-5 rounded-xl shadow-xl flex items-start gap-3 sm:gap-4 relative z-20\">\n<div class=\"p-3 bg-primary rounded-lg shrink-0\">\n<span class=\"material-symbols-outlined text-on-primary text-[24px]\">workspace_premium</span>\n</div>\n<div class=\"flex flex-col\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-tertiary-fixed font-bold\">National Chapter Recognition</span>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 mt-1\">\n              Recipient of multiple IIM Best Chapter Awards for high frequency of peer-reviewed workshops and university outreach programs.\n            </p>\n</div>\n</div>\n</div>\n</div>\n</section>\n<!-- Section 2: Mission, Vision, and Guiding Principles (Highlight Cards) -->\n<section class=\"w-full bg-surface-container-high/50 py-16 lg:py-24\">\n<div class=\"max-w-7xl mx-auto px-6 lg:px-12 flex flex-col gap-12\">\n<div class=\"text-center max-w-2xl mx-auto flex flex-col gap-3\">\n<span class=\"font-label-md text-label-md uppercase tracking-widest text-primary font-bold\">Guiding Philosophy</span>\n<h2 class=\"font-headline-lg text-headline-lg text-on-surface font-semibold\">\n          Pillars of Scientific Stewardship\n        </h2>\n<p class=\"font-body-md text-body-md text-on-surface-variant\">\n          Steered by an unwavering commitment to industrial progress, scholarly truth, and ecological responsibility.\n        </p>\n</div>\n<div class=\"grid grid-cols-1 md:grid-cols-3 gap-6\">\n<!-- Mission Card -->\n<div class=\"bg-surface-container-lowest p-8 rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow\">\n<div class=\"flex flex-col gap-4\">\n<div class=\"w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center text-primary\">\n<span class=\"material-symbols-outlined text-[28px]\">rocket_launch</span>\n</div>\n<div class=\"flex flex-col gap-1\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold\">Our Mission</span>\n<h3 class=\"font-title-lg text-title-lg text-on-surface font-semibold\">Industrial Excellence &amp; Training</h3>\n</div>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed\">\n              To advance the science, technology, and practice of metallurgy and materials engineering across Eastern India through intensive academia-industry synergy, national conferences, technical certifications, and skill mastery.\n            </p>\n</div>\n<div class=\"pt-6 mt-6 flex items-center text-primary font-label-md text-label-md font-semibold gap-1\">\n<span>Learn about Chapter Activities</span>\n<span class=\"material-symbols-outlined text-[16px]\">arrow_forward</span>\n</div>\n</div>\n<!-- Vision Card -->\n<div class=\"bg-surface-container-lowest p-8 rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow\">\n<div class=\"flex flex-col gap-4\">\n<div class=\"w-12 h-12 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary\">\n<span class=\"material-symbols-outlined text-[28px]\">visibility</span>\n</div>\n<div class=\"flex flex-col gap-1\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-wider text-tertiary font-semibold\">Our Vision</span>\n<h3 class=\"font-title-lg text-title-lg text-on-surface font-semibold\">Decarbonised Metal Leadership</h3>\n</div>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed\">\n              To position Odisha as the global vanguard of circular, decarbonised, and technologically superior mineral beneficiation, creating clean, zero-loss extraction ecosystems by 2035.\n            </p>\n</div>\n<div class=\"pt-6 mt-6 flex items-center text-tertiary font-label-md text-label-md font-semibold gap-1\">\n<span>Review 2035 Roadmap</span>\n<span class=\"material-symbols-outlined text-[16px]\">arrow_forward</span>\n</div>\n</div>\n<!-- Values Card -->\n<div class=\"bg-surface-container-lowest p-8 rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow\">\n<div class=\"flex flex-col gap-4\">\n<div class=\"w-12 h-12 rounded-lg bg-secondary-fixed flex items-center justify-center text-secondary\">\n<span class=\"material-symbols-outlined text-[28px]\">balance</span>\n</div>\n<div class=\"flex flex-col gap-1\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold\">Core Values</span>\n<h3 class=\"font-title-lg text-title-lg text-on-surface font-semibold\">Ethical Rigor &amp; Fellowship</h3>\n</div>\n<ul class=\"flex flex-col gap-2.5 pt-1\">\n<li class=\"flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm\">\n<span class=\"material-symbols-outlined text-primary text-[18px]\">check_circle</span>\n<span><strong>Technical Rigor:</strong> Uncompromising empirical standards.</span>\n</li>\n<li class=\"flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm\">\n<span class=\"material-symbols-outlined text-primary text-[18px]\">check_circle</span>\n<span><strong>Collaborative Fellowship:</strong> Cross-institutional mentorship.</span>\n</li>\n<li class=\"flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm\">\n<span class=\"material-symbols-outlined text-primary text-[18px]\">check_circle</span>\n<span><strong>Ecological Care:</strong> Clean extraction &amp; circular economies.</span>\n</li>\n</ul>\n</div>\n<div class=\"pt-6 mt-6 flex items-center text-secondary font-label-md text-label-md font-semibold gap-1\">\n<span>Institutional Bylaws</span>\n<span class=\"material-symbols-outlined text-[16px]\">arrow_forward</span>\n</div>\n</div>\n</div>\n</div>\n</section>\n<!-- Section 3: Interactive Milestone Timeline (1978 – Present) -->\n<section class=\"max-w-7xl mx-auto px-6 lg:px-12 py-16 lg:py-24 w-full\">\n<div class=\"flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12\">\n<div class=\"flex flex-col gap-3\">\n<span class=\"font-label-md text-label-md uppercase tracking-widest text-primary font-bold\">Historical Odyssey</span>\n<h2 class=\"font-headline-lg text-headline-lg text-on-surface font-semibold\">\n          Decades of Metallurgical Mastery\n        </h2>\n<p class=\"font-body-md text-body-md text-on-surface-variant max-w-xl\">\n          Tracing the trajectory of regional innovations, symposia, and academic milestones from 1978 to the present era.\n        </p>\n</div>\n<!-- Quick Timeline Filter Micro-Interaction Controls -->\n<div class=\"flex flex-wrap items-center gap-2 bg-surface-container p-1 rounded-lg\" id=\"timeline-filters\">\n<button class=\"timeline-btn px-3 py-1.5 rounded-lg bg-surface-container-lowest text-primary font-label-md text-label-md font-semibold shadow-sm transition-all\" data-filter=\"all\">All Eras</button>\n<button class=\"timeline-btn px-3 py-1.5 rounded-lg text-on-surface-variant font-label-md text-label-md font-medium hover:text-on-surface transition-all\" data-filter=\"pioneer\">Foundational (1978-99)</button>\n<button class=\"timeline-btn px-3 py-1.5 rounded-lg text-on-surface-variant font-label-md text-label-md font-medium hover:text-on-surface transition-all\" data-filter=\"modern\">Modern (2000-Present)</button>\n</div>\n</div>\n<!-- Timeline Spine -->\n<div class=\"relative flex flex-col gap-8 before:absolute before:inset-0 before:left-4 md:before:left-1/2 md:before:-translate-x-1/2 before:w-0.5 before:bg-surface-variant before:z-0\">\n<!-- 1978 -->\n<div class=\"timeline-item pioneer relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center pl-10 md:pl-0\">\n<div class=\"md:text-right flex flex-col md:items-end gap-2 order-2 md:order-1\">\n<span class=\"font-headline-md text-headline-md text-primary font-bold\">1976–1978</span>\n<h3 class=\"font-title-lg text-title-lg text-on-surface font-semibold\">Founding &amp; Charter of the Bhubaneswar Chapter</h3>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-md\">\n            Spearheaded in 1976 by Founder Chairman Prof. P. K. Jena (Director, RRL Bhubaneswar) with 25–30 inaugural scientists, establishing core industrial partnerships with IDCOL, FACOR, IMFA, IPICOL, and NALCO. Formal national charter grant #OR-04 issued by the IIM National Council.\n          </p>\n<span class=\"inline-flex px-2 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface-variant\">Charter Grant #OR-04</span>\n</div>\n<div class=\"order-1 md:order-2 flex items-center\">\n<div class=\"w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-surface absolute left-0 md:left-1/2 -translate-x-1/2\">\n            1\n          </div>\n<div class=\"hidden md:block w-full pl-8\">\n<div class=\"bg-surface-container-low p-4 rounded-xl max-w-sm shadow-sm\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold\">Original Membership</span>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-1\">First general assembly comprised 42 registered lifetime members across mineral exploration departments.</p>\n</div>\n</div>\n</div>\n</div>\n<!-- 1989 -->\n<div class=\"timeline-item pioneer relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center pl-10 md:pl-0\">\n<div class=\"hidden md:flex order-1 justify-end pr-8\">\n<div class=\"bg-surface-container-low p-4 rounded-xl max-w-sm shadow-sm text-right\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold\">Sukinda Chromite Belt</span>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-1\">Seminal proceedings recommended modern hydro-cyclone classification techniques adopted nationally.</p>\n</div>\n</div>\n<div class=\"order-2 flex flex-col items-start gap-2\">\n<div class=\"w-8 h-8 rounded-full bg-surface-container-highest text-primary flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-surface absolute left-0 md:left-1/2 -translate-x-1/2\">\n            2\n          </div>\n<span class=\"font-headline-md text-headline-md text-primary font-bold\">1989</span>\n<h3 class=\"font-title-lg text-title-lg text-on-surface font-semibold\">Symposium on Low-Grade Chromite Ores</h3>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-md\">\n            First flagship national conference hosted in Bhubaneswar, setting industry standards for beneficiating refractory and metallurgical-grade chrome ores.\n          </p>\n<span class=\"inline-flex px-2 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface-variant\">Keynote: Dr. P. K. Jena</span>\n</div>\n</div>\n<!-- 2004 -->\n<div class=\"timeline-item modern relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center pl-10 md:pl-0\">\n<div class=\"md:text-right flex flex-col md:items-end gap-2 order-2 md:order-1\">\n<span class=\"font-headline-md text-headline-md text-primary font-bold\">2004</span>\n<h3 class=\"font-title-lg text-title-lg text-on-surface font-semibold\">Annual Memorial Lecture Inauguration</h3>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-md\">\n            Instituted to pay homage to founding metallurgists of India. The annual oration became Eastern India's marquee forum for thought leaders in blast furnace efficiency and metal physics.\n          </p>\n<span class=\"inline-flex px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold\">Annual Flagship Tradition</span>\n</div>\n<div class=\"order-1 md:order-2 flex items-center\">\n<div class=\"w-8 h-8 rounded-full bg-surface-container-highest text-primary flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-surface absolute left-0 md:left-1/2 -translate-x-1/2\">\n            3\n          </div>\n<div class=\"hidden md:block w-full pl-8\">\n<div class=\"bg-surface-container-low p-4 rounded-xl max-w-sm shadow-sm\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold\">Scholarly Archive</span>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-1\">20 consecutive printed monographs archived in the National Metal House library.</p>\n</div>\n</div>\n</div>\n</div>\n<!-- 2016 -->\n<div class=\"timeline-item modern relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center pl-10 md:pl-0\">\n<div class=\"hidden md:flex order-1 justify-end pr-8\">\n<div class=\"bg-surface-container-low p-4 rounded-xl max-w-sm shadow-sm text-right\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold\">Youth Empowerment</span>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-1\">Over 850+ metallurgical undergraduates connected to active industry mentors.</p>\n</div>\n</div>\n<div class=\"order-2 flex flex-col items-start gap-2\">\n<div class=\"w-8 h-8 rounded-full bg-surface-container-highest text-primary flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-surface absolute left-0 md:left-1/2 -translate-x-1/2\">\n            4\n          </div>\n<span class=\"font-headline-md text-headline-md text-primary font-bold\">2016</span>\n<h3 class=\"font-title-lg text-title-lg text-on-surface font-semibold\">Student Chapter Chartering Expansion</h3>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-md\">\n            Formation of affiliated student collegiate chapters at IIT Bhubaneswar, followed by NIT Rourkela and KIIT School of Mechanical &amp; Materials Engineering.\n          </p>\n<span class=\"inline-flex px-2 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface-variant\">Collegiate Outreach Program</span>\n</div>\n</div>\n<!-- 2024 -->\n<div class=\"timeline-item modern relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center pl-10 md:pl-0\">\n<div class=\"md:text-right flex flex-col md:items-end gap-2 order-2 md:order-1\">\n<span class=\"font-headline-md text-headline-md text-primary font-bold\">2024</span>\n<h3 class=\"font-title-lg text-title-lg text-on-surface font-semibold\">Green Metallurgy &amp; Hydrogen Taskforce</h3>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-md\">\n            Established a specialised consortium of plant managers and researchers investigating low-carbon Direct Reduced Iron (DRI) with hydrogen gas feeds to meet Net Zero 2070 directives.\n          </p>\n<span class=\"inline-flex px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-semibold\">Decarbonisation Initiative</span>\n</div>\n<div class=\"order-1 md:order-2 flex items-center\">\n<div class=\"w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-surface absolute left-0 md:left-1/2 -translate-x-1/2\">\n            5\n          </div>\n<div class=\"hidden md:block w-full pl-8\">\n<div class=\"bg-surface-container-low p-4 rounded-xl max-w-sm shadow-sm\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold\">Industrial Consortium</span>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-1\">Joint pilot study on hydrogen injection kinetics published in chapter white paper.</p>\n</div>\n</div>\n</div>\n</div>\n<!-- 2026 -->\n<div class=\"timeline-item modern relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center pl-10 md:pl-0\">\n<div class=\"hidden md:flex order-1 justify-end pr-8\">\n<div class=\"bg-surface-container-low p-4 rounded-xl max-w-sm shadow-sm text-right\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold\">Golden Jubilee Gateway</span>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-1\">Digital directory, interactive archives, and early-career innovation seed fund.</p>\n</div>\n</div>\n<div class=\"order-2 flex flex-col items-start gap-2\">\n<div class=\"w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-surface absolute left-0 md:left-1/2 -translate-x-1/2\">\n            ★\n          </div>\n<span class=\"font-headline-md text-headline-md text-primary font-bold\">2026</span>\n<h3 class=\"font-title-lg text-title-lg text-on-surface font-semibold\">Digital Portal &amp; Innovation Incubator</h3>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-md\">\n            Unveiling of the dedicated digital knowledge exchange platform at iimbhubaneswar.in, catalyzing patent disclosures and youth fellowship sponsorships.\n          </p>\n<span class=\"inline-flex px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold\">Present Era</span>\n</div>\n</div>\n</div>\n</section>\n<!-- Section 4: Strategic Ties & Institutional Ecosystem -->\n<section class=\"w-full bg-surface-container py-16 lg:py-24\">\n<div class=\"max-w-7xl mx-auto px-6 lg:px-12 flex flex-col gap-12\">\n<div class=\"flex flex-col md:flex-row md:items-end justify-between gap-6\">\n<div class=\"flex flex-col gap-3\">\n<span class=\"font-label-md text-label-md uppercase tracking-widest text-primary font-bold\">Collaborative Network</span>\n<h2 class=\"font-headline-lg text-headline-lg text-on-surface font-semibold\">\n            The Regional Metallurgical Ecosystem\n          </h2>\n<p class=\"font-body-md text-body-md text-on-surface-variant max-w-2xl\">\n            Our chapter acts as an intellectual bridge, unifying national premier R&amp;D laboratories, central universities, and industrial giants across the Kalinganagar and Angul industrial corridors.\n          </p>\n</div>\n</div>\n<!-- Bento-style Partner Grid -->\n<div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6\">\n<!-- R&D Partner 1 -->\n<div class=\"bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col justify-between\">\n<div class=\"flex flex-col gap-3\">\n<div class=\"flex items-center justify-between\">\n<span class=\"p-2 rounded-lg bg-surface-container text-primary material-symbols-outlined text-[24px]\">science</span>\n<span class=\"font-label-sm text-label-sm uppercase font-semibold text-secondary\">R&amp;D Core</span>\n</div>\n<h4 class=\"font-title-md text-title-md text-on-surface font-semibold\">CSIR-IMMT</h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\">\n              Institute of Minerals and Materials Technology, Bhubaneswar. Pioneer partner in hydro &amp; bio-metallurgy and pilot testing.\n            </p>\n</div>\n<div class=\"pt-4 mt-4 font-label-sm text-label-sm text-primary flex items-center gap-1 font-semibold\">\n<span>Primary Secretariat Base</span>\n<span class=\"material-symbols-outlined text-[14px]\">arrow_outward</span>\n</div>\n</div>\n<!-- Academic Partner 2 -->\n<div class=\"bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col justify-between\">\n<div class=\"flex flex-col gap-3\">\n<div class=\"flex items-center justify-between\">\n<span class=\"p-2 rounded-lg bg-surface-container text-primary material-symbols-outlined text-[24px]\">school</span>\n<span class=\"font-label-sm text-label-sm uppercase font-semibold text-secondary\">Academia</span>\n</div>\n<h4 class=\"font-title-md text-title-md text-on-surface font-semibold\">IIT Bhubaneswar</h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\">\n              School of Minerals, Metallurgical and Materials Engineering (SMMME). Co-host for student seminars and advanced characterization labs.\n            </p>\n</div>\n<div class=\"pt-4 mt-4 font-label-sm text-label-sm text-primary flex items-center gap-1 font-semibold\">\n<span>Student Chapter Affiliate</span>\n<span class=\"material-symbols-outlined text-[14px]\">arrow_outward</span>\n</div>\n</div>\n<!-- Academic Partner 3 -->\n<div class=\"bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col justify-between\">\n<div class=\"flex flex-col gap-3\">\n<div class=\"flex items-center justify-between\">\n<span class=\"p-2 rounded-lg bg-surface-container text-primary material-symbols-outlined text-[24px]\">account_balance</span>\n<span class=\"font-label-sm text-label-sm uppercase font-semibold text-secondary\">Academia</span>\n</div>\n<h4 class=\"font-title-md text-title-md text-on-surface font-semibold\">NIT Rourkela</h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\">\n              Department of Metallurgical &amp; Materials Engineering. Collaborator in steel refining research and regional symposium co-sponsorship.\n            </p>\n</div>\n<div class=\"pt-4 mt-4 font-label-sm text-label-sm text-primary flex items-center gap-1 font-semibold\">\n<span>Western Odisha Node</span>\n<span class=\"material-symbols-outlined text-[14px]\">arrow_outward</span>\n</div>\n</div>\n<!-- Industry Interface -->\n<div class=\"bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col justify-between\">\n<div class=\"flex flex-col gap-3\">\n<div class=\"flex items-center justify-between\">\n<span class=\"p-2 rounded-lg bg-surface-container text-primary material-symbols-outlined text-[24px]\">factory</span>\n<span class=\"font-label-sm text-label-sm uppercase font-semibold text-secondary\">Industry Pillars</span>\n</div>\n<h4 class=\"font-title-md text-title-md text-on-surface font-semibold\">Eastern Metal Corridor</h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\">\n              Industrial patron participation from Tata Steel, SAIL (Rourkela Steel Plant), NALCO, Jindal Steel &amp; Power (JSP), JSW Steel, and Vedanta.\n            </p>\n</div>\n<div class=\"pt-4 mt-4 font-label-sm text-label-sm text-primary flex items-center gap-1 font-semibold\">\n<span>Corporate Patronage</span>\n<span class=\"material-symbols-outlined text-[14px]\">arrow_outward</span>\n</div>\n</div>\n</div>\n<!-- Industry Stat Bar -->\n<div class=\"bg-inverse-surface text-inverse-on-surface p-8 rounded-xl flex flex-col lg:flex-row items-center justify-between gap-8\">\n<div class=\"flex flex-col gap-1 text-center lg:text-left\">\n<span class=\"font-title-lg text-title-lg font-semibold text-surface-bright\">Impact by the Numbers</span>\n<span class=\"font-body-sm text-body-sm text-surface-variant/80\">Continuous contribution to mineral and metal standards across Eastern India.</span>\n</div>\n<div class=\"grid grid-cols-2 sm:grid-cols-4 gap-6 text-center\">\n<div class=\"flex flex-col\">\n<span class=\"font-headline-md text-headline-md text-tertiary-fixed font-bold\">48+</span>\n<span class=\"font-label-sm text-label-sm uppercase text-surface-variant/80\">Years Active</span>\n</div>\n<div class=\"flex flex-col\">\n<span class=\"font-headline-md text-headline-md text-tertiary-fixed font-bold\">650+</span>\n<span class=\"font-label-sm text-label-sm uppercase text-surface-variant/80\">Fellows &amp; Members</span>\n</div>\n<div class=\"flex flex-col\">\n<span class=\"font-headline-md text-headline-md text-tertiary-fixed font-bold\">85+</span>\n<span class=\"font-label-sm text-label-sm uppercase text-surface-variant/80\">Symposia Hosted</span>\n</div>\n<div class=\"flex flex-col\">\n<span class=\"font-headline-md text-headline-md text-tertiary-fixed font-bold\">12</span>\n<span class=\"font-label-sm text-label-sm uppercase text-surface-variant/80\">Patents Catalysed</span>\n</div>\n</div>\n</div>\n</div>\n</section>\n<!-- Section 5: Governance & Affiliation Statement -->\n<section class=\"max-w-7xl mx-auto px-6 lg:px-12 py-16 lg:py-20 w-full\">\n<div class=\"bg-surface-container-low rounded-xl p-8 lg:p-12 shadow-sm flex flex-col lg:flex-row gap-8 items-start justify-between\">\n<div class=\"flex flex-col gap-4 max-w-3xl\">\n<div class=\"flex items-center gap-2 text-primary font-label-md text-label-md uppercase tracking-wider font-bold\">\n<span class=\"material-symbols-outlined text-[20px]\">gavel</span>\n<span>Constitutional Governance &amp; Bylaws</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface font-semibold\">\n          Affiliation and Democratic Administration\n        </h3>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed\">\n          The Bhubaneswar Chapter operates strictly under the registered Constitution and Bylaws of <strong>The Indian Institute of Metals</strong> (Head Office: 'Metal House', Plot 13/8, Block-GN, Sector-V, Salt Lake, Kolkata 700091; Website: <a class=\"text-primary underline hover:text-primary-container\" href=\"https://iim-india.net\" rel=\"noopener noreferrer\" target=\"_blank\">iim-india.net</a>). \n        </p>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant/90 leading-relaxed\">\n          The chapter executive committee is democratically elected biennially from registered Life Members and Fellows across academia, public sector undertakings, and private metallurgical conglomerates. All financial statements, technical audits, and activity reports are annually submitted to the IIM National Council for statutory ratification.\n        </p>\n</div>\n<div class=\"shrink-0 flex flex-col gap-3 w-full lg:w-auto\">\n<a class=\"inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md font-semibold hover:bg-surface-container-high transition-colors shadow-sm\" data-path=\"committee\" href=\"/committee\">\n<span class=\"material-symbols-outlined text-[18px]\">group</span>\n<span>View Executive Committee</span>\n</a>\n<a class=\"inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md font-semibold hover:bg-on-secondary-fixed transition-colors shadow-sm\" href=\"https://iim-india.net\" rel=\"noopener noreferrer\" target=\"_blank\">\n<span class=\"material-symbols-outlined text-[18px]\">open_in_new</span>\n<span>IIM Head Office Kolkata</span>\n</a>\n</div>\n</div>\n</section>\n<!-- Section 6: Call-To-Action Banner -->\n<section class=\"w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-16\">\n<div class=\"max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left\">\n<div class=\"flex flex-col gap-2 max-w-2xl\">\n<span class=\"font-label-md text-label-md uppercase tracking-widest text-primary-fixed font-bold\">Participate In Our Legacy</span>\n<h2 class=\"font-headline-lg text-headline-lg text-white font-semibold\">\n          Join Our Fellowship of Metallurgists\n        </h2>\n<p class=\"font-body-md text-body-md text-white/90\">\n          Whether you are an undergraduate materials scholar, a laboratory scientist, or a plant superintendent, the IIM Bhubaneswar Chapter offers peer community, technical publications, and national recognition.\n        </p>\n</div>\n<div class=\"flex flex-wrap items-center justify-center gap-4 shrink-0\">\n<a class=\"px-6 py-3 rounded-lg bg-surface-container-lowest text-primary font-label-md text-label-md font-semibold shadow-md hover:bg-primary-fixed transition-all\" data-path=\"join-chapter\" href=\"/membership\">\n          Apply for Membership\n        </a>\n<a class=\"px-6 py-3 rounded-lg bg-transparent text-white font-label-md text-label-md font-semibold hover:bg-white/10 transition-colors\" data-path=\"committee\" href=\"/committee\">\n          Meet Leadership\n        </a>\n</div>\n</div>\n</section>\n</div>\n<script>\n  // Interactive Timeline Category Filter\n  (function() {\n    const filterButtons = document.querySelectorAll('#timeline-filters .timeline-btn');\n    const timelineItems = document.querySelectorAll('.timeline-item');\n\n    filterButtons.forEach(btn => {\n      btn.addEventListener('click', () => {\n        const targetFilter = btn.getAttribute('data-filter');\n\n        // Update active filter style\n        filterButtons.forEach(b => {\n          b.classList.remove('bg-surface-container-lowest', 'text-primary', 'shadow-sm');\n          b.classList.add('text-on-surface-variant');\n        });\n        btn.classList.add('bg-surface-container-lowest', 'text-primary', 'shadow-sm');\n        btn.classList.remove('text-on-surface-variant');\n\n        // Filter cards\n        timelineItems.forEach(item => {\n          if (targetFilter === 'all') {\n            item.style.display = 'grid';\n          } else if (item.classList.contains(targetFilter)) {\n            item.style.display = 'grid';\n          } else {\n            item.style.display = 'none';\n          }\n        });\n      });\n    });\n  })();\n</script></main>";
+const ECOSYSTEM_PARTNERS = [
+  {
+    icon: Building2,
+    badge: 'R&D Secretariat',
+    name: 'CSIR-IMMT',
+    desc: 'Institute of Minerals and Materials Technology, Bhubaneswar. Host of the Chapter Secretariat and pioneer in extractive metallurgy.',
+  },
+  {
+    icon: GraduationCap,
+    badge: 'Academic Partner',
+    name: 'IIT Bhubaneswar',
+    desc: 'School of Minerals, Metallurgical and Materials Engineering (SMMME). Co-host for advanced research colloquiums and student chapters.',
+  },
+  {
+    icon: Landmark,
+    badge: 'Academic Partner',
+    name: 'NIT Rourkela',
+    desc: 'Department of Metallurgical & Materials Engineering. Collaborator in steel refining research and student conclaves.',
+  },
+  {
+    icon: Factory,
+    badge: 'Industry Patrons',
+    name: 'Eastern Metal Corridor',
+    desc: 'Patron participation from NALCO, Tata Steel (Kalinganagar Works), SAIL (Rourkela Steel Plant), and Jindal Steel & Power.',
+  },
+];
 
-export default function Page() {
+export default function AboutPage() {
+  const [timelineEra, setTimelineEra] = useState<'all' | 'foundational' | 'modern'>('all');
+
+  const filteredTimeline = TIMELINE_EVENTS.filter((e) => {
+    if (timelineEra === 'all') return true;
+    return e.era === timelineEra;
+  });
+
   return (
     <>
-      <AboutTimelineFilter />
-      <div suppressHydrationWarning dangerouslySetInnerHTML={{ __html: htmlContent }} />
+      <JsonLd
+        data={getBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'About Institution', path: '/about' },
+        ])}
+      />
+
+      <main className="w-full pt-24 sm:pt-28 lg:pt-28 bg-slate-50/50 min-h-screen">
+        {/* Editorial Masthead */}
+        <section className="w-full bg-white border-b border-slate-200/80 py-10 sm:py-14">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav
+              aria-label="Breadcrumb"
+              className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4"
+            >
+              <Link href="/" className="hover:text-primary transition-colors">
+                Home
+              </Link>
+              <span className="text-slate-300">/</span>
+              <span className="text-primary">About Institution</span>
+            </nav>
+
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+              <div className="max-w-3xl">
+                <span className="inline-block px-3 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-xs font-semibold uppercase tracking-wider mb-3">
+                  Chartered 1978 • Bhubaneswar Chapter
+                </span>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
+                  Dedicated to the Science, Technology &amp; Art of Metals
+                </h1>
+                <p className="text-sm sm:text-base text-slate-600 mt-2.5 leading-relaxed">
+                  The Indian Institute of Metals (IIM) Bhubaneswar Chapter connects researchers, faculty, and industry professionals to advance mineral processing, metallurgical engineering, and sustainable manufacturing across Odisha.
+                </p>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-xs text-slate-700 max-w-xs shrink-0">
+                <div className="flex items-center justify-between text-slate-500 font-semibold mb-1">
+                  <span>Parent Body Charter</span>
+                  <span className="text-primary">EST. 1946</span>
+                </div>
+                <div className="font-bold text-slate-900 text-sm">
+                  The Indian Institute of Metals
+                </div>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  National Headquarters: 'Metal House', Salt Lake, Kolkata (iim-india.net)
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 1: Genesis & Foundational History */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-7 flex flex-col gap-4">
+              <span className="text-xs uppercase font-bold tracking-widest text-primary">
+                Chapter Genesis &amp; Focus
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+                Rooted at the Heart of India’s Mineral Belt
+              </h2>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                Founded in 1976 and formally chartered in 1978 under <strong>The Indian Institute of Metals (IIM, established 1946 in Kolkata)</strong>, the Bhubaneswar Chapter was instituted through the pioneering vision of eminent metallurgist <strong>Prof. P. K. Jena</strong> (former Director of RRL Bhubaneswar, who served as Founder Chairman for 12 years).
+              </p>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Established at the Regional Research Laboratory (now CSIR-IMMT) with an inaugural group of 25–30 research scientists, the chapter formed foundational collaborations with regional industry leaders including <strong>IDCOL, FACOR, IMFA, IPICOL, and NALCO</strong> to connect materials science with the mineral wealth of Odisha—which holds over half of India’s bauxite, chromite, and iron ore reserves.
+              </p>
+
+              {/* Core Focus Highlights */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+                <div className="p-3.5 rounded-xl bg-white border border-slate-200">
+                  <span className="text-xs font-bold text-slate-900 block">Mineral Beneficiation</span>
+                  <span className="text-xs text-slate-600 mt-0.5 block">High-yield recovery from lean and low-grade ores.</span>
+                </div>
+                <div className="p-3.5 rounded-xl bg-white border border-slate-200">
+                  <span className="text-xs font-bold text-slate-900 block">Sustainable Metallurgy</span>
+                  <span className="text-xs text-slate-600 mt-0.5 block">Low-carbon DRI ironmaking and green hydrogen feeds.</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
+                <h3 className="text-base font-bold text-slate-900 mb-4 pb-3 border-b border-slate-100 flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                  <span>Key Chapter Facts</span>
+                </h3>
+                <dl className="flex flex-col gap-3.5 text-xs">
+                  <div className="flex justify-between items-center py-1 border-b border-slate-50">
+                    <dt className="text-slate-500 font-medium">Chapter Charter Year</dt>
+                    <dd className="font-bold text-slate-900">1978 (Charter #OR-04)</dd>
+                  </div>
+                  <div className="flex justify-between items-center py-1 border-b border-slate-50">
+                    <dt className="text-slate-500 font-medium">Secretariat Location</dt>
+                    <dd className="font-bold text-slate-900">CSIR-IMMT, Bhubaneswar</dd>
+                  </div>
+                  <div className="flex justify-between items-center py-1 border-b border-slate-50">
+                    <dt className="text-slate-500 font-medium">Elected Council Members</dt>
+                    <dd className="font-bold text-slate-900">23 Members (2026–27)</dd>
+                  </div>
+                  <div className="flex justify-between items-center py-1 border-b border-slate-50">
+                    <dt className="text-slate-500 font-medium">Affiliated Student Chapters</dt>
+                    <dd className="font-bold text-slate-900">6 Premier Institutes</dd>
+                  </div>
+                  <div className="flex justify-between items-center py-1">
+                    <dt className="text-slate-500 font-medium">Head Office</dt>
+                    <dd className="font-bold text-slate-900">IIM Kolkata HQ</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 2: Core Thrust Areas */}
+        <section className="w-full bg-white border-y border-slate-200/80 py-12 sm:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <span className="text-xs uppercase font-bold tracking-widest text-primary">
+                Scientific Disciplines
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
+                Core Research &amp; Industrial Thrust Areas
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-2">
+                Focused research domains supporting eastern India&apos;s steel mills, aluminium smelters, and mineral processing complexes.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {FOCUS_AREAS.map((area, i) => {
+                const IconComponent = area.icon;
+                return (
+                  <div
+                    key={i}
+                    className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-slate-300 hover:bg-white transition-all shadow-xs"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-primary mb-3.5 shadow-2xs">
+                      <IconComponent className="w-5 h-5" />
+                    </div>
+                    <h3 className="text-base font-bold text-slate-900">{area.title}</h3>
+                    <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{area.desc}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Section 3: Historical Chronicle Timeline */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <span className="text-xs uppercase font-bold tracking-widest text-primary">
+                Chronicle &amp; Traditions
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
+                Decades of Chapter Milestones
+              </h2>
+              <p className="text-xs text-slate-600 mt-1">
+                Key technological forums, symposia, and academic milestones from 1976 to the present day.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200">
+              <button
+                onClick={() => setTimelineEra('all')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  timelineEra === 'all'
+                    ? 'bg-primary text-white shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                All Milestones
+              </button>
+              <button
+                onClick={() => setTimelineEra('foundational')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  timelineEra === 'foundational'
+                    ? 'bg-primary text-white shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Foundational
+              </button>
+              <button
+                onClick={() => setTimelineEra('modern')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  timelineEra === 'modern'
+                    ? 'bg-primary text-white shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Modern Era
+              </button>
+            </div>
+          </div>
+
+          <div className="relative border-l border-slate-200 ml-4 sm:ml-6 pl-6 sm:pl-8 flex flex-col gap-8">
+            {filteredTimeline.map((item, index) => (
+              <div key={index} className="relative">
+                <div className="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 rounded-full bg-white border-4 border-primary shadow-xs" />
+                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs max-w-3xl">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <span className="text-xs font-bold text-primary px-2.5 py-0.5 rounded-full bg-primary/10">
+                      {item.year}
+                    </span>
+                    <span className="text-[11px] font-mono font-medium text-slate-500">
+                      {item.tag}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900">{item.title}</h3>
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 4: Regional Ecosystem */}
+        <section className="w-full bg-white border-t border-slate-200/80 py-12 sm:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl mb-8">
+              <span className="text-xs uppercase font-bold tracking-widest text-primary">
+                Institutional Network
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
+                Regional Metallurgical Ecosystem
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                Uniting premier research laboratories, technical universities, and major metal producers across Eastern India.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {ECOSYSTEM_PARTNERS.map((partner, i) => {
+                const Icon = partner.icon;
+                return (
+                  <div
+                    key={i}
+                    className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <Icon className="w-5 h-5 text-primary" />
+                        <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
+                          {partner.badge}
+                        </span>
+                      </div>
+                      <h3 className="text-base font-bold text-slate-900">{partner.name}</h3>
+                      <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{partner.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Section 5: Governance & Secretariat */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-sm flex flex-col lg:flex-row gap-8 items-start justify-between">
+            <div className="max-w-2xl">
+              <span className="text-xs uppercase font-bold tracking-widest text-amber-400">
+                Statutory Governance &amp; Bylaws
+              </span>
+              <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">
+                Democratic Governance Under National IIM Constitution
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 mt-2.5 leading-relaxed">
+                The Bhubaneswar Chapter operates under the registered Constitution and Bylaws of <strong>The Indian Institute of Metals</strong> (Head Office: &apos;Metal House&apos;, Plot 13/8, Block-GN, Sector-V, Salt Lake, Kolkata 700091). The chapter executive committee is democratically elected for biennial terms by registered Life Members and Fellows.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 text-xs text-slate-300">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span>CSIR-IMMT Complex, Bhubaneswar - 751013</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span>iimbhubaneswarchapter@gmail.com</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 w-full sm:w-auto">
+              <Link
+                href="/committee"
+                className="px-5 py-3 bg-amber-500 text-slate-950 text-xs sm:text-sm font-bold rounded-xl hover:bg-amber-400 transition text-center shadow-xs"
+              >
+                View 2026–27 Council
+              </Link>
+              <Link
+                href="/membership"
+                className="px-5 py-3 bg-white/10 text-white text-xs sm:text-sm font-semibold rounded-xl hover:bg-white/20 transition text-center border border-white/20"
+              >
+                Join Chapter
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
+
       <Footer />
     </>
   );

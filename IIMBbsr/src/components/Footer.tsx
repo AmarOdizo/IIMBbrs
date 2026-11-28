@@ -123,9 +123,9 @@ export default function Footer() {
               OFFICE
             </span>
             <div className="font-body-sm text-body-sm text-surface-variant/90 leading-relaxed flex flex-col gap-0.5">
-              <span className="font-semibold text-white">Dr. Pravas Ranjan Behera</span>
+              <span className="font-semibold text-white">Dr. Sisir Mantry</span>
               <span className="text-surface-variant/80 text-xs">
-                Hony. Secretary, The Indian Institute of Metals,
+                Hony. Secretary (2026–27), The Indian Institute of Metals,
               </span>
               <span className="text-surface-variant/80 text-xs">
                 Bhubaneswar Chapter,

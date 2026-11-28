@@ -238,7 +238,7 @@ export const CHAPTER_AWARD_CATEGORIES = [
     shortName: 'Dr. S. K. Tamotia Award',
     tagline: 'Industrial Metallurgy & Visionary Engineering Leadership',
     description:
-      'Instituted in honor of industrial pioneer Dr. S. K. Tamotia (former CMD of NALCO and INDAL), recognizing stellar leadership, industrial process innovation, and corporate metallurgical stewardship.',
+      'Instituted in honor of industrial pioneer Dr. S. K. Tamotia (former CMD of NALCO and INDAL), recognizing exemplary industrial leadership, process innovation, and corporate metallurgical stewardship.',
     color: 'border-amber-500/30 bg-amber-50/50 text-amber-700',
     badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
   },
