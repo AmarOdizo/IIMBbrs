@@ -62,44 +62,70 @@ const FOCUS_AREAS = [
 
 const TIMELINE_EVENTS = [
   {
+    num: '1',
     year: '1976–1978',
     era: 'foundational',
-    title: 'Inception & Formal Charter of the Bhubaneswar Chapter',
+    title: 'Founding & Charter of the Bhubaneswar Chapter',
     description:
-      'Initiated in 1976 under the vision of eminent metallurgist Prof. P. K. Jena (Director, RRL Bhubaneswar, now CSIR-IMMT) alongside 25 research scientists. Granted formal institutional charter #OR-04 by the IIM National Council, Kolkata in 1978.',
+      'Spearheaded in 1976 by Founder Chairman Prof. P. K. Jena (Director, RRL Bhubaneswar) with 25–30 inaugural scientists, establishing core industrial partnerships with IDCOL, FACOR, IMFA, IPICOL, and NALCO. Formal national charter grant #OR-04 issued by the IIM National Council.',
     tag: 'Charter Grant #OR-04',
+    sideTitle: 'Original Membership',
+    sideText: 'First general assembly comprised 42 registered lifetime members across mineral exploration departments.',
   },
   {
+    num: '2',
     year: '1989',
     era: 'foundational',
-    title: 'National Symposium on Low-Grade Chromite Ores',
+    title: 'Symposium on Low-Grade Chromite Ores',
     description:
-      'Convened the first flagship national technical conference addressing the beneficiation of Sukinda chromite belt ores, contributing recommendations widely adopted by public sector smelters.',
-    tag: 'Sukinda Chromite Initiative',
+      'First flagship national conference hosted in Bhubaneswar, setting industry standards for beneficiating refractory and metallurgical-grade chrome ores.',
+    tag: 'Keynote: Dr. P. K. Jena',
+    sideTitle: 'Sukinda Chromite Belt',
+    sideText: 'Seminal proceedings recommended modern hydro-cyclone classification techniques adopted nationally.',
   },
   {
+    num: '3',
     year: '2004',
     era: 'modern',
-    title: 'Institution of the Annual Memorial Lecture Series',
+    title: 'Annual Memorial Lecture Inauguration',
     description:
-      'Established the prestigious annual oration series to honor founding metallurgists of India, creating an enduring Eastern India forum for physical metallurgy and blast furnace innovation.',
-    tag: 'Memorial Lecture Tradition',
+      "Instituted to pay homage to founding metallurgists of India. The annual oration became Eastern India's marquee forum for thought leaders in blast furnace efficiency and metal physics.",
+    tag: 'Annual Flagship Tradition',
+    sideTitle: 'Scholarly Archive',
+    sideText: '20 consecutive printed monographs archived in the National Metal House library.',
   },
   {
-    year: '2013–2016',
+    num: '4',
+    year: '2016',
     era: 'modern',
-    title: 'Chartering of University Student Chapters',
+    title: 'Student Chapter Chartering Expansion',
     description:
-      'Expanded collegiate outreach by chartering affiliated student chapters at IIT Bhubaneswar, NIT Rourkela, KIIT University, and VSSUT Burla to mentor youth in metallurgical disciplines.',
-    tag: 'Collegiate Affiliate Expansion',
+      'Formation of affiliated student collegiate chapters at IIT Bhubaneswar, followed by NIT Rourkela and KIIT School of Mechanical & Materials Engineering.',
+    tag: 'Collegiate Outreach Program',
+    sideTitle: 'Youth Empowerment',
+    sideText: 'Over 850+ metallurgical undergraduates connected to active industry mentors.',
   },
   {
-    year: '2024–2026',
+    num: '5',
+    year: '2024',
     era: 'modern',
-    title: 'Green Metallurgy & Decarbonisation Initiatives',
+    title: 'Green Metallurgy & Hydrogen Taskforce',
     description:
-      'Convened multi-institutional symposiums on Advanced High-Strength Steels (AHSS), hydrogen DRI kinetics, and circular economy practices across the Kalinganagar-Angul industrial belt.',
-    tag: 'Sustainable Steel Initiative',
+      'Established a specialised consortium of plant managers and researchers investigating low-carbon Direct Reduced Iron (DRI) with hydrogen gas feeds to meet Net Zero 2070 directives.',
+    tag: 'Decarbonisation Initiative',
+    sideTitle: 'Industrial Consortium',
+    sideText: 'Joint pilot study on hydrogen injection kinetics published in chapter white paper.',
+  },
+  {
+    num: '★',
+    year: '2026',
+    era: 'modern',
+    title: 'Digital Portal & Innovation Incubator',
+    description:
+      'Unveiling of the dedicated digital knowledge exchange platform at iimbhubaneswar.in, catalyzing patent disclosures and youth fellowship sponsorships.',
+    tag: 'Present Era',
+    sideTitle: 'Golden Jubilee Gateway',
+    sideText: 'Digital directory, interactive archives, and early-career innovation seed fund.',
   },
 ];
 
@@ -289,75 +315,154 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Section 3: Historical Chronicle Timeline */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <div>
-              <span className="text-xs uppercase font-bold tracking-widest text-primary">
-                Chronicle &amp; Traditions
+        {/* Section 3: Interactive Milestone Timeline (1978 – Present) */}
+        <section className="max-w-7xl mx-auto px-6 lg:px-12 py-16 lg:py-24 w-full">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div className="flex flex-col gap-3">
+              <span className="font-label-md text-label-md uppercase tracking-widest text-primary font-bold">
+                Historical Odyssey
               </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
+              <h2 className="font-headline-lg text-headline-lg text-slate-900 font-semibold text-2xl sm:text-3xl lg:text-4xl">
                 Decades of Chapter Milestones
               </h2>
-              <p className="text-xs text-slate-600 mt-1">
-                Key technological forums, symposia, and academic milestones from 1976 to the present day.
+              <p className="font-body-md text-body-md text-slate-600 max-w-xl">
+                Tracing the trajectory of regional innovations, symposia, and academic milestones from 1978 to the present era.
               </p>
             </div>
 
-            <div className="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200">
+            {/* Quick Timeline Filter Controls */}
+            <div className="flex flex-wrap items-center gap-2 bg-slate-100 p-1 rounded-xl" id="timeline-filters">
               <button
-                onClick={() => setTimelineEra('all')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                className={`timeline-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
                   timelineEra === 'all'
-                    ? 'bg-primary text-white shadow-xs'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-white text-primary shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
+                onClick={() => setTimelineEra('all')}
               >
-                All Milestones
+                All Eras
               </button>
               <button
-                onClick={() => setTimelineEra('foundational')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                className={`timeline-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
                   timelineEra === 'foundational'
-                    ? 'bg-primary text-white shadow-xs'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-white text-primary shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
+                onClick={() => setTimelineEra('foundational')}
               >
-                Foundational
+                Foundational (1978-99)
               </button>
               <button
-                onClick={() => setTimelineEra('modern')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                className={`timeline-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
                   timelineEra === 'modern'
-                    ? 'bg-primary text-white shadow-xs'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-white text-primary shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
+                onClick={() => setTimelineEra('modern')}
               >
-                Modern Era
+                Modern (2000-Present)
               </button>
             </div>
           </div>
 
-          <div className="relative border-l border-slate-200 ml-4 sm:ml-6 pl-6 sm:pl-8 flex flex-col gap-8">
-            {filteredTimeline.map((item, index) => (
-              <div key={index} className="relative">
-                <div className="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 rounded-full bg-white border-4 border-primary shadow-xs" />
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs max-w-3xl">
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                    <span className="text-xs font-bold text-primary px-2.5 py-0.5 rounded-full bg-primary/10">
+          {/* Timeline Spine */}
+          <div className="relative flex flex-col gap-8 before:absolute before:inset-0 before:left-4 md:before:left-1/2 md:before:-translate-x-1/2 before:w-0.5 before:bg-slate-200 before:z-0">
+            {filteredTimeline.map((item, index) => {
+              const isEven = index % 2 === 0;
+              const isAccent = item.num === '1' || item.num === '5' || item.num === '★';
+
+              if (isEven) {
+                return (
+                  <div
+                    key={item.year}
+                    className="timeline-item relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center pl-10 md:pl-0"
+                  >
+                    {/* Left: Text */}
+                    <div className="md:text-right flex flex-col md:items-end gap-2 order-2 md:order-1">
+                      <span className="font-headline-md text-headline-md text-primary font-bold text-2xl">
+                        {item.year}
+                      </span>
+                      <h3 className="font-title-lg text-title-lg text-slate-900 font-semibold text-lg sm:text-xl">
+                        {item.title}
+                      </h3>
+                      <p className="font-body-md text-body-md text-slate-600 leading-relaxed max-w-md text-sm">
+                        {item.description}
+                      </p>
+                      <span className="inline-flex px-2.5 py-0.5 rounded-full bg-slate-100 font-label-sm text-xs font-semibold text-slate-700">
+                        {item.tag}
+                      </span>
+                    </div>
+
+                    {/* Center: Number Pill */}
+                    <div className="order-1 md:order-2 flex items-center">
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-white absolute left-0 md:left-1/2 -translate-x-1/2 z-10 ${
+                          isAccent ? 'bg-primary text-white' : 'bg-slate-100 text-primary border border-slate-300'
+                        }`}
+                      >
+                        {item.num}
+                      </div>
+
+                      {/* Right: Side Card */}
+                      <div className="hidden md:block w-full pl-8">
+                        <div className="bg-slate-50 p-4 rounded-xl max-w-sm shadow-xs border border-slate-200/80">
+                          <span className="font-label-sm text-xs uppercase font-semibold text-slate-700 block">
+                            {item.sideTitle}
+                          </span>
+                          <p className="font-body-sm text-xs text-slate-600 mt-1 leading-relaxed">
+                            {item.sideText}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              // Odd items
+              return (
+                <div
+                  key={item.year}
+                  className="timeline-item relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center pl-10 md:pl-0"
+                >
+                  {/* Left: Side Card */}
+                  <div className="hidden md:flex order-1 justify-end pr-8">
+                    <div className="bg-slate-50 p-4 rounded-xl max-w-sm shadow-xs border border-slate-200/80 text-right">
+                      <span className="font-label-sm text-xs uppercase font-semibold text-slate-700 block">
+                        {item.sideTitle}
+                      </span>
+                      <p className="font-body-sm text-xs text-slate-600 mt-1 leading-relaxed">
+                        {item.sideText}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Center & Right: Text */}
+                  <div className="order-2 flex flex-col items-start gap-2">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-white absolute left-0 md:left-1/2 -translate-x-1/2 z-10 ${
+                        isAccent ? 'bg-primary text-white' : 'bg-slate-100 text-primary border border-slate-300'
+                      }`}
+                    >
+                      {item.num}
+                    </div>
+
+                    <span className="font-headline-md text-headline-md text-primary font-bold text-2xl">
                       {item.year}
                     </span>
-                    <span className="text-[11px] font-mono font-medium text-slate-500">
+                    <h3 className="font-title-lg text-title-lg text-slate-900 font-semibold text-lg sm:text-xl">
+                      {item.title}
+                    </h3>
+                    <p className="font-body-md text-body-md text-slate-600 leading-relaxed max-w-md text-sm">
+                      {item.description}
+                    </p>
+                    <span className="inline-flex px-2.5 py-0.5 rounded-full bg-slate-100 font-label-sm text-xs font-semibold text-slate-700">
                       {item.tag}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-slate-900">{item.title}</h3>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                    {item.description}
-                  </p>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
